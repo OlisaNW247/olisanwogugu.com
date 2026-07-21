@@ -1,0 +1,36 @@
+/* Background canvas layer + legibility helpers, shared across pages. */
+#bg {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  display: block;
+  pointer-events: none;
+}
+
+/* Soft dark vignette so the drifting squares never overpower the text. */
+#veil {
+  position: fixed;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background: radial-gradient(
+    ellipse at center,
+    rgba(0, 0, 0, 0.72) 0%,
+    rgba(0, 0, 0, 0.45) 38%,
+    rgba(0, 0, 0, 0.2) 70%,
+    rgba(0, 0, 0, 0) 100%
+  );
+}
+
+/* Content sits above both layers. */
+main {
+  position: relative;
+  z-index: 2;
+}
+
+/* A little glow behind text keeps it crisp against bright squares. */
+main :is(h1, h2, h3, p, a, time) {
+  text-shadow: 0 0 12px rgba(0, 0, 0, 0.9), 0 0 4px rgba(0, 0, 0, 0.9);
+}
