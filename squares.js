@@ -8,9 +8,13 @@
   if (!canvas) return;
   var ctx = canvas.getContext("2d");
 
-  var reduceMotion =
+  // Respect "reduce motion" by calming the animation (slower drift, no
+  // brightness pulsing) rather than freezing it outright, so the background
+  // still moves everywhere while staying gentle for motion-sensitive users.
+  var reduceMotionQuery =
     window.matchMedia &&
-    window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    window.matchMedia("(prefers-reduced-motion: reduce)");
+  var reduceMotion = reduceMotionQuery ? reduceMotionQuery.matches : false;
 
   var dpr = Math.min(window.devicePixelRatio || 1, 2);
   var W = 0,
@@ -71,9 +75,10 @@
     for (var i = 0; i < squares.length; i++) {
       var s = squares[i];
 
-      // Drift.
-      s.x += s.vx;
-      s.y += s.vy;
+      // Drift (calmer when reduced motion is preferred).
+      var motionScale = reduceMotion ? 0.4 : 1;
+      s.x += s.vx * motionScale;
+      s.y += s.vy * motionScale;
 
       // Wrap around edges (with margin so squares fade in/out off-screen).
       var m = s.size + 20;
@@ -111,7 +116,7 @@
   var running = true;
   function loop(t) {
     draw(t);
-    if (running && !reduceMotion) requestAnimationFrame(loop);
+    if (running) requestAnimationFrame(loop);
   }
 
   var resizeTimer;
@@ -124,16 +129,24 @@
   document.addEventListener("visibilitychange", function () {
     if (document.hidden) {
       running = false;
-    } else if (!reduceMotion) {
+    } else if (!running) {
       running = true;
       requestAnimationFrame(loop);
     }
   });
 
-  resize();
-  if (reduceMotion) {
-    draw(0); // single static frame
-  } else {
-    requestAnimationFrame(loop);
+  // Update live if the user toggles the OS "reduce motion" setting.
+  if (reduceMotionQuery) {
+    var onChange = function (e) {
+      reduceMotion = e.matches;
+    };
+    if (reduceMotionQuery.addEventListener) {
+      reduceMotionQuery.addEventListener("change", onChange);
+    } else if (reduceMotionQuery.addListener) {
+      reduceMotionQuery.addListener(onChange); // older Safari
+    }
   }
+
+  resize();
+  requestAnimationFrame(loop);
 })();
