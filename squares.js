@@ -8,14 +8,6 @@
   if (!canvas) return;
   var ctx = canvas.getContext("2d");
 
-  // Respect "reduce motion" by calming the animation (slower drift, no
-  // brightness pulsing) rather than freezing it outright, so the background
-  // still moves everywhere while staying gentle for motion-sensitive users.
-  var reduceMotionQuery =
-    window.matchMedia &&
-    window.matchMedia("(prefers-reduced-motion: reduce)");
-  var reduceMotion = reduceMotionQuery ? reduceMotionQuery.matches : false;
-
   var dpr = Math.min(window.devicePixelRatio || 1, 2);
   var W = 0,
     H = 0;
@@ -75,10 +67,9 @@
     for (var i = 0; i < squares.length; i++) {
       var s = squares[i];
 
-      // Drift (calmer when reduced motion is preferred).
-      var motionScale = reduceMotion ? 0.4 : 1;
-      s.x += s.vx * motionScale;
-      s.y += s.vy * motionScale;
+      // Drift.
+      s.x += s.vx;
+      s.y += s.vy;
 
       // Wrap around edges (with margin so squares fade in/out off-screen).
       var m = s.size + 20;
@@ -88,9 +79,7 @@
       else if (s.y > H + m) s.y = -m;
 
       // Pulsing opacity.
-      var pulse = reduceMotion
-        ? 0
-        : Math.sin(t * 0.001 * s.speed + s.phase);
+      var pulse = Math.sin(t * 0.001 * s.speed + s.phase);
       var alpha = Math.max(0.02, s.base + s.amp * pulse);
 
       var half = s.size / 2;
@@ -134,18 +123,6 @@
       requestAnimationFrame(loop);
     }
   });
-
-  // Update live if the user toggles the OS "reduce motion" setting.
-  if (reduceMotionQuery) {
-    var onChange = function (e) {
-      reduceMotion = e.matches;
-    };
-    if (reduceMotionQuery.addEventListener) {
-      reduceMotionQuery.addEventListener("change", onChange);
-    } else if (reduceMotionQuery.addListener) {
-      reduceMotionQuery.addListener(onChange); // older Safari
-    }
-  }
 
   resize();
   requestAnimationFrame(loop);
