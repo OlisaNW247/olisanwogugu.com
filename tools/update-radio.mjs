@@ -156,7 +156,8 @@ async function main() {
   const sameStation = !!(current && current.station && current.station.id === station.id && current.station.lastModified === station.lastModified);
 
   let tracks;
-  if (sameStation) {
+  const complete = sameStation && current.tracks.every((t) => 'isrc' in t);
+  if (complete) {
     // Keep the running station's order and clock; only Spotify matches may still be filling in.
     tracks = current.tracks;
   } else {
@@ -164,6 +165,13 @@ async function main() {
     const songs = await catalogSongs(apple, storefront, station.catalogIds.slice(0, MAX_TRACKS));
     tracks = station.catalogIds.map((id) => radioTrack(songs.get(id))).filter(Boolean);
     if (!tracks.length) { console.log(`No playable catalog songs in "${station.name}"; station unchanged.`); return; }
+    if (sameStation) {
+      // Same station, older file format: refresh the details but keep the running order and clock.
+      const byId = new Map(tracks.map((t) => [t.id, t]));
+      const kept = current.tracks.map((t) => byId.get(t.id)).filter(Boolean);
+      const seen = new Set(kept.map((t) => t.id));
+      tracks = kept.concat(tracks.filter((t) => !seen.has(t.id)));
+    }
   }
 
   await matchSpotify(tracks, ROOT);
