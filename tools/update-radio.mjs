@@ -9,11 +9,13 @@
 //                     playlist changed (or once a day)
 //   radio.json        the station: playlist name, start time, shuffled playable tracks
 //   radio-token.json  developer token for the web player, renewed when under 30 days remain
+//   spotify-index.json  cache of ISRC → Spotify track id (only when Spotify secrets are set)
 
 import { readFileSync, writeFileSync, existsSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { resolve, dirname } from 'node:path';
 import { appleClient, developerToken, credentials } from './apple.mjs';
+import { matchSpotify } from './spotify.mjs';
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const MIN_SONGS = 10;            // a playlist needs more than this many songs
@@ -65,7 +67,8 @@ export function radioTrack(song) {
     artwork: a.artwork && a.artwork.url ? a.artwork.url.replace('{w}', '1200').replace('{h}', '1200') : '',
     duration: a.durationInMillis,
     preview: preview || '',
-    url: a.url || ''
+    url: a.url || '',
+    isrc: a.isrc || ''
   };
 }
 
@@ -121,12 +124,17 @@ async function catalogSongs(apple, storefront, ids) {
 }
 
 function refreshToken() {
-  const current = readJson('radio-token.json', null);
+  const current = readJson('radio-token.json', null) || {};
   const now = Math.floor(Date.now() / 1000);
-  if (current && current.exp - now > TOKEN_RENEW_S) return false;
-  const token = developerToken({ ...credentials(), ttlSeconds: TOKEN_TTL_S });
-  writeJson('radio-token.json', { token, exp: now + TOKEN_TTL_S });
-  console.log('Renewed the web player developer token.');
+  const spotifyClientId = process.env.SPOTIFY_CLIENT_ID || '';
+  const next = { ...current, spotifyClientId };
+  if (!current.token || (current.exp - now) <= TOKEN_RENEW_S) {
+    next.token = developerToken({ ...credentials(), ttlSeconds: TOKEN_TTL_S });
+    next.exp = now + TOKEN_TTL_S;
+    console.log('Renewed the web player developer token.');
+  }
+  if (JSON.stringify(next) === JSON.stringify(current)) return false;
+  writeJson('radio-token.json', next);
   return true;
 }
 
@@ -145,25 +153,40 @@ async function main() {
   if (!station) { console.log(`"${np.song}" is not in any playlist with more than ${MIN_SONGS} songs; station unchanged.`); return; }
 
   const current = readJson('radio.json', null);
-  if (current && current.station && current.station.id === station.id && current.station.lastModified === station.lastModified) {
-    console.log(`Station unchanged: ${station.name}`);
-    return;
+  const sameStation = !!(current && current.station && current.station.id === station.id && current.station.lastModified === station.lastModified);
+
+  let tracks;
+  const complete = sameStation && current.tracks.every((t) => 'isrc' in t);
+  if (complete) {
+    // Keep the running station's order and clock; only Spotify matches may still be filling in.
+    tracks = current.tracks;
+  } else {
+    const storefront = await apple.storefront();
+    const songs = await catalogSongs(apple, storefront, station.catalogIds.slice(0, MAX_TRACKS));
+    tracks = station.catalogIds.map((id) => radioTrack(songs.get(id))).filter(Boolean);
+    if (!tracks.length) { console.log(`No playable catalog songs in "${station.name}"; station unchanged.`); return; }
+    if (sameStation) {
+      // Same station, older file format: refresh the details but keep the running order and clock.
+      const byId = new Map(tracks.map((t) => [t.id, t]));
+      const kept = current.tracks.map((t) => byId.get(t.id)).filter(Boolean);
+      const seen = new Set(kept.map((t) => t.id));
+      tracks = kept.concat(tracks.filter((t) => !seen.has(t.id)));
+    }
   }
 
-  const storefront = await apple.storefront();
-  const songs = await catalogSongs(apple, storefront, station.catalogIds.slice(0, MAX_TRACKS));
-  const tracks = station.catalogIds.map((id) => radioTrack(songs.get(id))).filter(Boolean);
-  if (!tracks.length) { console.log(`No playable catalog songs in "${station.name}"; station unchanged.`); return; }
+  await matchSpotify(tracks, ROOT);
 
-  const startedAt = new Date().toISOString();
+  const startedAt = sameStation ? current.startedAt : new Date().toISOString();
   const radio = {
     station: { id: station.id, name: station.name, lastModified: station.lastModified, songCount: station.count },
     startedAt,
-    tracks: seededShuffle(tracks, startedAt + station.id),
-    updated: startedAt
+    tracks: sameStation ? tracks : seededShuffle(tracks, startedAt + station.id),
+    updated: sameStation ? current.updated : startedAt
   };
+  if (sameStation && JSON.stringify(radio) === JSON.stringify(current)) { console.log(`Station unchanged: ${station.name}`); return; }
+  if (sameStation) radio.updated = new Date().toISOString();
   writeJson('radio.json', radio);
-  console.log(`Radio: ${station.name} (${tracks.length} playable of ${station.count})`);
+  console.log(`Radio: ${station.name} (${tracks.length} playable of ${station.count}, ${tracks.filter((t) => t.spotifyId).length} on Spotify)`);
 }
 
 if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
