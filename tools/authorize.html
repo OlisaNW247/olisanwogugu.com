@@ -17,6 +17,11 @@
     section { margin-top: 2.5rem; padding-top: 2rem; border-top: 1px solid rgba(255,255,255,0.12); }
     h2 { font-size: 0.8rem; letter-spacing: 0.25em; text-transform: uppercase; opacity: 0.5; font-weight: 400; }
     label { display: block; margin-top: 1.25rem; font-size: 0.85rem; opacity: 0.8; }
+    input[type="file"] { padding: 0.5rem 0; border: 0; background: none; color: #fff; font-size: 0.9rem; }
+    input[type="file"]::file-selector-button {
+      margin-right: 0.75rem; padding: 0.5rem 1rem; background: transparent; color: #fff;
+      border: 1px solid rgba(255,255,255,0.3); border-radius: 999px; font: inherit; font-size: 0.85rem; cursor: pointer;
+    }
     input, textarea {
       width: 100%; margin-top: 0.4rem; padding: 0.7rem 0.8rem; color: #fff; background: #0d0d0d;
       border: 1px solid rgba(255,255,255,0.2); border-radius: 6px; font: inherit; font-size: 0.95rem;
@@ -50,7 +55,8 @@
       <h2>1. Developer key</h2>
       <label>Team ID <input id="teamId" placeholder="ABCDE12345" autocomplete="off" spellcheck="false"></label>
       <label>Key ID <input id="keyId" placeholder="ABC123DEFG" autocomplete="off" spellcheck="false"></label>
-      <label>Private key (.p8 file contents) <textarea id="p8" placeholder="-----BEGIN PRIVATE KEY-----&#10;…&#10;-----END PRIVATE KEY-----" spellcheck="false"></textarea></label>
+      <label>Private key file (.p8) <input type="file" id="p8file" accept=".p8,.pem,.txt,text/plain"></label>
+      <label>Or paste the .p8 file contents <textarea id="p8" placeholder="-----BEGIN PRIVATE KEY-----&#10;…&#10;-----END PRIVATE KEY-----" spellcheck="false"></textarea></label>
       <button id="go">Sign in with Apple Music</button>
       <p class="status" id="status"></p>
     </section>
@@ -88,6 +94,8 @@
 
       async function developerToken(teamId, keyId, pem) {
         var body = pem.replace(/-----[^-]+-----/g, '').replace(/\s+/g, '');
+        if (!body) throw new Error('The private key box is empty.');
+        if (/[^A-Za-z0-9+\/=]/.test(body)) throw new Error('The private key contains characters that are not part of a .p8 file. It was probably copied from a masked preview. Use the file chooser above to pick the .p8 file directly.');
         var der = Uint8Array.from(atob(body), function (c) { return c.charCodeAt(0); });
         var key = await crypto.subtle.importKey('pkcs8', der, { name: 'ECDSA', namedCurve: 'P-256' }, false, ['sign']);
         var now = Math.floor(Date.now() / 1000);
@@ -105,6 +113,15 @@
           setTimeout(function () { if (!window.MusicKit) reject(new Error('MusicKit JS did not load. Check your connection and try again.')); }, 10000);
         });
       }
+
+      $('p8file').addEventListener('change', function () {
+        var f = this.files && this.files[0];
+        if (!f) return;
+        var r = new FileReader();
+        r.onload = function () { $('p8').value = String(r.result).trim(); say('Loaded ' + f.name + '.'); };
+        r.onerror = function () { say('Could not read that file.', true); };
+        r.readAsText(f);
+      });
 
       $('go').addEventListener('click', async function () {
         var teamId = $('teamId').value.trim(), keyId = $('keyId').value.trim(), p8 = $('p8').value.trim();
