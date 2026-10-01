@@ -1,8 +1,9 @@
 {
-  "song": "Jean and Dinah",
-  "artist": "Mighty Sparrow",
-  "album": "",
+  "song": "Nova Bossa Amor",
+  "artist": "Drumagick",
+  "album": "Novo Brasil",
+  "artwork": "https://is1-ssl.mzstatic.com/image/thumb/Music128/v4/84/31/12/8431127e-7aa3-e08a-08bd-d87d0f3331f5/5055637198670.png/1200x1200bb.jpg",
   "appleMusicUrl": "",
-  "artwork": "",
-  "updated": "2026-10-01"
+  "updated": "2026-10-01T21:13:58.086Z",
+  "source": "apple-music"
 }
