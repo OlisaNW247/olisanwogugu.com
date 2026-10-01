@@ -41,11 +41,13 @@ jobs:
           APPLE_KEY_ID: ${{ secrets.APPLE_KEY_ID }}
           APPLE_PRIVATE_KEY: ${{ secrets.APPLE_PRIVATE_KEY }}
           APPLE_MUSIC_USER_TOKEN: ${{ secrets.APPLE_MUSIC_USER_TOKEN }}
+          SPOTIFY_CLIENT_ID: ${{ secrets.SPOTIFY_CLIENT_ID }}
+          SPOTIFY_CLIENT_SECRET: ${{ secrets.SPOTIFY_CLIENT_SECRET }}
         run: node tools/update-radio.mjs
 
       - name: Commit and push if anything changed
         run: |
-          git add now-playing.json radio.json radio-index.json radio-token.json 2>/dev/null || true
+          git add now-playing.json radio.json radio-index.json radio-token.json spotify-index.json 2>/dev/null || true
           if git diff --cached --quiet; then
             echo "No change."
             exit 0

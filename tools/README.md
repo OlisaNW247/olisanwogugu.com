@@ -61,9 +61,31 @@ seeded shuffle of the playlist's catalog songs.
 | `radio-index.json` | cache of every library playlist's track ids, refreshed when Apple reports a change or once a day |
 | `radio-token.json` | developer token for Apple's web player, renewed when under 30 days remain |
 
-**Listening.** Visitors are asked to sign in with Apple Music. Subscribers hear full songs through
-Apple's web player (MusicKit JS). Anyone who declines, or has no subscription, hears Apple's 30-second
-previews instead. Songs that exist only in the library with no catalog match are skipped.
+**Listening.** The page opens on a split screen: Apple Music on one half, Spotify on the other.
+
+- *Apple Music*: sign in with an Apple Music subscription and hear full songs through Apple's web
+  player (MusicKit JS). No subscription → falls back to Apple's 30-second previews.
+- *Spotify*: sign in with Spotify (Authorization Code with PKCE, entirely in the browser). Premium
+  listeners hear full songs through Spotify's web player. Anyone else gets Spotify's embedded player,
+  which plays full songs if they are logged in to Spotify and 30-second previews otherwise.
+- A small link under the halves plays Apple's previews with no sign-in at all.
+
+Songs that exist only in the library with no catalog match are skipped. Songs with no Spotify match
+are silent for Spotify listeners during that slot, so everyone stays in sync.
+
+## Spotify setup (optional)
+
+1. At <https://developer.spotify.com/dashboard> (a free Spotify account is enough) click **Create app**.
+   Name it anything, add `https://olisanwogugu.com/radio.html` as a **Redirect URI**, tick **Web API**
+   and **Web Playback SDK**, and save.
+2. Open the app's **Settings** and copy the **Client ID** and **Client secret**.
+3. Add two repository secrets: `SPOTIFY_CLIENT_ID` and `SPOTIFY_CLIENT_SECRET`.
+4. Run the workflow once. It matches the station's songs to Spotify by ISRC (up to 300 per run, the
+   rest on later runs) and publishes the client id in `radio-token.json` for the browser sign-in.
+
+Spotify keeps new apps in *development mode*, where only users you list under **User Management** in
+the dashboard (up to 25) can complete the sign-in. Everyone else lands on Spotify's embedded player
+automatically, so the radio still works for them.
 
 **Things to know.**
 
