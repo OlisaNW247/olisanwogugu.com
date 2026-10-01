@@ -34,16 +34,33 @@ jobs:
           APPLE_MUSIC_USER_TOKEN: ${{ secrets.APPLE_MUSIC_USER_TOKEN }}
         run: node tools/update-now-playing.mjs
 
-      - name: Commit and push if the track changed
+      - name: Update the radio station
+        continue-on-error: true
+        env:
+          APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
+          APPLE_KEY_ID: ${{ secrets.APPLE_KEY_ID }}
+          APPLE_PRIVATE_KEY: ${{ secrets.APPLE_PRIVATE_KEY }}
+          APPLE_MUSIC_USER_TOKEN: ${{ secrets.APPLE_MUSIC_USER_TOKEN }}
+        run: node tools/update-radio.mjs
+
+      - name: Commit and push if anything changed
         run: |
-          if git diff --quiet -- now-playing.json; then
+          git add now-playing.json radio.json radio-index.json radio-token.json 2>/dev/null || true
+          if git diff --cached --quiet; then
             echo "No change."
             exit 0
           fi
-          TITLE=$(node -p "const t=require('./now-playing.json'); t.song + ' — ' + t.artist")
+          MSG=""
+          if ! git diff --cached --quiet -- now-playing.json; then
+            MSG="Now playing: $(node -p "const t=require('./now-playing.json'); t.song + ' — ' + t.artist")"
+          fi
+          if ! git diff --cached --quiet -- radio.json; then
+            R="Radio: $(node -p "require('./radio.json').station.name")"
+            MSG="${MSG:+$MSG · }$R"
+          fi
+          [ -n "$MSG" ] || MSG="Radio: refresh index and token"
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add now-playing.json
-          git commit -m "Now playing: $TITLE"
+          git commit -m "$MSG"
           git pull --rebase origin main
           git push origin HEAD:main

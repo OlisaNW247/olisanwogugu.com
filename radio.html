@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Olisa’s Radio — Olisa Nwogugu</title>
+  <meta name="description" content="A 24/7 radio station built from whichever playlist Olisa Nwogugu last played on Apple Music.">
+  <meta name="robots" content="index, follow">
+  <meta name="author" content="Olisa Nwogugu">
+  <link rel="canonical" href="https://olisanwogugu.com/radio.html">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Olisa Nwogugu">
+  <meta property="og:title" content="Olisa’s Radio">
+  <meta property="og:description" content="A 24/7 station built from whichever playlist Olisa last played on Apple Music.">
+  <meta property="og:url" content="https://olisanwogugu.com/radio.html">
+  <meta name="twitter:card" content="summary">
+  <link rel="stylesheet" href="/radio.css">
+</head>
+<body>
+  <div class="rd-backdrop" id="rd-back"></div>
+  <div class="rd-vignette"></div>
+  <div class="rd-grain"></div>
+  <div class="rd-bar rd-bar-top"></div>
+  <div class="rd-bar rd-bar-bottom"></div>
+
+  <a class="rd-home" href="/">&larr; Olisa Nwogugu</a>
+  <div class="rd-onair" id="rd-onair"><span class="dot"></span><span>On air</span></div>
+
+  <main class="rd-stage">
+    <p class="rd-eyebrow">Olisa&rsquo;s Radio</p>
+    <p class="rd-station" id="rd-station">Tuning&hellip;</p>
+    <div class="rd-art" id="rd-art"></div>
+    <h1 class="rd-title" id="rd-title"></h1>
+    <p class="rd-artist" id="rd-artist"></p>
+    <div class="rd-progress"><div id="rd-progress"></div></div>
+
+    <div class="rd-controls">
+      <button class="rd-btn" id="rd-tune" type="button" hidden>Tune in</button>
+      <button class="rd-icon" id="rd-play" type="button" aria-label="Play" hidden><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></button>
+      <button class="rd-icon" id="rd-pause" type="button" aria-label="Pause" hidden><svg viewBox="0 0 24 24"><path d="M6 5h4v14H6zm8 0h4v14h-4z"/></svg></button>
+      <input class="rd-volume" id="rd-volume" type="range" min="0" max="1" step="0.01" value="0.9" aria-label="Volume" hidden>
+    </div>
+    <p class="rd-status" id="rd-status">Tuning&hellip;</p>
+    <a class="rd-link" id="rd-link" target="_blank" rel="noopener" hidden>Open in Apple Music &rarr;</a>
+  </main>
+
+  <div class="rd-sheet" id="rd-sheet" hidden>
+    <div>
+      <h2>Listen with Apple Music</h2>
+      <p id="rd-sheetNote">Full songs need an Apple Music subscription. Apple handles the sign-in; this site never sees your password.</p>
+      <button class="rd-btn" id="rd-signin" type="button">Sign in with Apple Music</button>
+      <button class="rd-btn ghost" id="rd-previews" type="button">Just play previews</button>
+      <p class="fine">Everyone tuned in hears the same song at the same moment.</p>
+    </div>
+  </div>
+
+  <script src="/radio.js"></script>
+</body>
+</html>

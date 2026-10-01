@@ -1,3 +1,10 @@
+# Apple Music → the site
+
+Two scripts run from the same GitHub Action (`.github/workflows/now-playing.yml`), every five minutes:
+
+- `tools/update-now-playing.mjs` writes `now-playing.json`, the song behind the headphones icon.
+- `tools/update-radio.mjs` writes `radio.json`, the station behind the radio icon (see **Olisa's radio** below).
+
 # Now playing: Apple Music → now-playing.json
 
 `now-playing.json` at the root of the site is what the "Olisa is listening to" reveal reads.
@@ -34,3 +41,32 @@ for the most recently played track every five minutes and committing the file wh
 - If the site stops redeploying after the bot's commits, create a fine-grained personal access token with
   **Contents: Read and write** on this repository and save it as a `PUSH_TOKEN` secret. The workflow
   uses it automatically when present.
+
+# Olisa's radio
+
+`radio.html` is a synchronized 24/7 station. Everyone tuned in hears the same song at the same moment,
+because the page computes the position from the station's start time rather than streaming.
+
+**How the station is chosen.** Every run, the Action takes the last song Olisa played and finds the
+playlists with more than 10 songs that contain it. The one with the most songs wins; a tie goes to the
+playlist Olisa opened most recently. If no playlist qualifies (an album play, say), the station stays as
+it is. When the winning playlist changes, `radio.json` is rewritten with a fresh start time and a
+seeded shuffle of the playlist's catalog songs.
+
+**Files.**
+
+| File | What it is |
+| --- | --- |
+| `radio.json` | the station: playlist name, start time, shuffled tracks with art, duration, preview and link |
+| `radio-index.json` | cache of every library playlist's track ids, refreshed when Apple reports a change or once a day |
+| `radio-token.json` | developer token for Apple's web player, renewed when under 30 days remain |
+
+**Listening.** Visitors are asked to sign in with Apple Music. Subscribers hear full songs through
+Apple's web player (MusicKit JS). Anyone who declines, or has no subscription, hears Apple's 30-second
+previews instead. Songs that exist only in the library with no catalog match are skipped.
+
+**Things to know.**
+
+- The first run after enabling the radio indexes every playlist, which can take a few minutes for a
+  large library. Later runs only re-fetch playlists that changed.
+- `radio-token.json` is public by design; MusicKit developer tokens are meant for client-side use.
