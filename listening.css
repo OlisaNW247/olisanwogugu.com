@@ -1,6 +1,6 @@
 /* "Olisa is listening to" — icon + cinematic reveal */
 
-.listening { display: flex; flex-direction: column; align-items: center; gap: 1rem; margin-top: 4rem; }
+.listening { display: flex; flex-direction: row; align-items: center; justify-content: center; gap: 2.5rem; margin-top: 4rem; }
 .listening-btn {
   appearance: none; background: none; border: 0; padding: 0.5rem; cursor: pointer;
   color: #fff; border-radius: 50%; line-height: 0;
@@ -15,6 +15,10 @@
 .listening-label {
   font-size: 0.85rem; font-weight: 400; letter-spacing: 0.25em; text-transform: uppercase; opacity: 0.5;
 }
+.radio-btn { display: inline-block; border-bottom: 0; opacity: 1; }
+.radio-btn .wave { opacity: 0.35; transition: opacity 0.3s; }
+.radio-btn:hover .wave, .radio-btn:focus-visible .wave { opacity: 1; animation: lst-wave 1.2s ease-in-out infinite; }
+@keyframes lst-wave { 0%, 100% { opacity: 0.4; } 50% { opacity: 1; } }
 @keyframes lst-note {
   0%   { opacity: 0; transform: translateY(6px) rotate(-8deg); }
   20%  { opacity: 0.9; }
