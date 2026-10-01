@@ -2,8 +2,13 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://olisanwogugu.com/</loc>
-    <lastmod>2026-09-06</lastmod>
+    <lastmod>2026-10-01</lastmod>
     <priority>1.0</priority>
+  </url>
+  <url>
+    <loc>https://olisanwogugu.com/listening.html</loc>
+    <lastmod>2026-10-01</lastmod>
+    <priority>0.7</priority>
   </url>
   <url>
     <loc>https://olisanwogugu.com/posts/what-i-dislike-about-music-right-now.html</loc>
