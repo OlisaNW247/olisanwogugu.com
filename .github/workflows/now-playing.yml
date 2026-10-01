@@ -1,0 +1,49 @@
+name: Update now playing
+
+on:
+  schedule:
+    - cron: '*/5 * * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: now-playing
+  cancel-in-progress: false
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          # Optional PUSH_TOKEN secret (fine-grained PAT with contents: write) if GitHub Pages
+          # does not redeploy after commits made with the default token.
+          token: ${{ secrets.PUSH_TOKEN || github.token }}
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Fetch latest track from Apple Music
+        env:
+          APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
+          APPLE_KEY_ID: ${{ secrets.APPLE_KEY_ID }}
+          APPLE_PRIVATE_KEY: ${{ secrets.APPLE_PRIVATE_KEY }}
+          APPLE_MUSIC_USER_TOKEN: ${{ secrets.APPLE_MUSIC_USER_TOKEN }}
+        run: node tools/update-now-playing.mjs
+
+      - name: Commit and push if the track changed
+        run: |
+          if git diff --quiet -- now-playing.json; then
+            echo "No change."
+            exit 0
+          fi
+          TITLE=$(node -p "const t=require('./now-playing.json'); t.song + ' — ' + t.artist")
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add now-playing.json
+          git commit -m "Now playing: $TITLE"
+          git pull --rebase origin main
+          git push origin HEAD:main

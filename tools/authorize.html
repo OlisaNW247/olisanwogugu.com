@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Authorize Apple Music — Olisa Nwogugu</title>
+  <meta name="robots" content="noindex, nofollow">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      background: #000; color: #fff; line-height: 1.6;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+    }
+    main { max-width: 40rem; margin: 0 auto; padding: 3rem 1.25rem 6rem; }
+    h1 { font-weight: 300; letter-spacing: 0.08em; font-size: 1.6rem; }
+    p.lead { margin-top: 0.75rem; opacity: 0.6; font-size: 0.95rem; }
+    section { margin-top: 2.5rem; padding-top: 2rem; border-top: 1px solid rgba(255,255,255,0.12); }
+    h2 { font-size: 0.8rem; letter-spacing: 0.25em; text-transform: uppercase; opacity: 0.5; font-weight: 400; }
+    label { display: block; margin-top: 1.25rem; font-size: 0.85rem; opacity: 0.8; }
+    input, textarea {
+      width: 100%; margin-top: 0.4rem; padding: 0.7rem 0.8rem; color: #fff; background: #0d0d0d;
+      border: 1px solid rgba(255,255,255,0.2); border-radius: 6px; font: inherit; font-size: 0.95rem;
+    }
+    textarea { min-height: 9rem; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 0.8rem; }
+    button {
+      margin-top: 1.5rem; padding: 0.8rem 1.4rem; background: #fff; color: #000; border: 0; border-radius: 999px;
+      font: inherit; font-size: 0.95rem; letter-spacing: 0.04em; cursor: pointer;
+    }
+    button[disabled] { opacity: 0.4; cursor: default; }
+    .out {
+      margin-top: 1.25rem; padding: 0.9rem 1rem; background: #0d0d0d; border: 1px solid rgba(255,255,255,0.2);
+      border-radius: 6px; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 0.78rem;
+      word-break: break-all; white-space: pre-wrap; display: none;
+    }
+    .out.show { display: block; }
+    .status { margin-top: 1rem; font-size: 0.9rem; opacity: 0.75; min-height: 1.4em; }
+    .error { color: #ff6b6b; opacity: 1; }
+    .copy { margin-top: 0.75rem; background: transparent; color: #fff; border: 1px solid rgba(255,255,255,0.3); padding: 0.5rem 1rem; font-size: 0.85rem; }
+    ol { margin-top: 1rem; padding-left: 1.25rem; font-size: 0.95rem; opacity: 0.85; }
+    li + li { margin-top: 0.5rem; }
+    code { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 0.85em; background: rgba(255,255,255,0.08); padding: 0.1em 0.35em; border-radius: 4px; }
+  </style>
+</head>
+<body>
+  <main>
+    <h1>Authorize Apple Music</h1>
+    <p class="lead">A one-time step that lets the site read your recently played tracks. Everything on this page runs in your browser; the private key is used locally to sign a token and is never sent anywhere except, as a signature, to Apple.</p>
+
+    <section>
+      <h2>1. Developer key</h2>
+      <label>Team ID <input id="teamId" placeholder="ABCDE12345" autocomplete="off" spellcheck="false"></label>
+      <label>Key ID <input id="keyId" placeholder="ABC123DEFG" autocomplete="off" spellcheck="false"></label>
+      <label>Private key (.p8 file contents) <textarea id="p8" placeholder="-----BEGIN PRIVATE KEY-----&#10;…&#10;-----END PRIVATE KEY-----" spellcheck="false"></textarea></label>
+      <button id="go">Sign in with Apple Music</button>
+      <p class="status" id="status"></p>
+    </section>
+
+    <section id="result" style="display:none">
+      <h2>2. Your Music User Token</h2>
+      <p style="margin-top:1rem;font-size:0.95rem;opacity:0.85">Save this as the <code>APPLE_MUSIC_USER_TOKEN</code> secret in the GitHub repository. It lasts about six months; when the Action starts failing with a 403, come back here and make a new one.</p>
+      <div class="out show" id="mut"></div>
+      <button class="copy" id="copy">Copy token</button>
+    </section>
+
+    <section>
+      <h2>Where these come from</h2>
+      <ol>
+        <li>In the Apple Developer portal, open <strong>Certificates, Identifiers &amp; Profiles → Keys</strong> and create a key with <strong>MusicKit</strong> enabled. Download the <code>.p8</code> file. The Key ID is shown on that page.</li>
+        <li>The Team ID is in the top right of the developer portal under your name, or under <strong>Membership details</strong>.</li>
+        <li>The <code>.p8</code> can only be downloaded once. Keep it somewhere safe.</li>
+      </ol>
+    </section>
+  </main>
+
+  <script src="https://js-cdn.music.apple.com/musickit/v3/musickit.js" async></script>
+  <script>
+    (function () {
+      var $ = function (id) { return document.getElementById(id); };
+      var status = $('status');
+      function say(msg, isError) { status.textContent = msg; status.className = 'status' + (isError ? ' error' : ''); }
+
+      function b64url(buf) {
+        var s = '', bytes = new Uint8Array(buf);
+        for (var i = 0; i < bytes.length; i++) s += String.fromCharCode(bytes[i]);
+        return btoa(s).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+      }
+      function enc(str) { return b64url(new TextEncoder().encode(str)); }
+
+      async function developerToken(teamId, keyId, pem) {
+        var body = pem.replace(/-----[^-]+-----/g, '').replace(/\s+/g, '');
+        var der = Uint8Array.from(atob(body), function (c) { return c.charCodeAt(0); });
+        var key = await crypto.subtle.importKey('pkcs8', der, { name: 'ECDSA', namedCurve: 'P-256' }, false, ['sign']);
+        var now = Math.floor(Date.now() / 1000);
+        var header = enc(JSON.stringify({ alg: 'ES256', kid: keyId }));
+        var payload = enc(JSON.stringify({ iss: teamId, iat: now, exp: now + 60 * 60 * 24 * 180 }));
+        var data = header + '.' + payload;
+        var sig = await crypto.subtle.sign({ name: 'ECDSA', hash: 'SHA-256' }, key, new TextEncoder().encode(data));
+        return data + '.' + b64url(sig);
+      }
+
+      function musicKitReady() {
+        return new Promise(function (resolve, reject) {
+          if (window.MusicKit) return resolve();
+          document.addEventListener('musickitloaded', resolve, { once: true });
+          setTimeout(function () { if (!window.MusicKit) reject(new Error('MusicKit JS did not load. Check your connection and try again.')); }, 10000);
+        });
+      }
+
+      $('go').addEventListener('click', async function () {
+        var teamId = $('teamId').value.trim(), keyId = $('keyId').value.trim(), p8 = $('p8').value.trim();
+        if (!teamId || !keyId || !p8) return say('Fill in all three fields first.', true);
+        $('go').disabled = true;
+        try {
+          say('Signing developer token…');
+          var token = await developerToken(teamId, keyId, p8);
+          say('Loading MusicKit…');
+          await musicKitReady();
+          await MusicKit.configure({ developerToken: token, app: { name: 'olisanwogugu.com', build: '1' } });
+          say('Opening Apple sign-in…');
+          var music = MusicKit.getInstance();
+          var mut = await music.authorize();
+          if (!mut) throw new Error('Apple did not return a user token.');
+          $('mut').textContent = mut;
+          $('result').style.display = '';
+          $('result').scrollIntoView({ behavior: 'smooth' });
+          say('Done. Copy the token below into the GitHub secret.');
+        } catch (e) {
+          say((e && e.message) || String(e), true);
+        } finally {
+          $('go').disabled = false;
+        }
+      });
+
+      $('copy').addEventListener('click', function () {
+        navigator.clipboard.writeText($('mut').textContent).then(function () { $('copy').textContent = 'Copied'; setTimeout(function () { $('copy').textContent = 'Copy token'; }, 1500); });
+      });
+    })();
+  </script>
+</body>
+</html>
