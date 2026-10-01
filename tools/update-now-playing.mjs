@@ -25,15 +25,18 @@ export function developerToken({ teamId, keyId, privateKey, ttlSeconds = 3600 })
   return `${data}.${b64url(sig)}`;
 }
 
-export function trackFromApple(item) {
+export function trackFromApple(item, storefront = 'us') {
   const a = item && item.attributes;
   if (!a) return null;
+  // Library songs carry no public URL, but their catalog ID is enough to build one.
+  const catalogId = a.playParams && a.playParams.catalogId;
+  const url = a.url || (catalogId ? `https://music.apple.com/${storefront}/song/${catalogId}` : '');
   return {
     song: a.name || '',
     artist: a.artistName || '',
     album: a.albumName || '',
     artwork: a.artwork && a.artwork.url ? a.artwork.url.replace('{w}', '1200').replace('{h}', '1200') : '',
-    appleMusicUrl: a.url || ''
+    appleMusicUrl: url
   };
 }
 
@@ -48,13 +51,21 @@ async function main() {
   const devToken = developerToken({ teamId: env('APPLE_TEAM_ID'), keyId: env('APPLE_KEY_ID'), privateKey: env('APPLE_PRIVATE_KEY') });
   const userToken = env('APPLE_MUSIC_USER_TOKEN');
 
+  const headers = { Authorization: `Bearer ${devToken}`, 'Music-User-Token': userToken };
+
+  let storefront = 'us';
+  try {
+    const sf = await fetch('https://api.music.apple.com/v1/me/storefront', { headers });
+    if (sf.ok) { const j = await sf.json(); if (j.data && j.data[0] && j.data[0].id) storefront = j.data[0].id; }
+  } catch {}
+
   const url = 'https://api.music.apple.com/v1/me/recent/played/tracks?types=songs,library-songs&limit=1';
-  const res = await fetch(url, { headers: { Authorization: `Bearer ${devToken}`, 'Music-User-Token': userToken } });
+  const res = await fetch(url, { headers });
   if (res.status === 403) throw new Error('Apple returned 403. The Music User Token has probably expired: re-run tools/authorize.html and update the APPLE_MUSIC_USER_TOKEN secret.');
   if (res.status === 401) throw new Error('Apple returned 401. Check APPLE_TEAM_ID, APPLE_KEY_ID and APPLE_PRIVATE_KEY.');
   if (!res.ok) throw new Error(`Apple returned ${res.status}: ${await res.text()}`);
   const body = await res.json();
-  const track = trackFromApple(body.data && body.data[0]);
+  const track = trackFromApple(body.data && body.data[0], storefront);
   if (!track || !track.song) {
     console.log('No recently played track returned; leaving now-playing.json unchanged.');
     return;
