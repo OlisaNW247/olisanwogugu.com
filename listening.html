@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Olisa is listening to — Olisa Nwogugu</title>
+  <meta name="description" content="What Olisa Nwogugu is listening to right now on Apple Music.">
+  <meta name="robots" content="index, follow">
+  <meta name="author" content="Olisa Nwogugu">
+  <link rel="canonical" href="https://olisanwogugu.com/listening.html">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Olisa Nwogugu">
+  <meta property="og:title" content="Olisa is listening to">
+  <meta property="og:description" content="What Olisa is listening to right now on Apple Music.">
+  <meta property="og:url" content="https://olisanwogugu.com/listening.html">
+  <meta name="twitter:card" content="summary">
+  <link rel="stylesheet" href="/squares.css">
+  <link rel="stylesheet" href="/listening.css">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      min-height: 100vh; background: #000; color: #fff; text-align: center;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+    }
+    main { min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 4rem 1.5rem; }
+    a.home {
+      position: fixed; top: 1.5rem; left: 1.5rem; color: #fff; opacity: 0.6; text-decoration: none;
+      font-size: 0.85rem; letter-spacing: 0.2em; text-transform: uppercase;
+    }
+    a.home:hover { opacity: 1; }
+  </style>
+</head>
+<body data-listening-autoopen="true">
+  <canvas id="bg" aria-hidden="true"></canvas>
+  <div id="veil" aria-hidden="true"></div>
+  <a class="home" href="/">&larr; Olisa Nwogugu</a>
+  <main>
+    <div class="listening">
+      <button class="listening-btn" id="listening-btn" type="button" aria-label="See what Olisa is listening to">
+        <svg viewBox="0 0 72 72" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <!-- floating notes (animate on hover) -->
+          <g class="note note-1" transform="translate(56 14)"><path d="M0 7V-2l5-1.5V5.5"/><circle cx="-1.8" cy="7.2" r="1.9" fill="currentColor" stroke="none"/><circle cx="3.2" cy="5.7" r="1.9" fill="currentColor" stroke="none"/></g>
+          <g class="note note-2" transform="translate(10 20)"><path d="M0 6V-3"/><circle cx="-1.8" cy="6.2" r="1.9" fill="currentColor" stroke="none"/></g>
+          <g class="note note-3" transform="translate(63 30)"><path d="M0 5V-3"/><circle cx="-1.8" cy="5.2" r="1.9" fill="currentColor" stroke="none"/></g>
+          <!-- head -->
+          <circle cx="36" cy="40" r="17"/>
+          <!-- hair tuft -->
+          <path d="M28 24c2-4 6-6 8-6s6 2 8 6"/>
+          <!-- eyes -->
+          <circle cx="29.5" cy="38" r="1.9" fill="currentColor" stroke="none"/>
+          <circle cx="42.5" cy="38" r="1.9" fill="currentColor" stroke="none"/>
+          <!-- smile -->
+          <path d="M29 45.5c2.5 3.5 11.5 3.5 14 0"/>
+          <!-- headband -->
+          <path d="M16 40c0-13 9-22 20-22s20 9 20 22"/>
+          <!-- ear cups -->
+          <rect x="12" y="36" width="8" height="13" rx="3.5" fill="#000"/>
+          <rect x="52" y="36" width="8" height="13" rx="3.5" fill="#000"/>
+        </svg>
+      </button>
+      <p class="listening-label">Olisa is listening to&hellip;</p>
+    </div>
+
+  </main>
+  <script src="/squares.js"></script>
+  <script src="/listening.js"></script>
+</body>
+</html>
