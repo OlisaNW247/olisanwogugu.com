@@ -1,0 +1,652 @@
+{
+  "station": {
+    "id": "p.ZOAXXEzs4xVEq5X",
+    "name": "🕴️",
+    "lastModified": "2026-09-27T20:38:56Z",
+    "songCount": 66
+  },
+  "startedAt": "2026-10-01T23:32:44.163Z",
+  "tracks": [
+    {
+      "id": "1422656591",
+      "song": "Corcovado (Quiet Nights of Quiet Stars)",
+      "artist": "Stan Getz, Astrud Gilberto, Antônio Carlos Jobim & João Gilberto",
+      "album": "Getz/Gilberto",
+      "artwork": "https://is1-ssl.mzstatic.com/image/thumb/Music126/v4/54/04/b8/5404b8fd-3dbf-9fe1-0513-4611c4dec84e/06UMGIM14182.rgb.jpg/1200x1200bb.jpg",
+      "duration": 259813,
+      "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/5a/91/31/5a913105-95e9-6669-1b1c-a3fe18560077/mzaf_8444170522757703263.plus.aac.p.m4a",
+      "url": "https://music.apple.com/us/album/corcovado-quiet-nights-of-quiet-stars/1422655717?i=1422656591"
+    },
+    {
+      "id": "1543320460",
+      "song": "Além Do Horizonte",
+      "artist": "Nara Leão",
+      "album": "... E Que Tudo Mais Vá Pro Inferno",
+      "artwork": "https://is1-ssl.mzstatic.com/image/thumb/Music124/v4/8b/fa/7d/8bfa7d83-e7ff-8def-cd72-2c4a533ae1b0/20UM1IM01145.rgb.jpg/1200x1200bb.jpg",
+      "duration": 253840,
+      "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview125/v4/95/f5/71/95f57126-b998-e32b-6c54-3296875cd72d/mzaf_2361156617275210373.plus.aac.p.m4a",
+      "url": "https://music.apple.com/us/album/al%C3%A9m-do-horizonte/1543320124?i=1543320460"
+    },
+    {
+      "id": "1442918667",
+      "song": "Clareou",
+      "artist": "Xande de Pilares",
+      "album": "Samba + Pagode De Todos Os Tempos",
+      "artwork": "https://is1-ssl.mzstatic.com/image/thumb/Music114/v4/70/c3/5a/70c35a87-2401-ca36-f98f-a6d93383331f/16UMGIM01070.rgb.jpg/1200x1200bb.jpg",
+      "duration": 242746,
+      "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/62/76/0f/62760fc8-c188-4e39-cac2-fad01e111161/mzaf_7215131924121670566.plus.aac.p.m4a",
+      "url": "https://music.apple.com/us/album/clareou/1442918464?i=1442918667"
+    },
+    {
+      "id": "1425191998",
+      "song": "De Conversa em Conversa",
+      "artist": "João Gilberto",
+      "album": "Bossa Nova Brasil",
+      "artwork": "https://is1-ssl.mzstatic.com/image/thumb/Music126/v4/a1/83/f0/a183f085-2b5b-7390-59ba-585ceabc78c5/06UMGIM06349.rgb.jpg/1200x1200bb.jpg",
+      "duration": 136067,
+      "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/4e/3b/23/4e3b2364-83a7-0158-f09c-73a83a2e6b01/mzaf_9211163385100537509.plus.aac.p.m4a",
+      "url": "https://music.apple.com/us/album/de-conversa-em-conversa/1425191985?i=1425191998"
+    },
+    {
+      "id": "460033761",
+      "song": "Quando Bate Uma Saudade",
+      "artist": "Paulinho da Viola",
+      "album": "Eu Canto Samba",
+      "artwork": "https://is1-ssl.mzstatic.com/image/thumb/Music/cf/0d/21/mzi.zbfxbggf.jpg/1200x1200bb.jpg",
+      "duration": 221467,
+      "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview125/v4/63/c4/73/63c473ae-1910-f0e6-659d-e7d582bb5838/mzaf_4401955099347595828.plus.aac.p.m4a",
+      "url": "https://music.apple.com/us/album/quando-bate-uma-saudade/460033695?i=460033761"
+    },
+    {
+      "id": "1199070065",
+      "song": "O bêbado e a equilibrista",
+      "artist": "Elis Regina",
+      "album": "Eternamente Elis, Vol. 2",
+      "artwork": "https://is1-ssl.mzstatic.com/image/thumb/Music122/v4/79/c6/f3/79c6f311-27ca-76f8-9b7d-d7162f97dbe8/190296980268.jpg/1200x1200bb.jpg",
+      "duration": 230000,
+      "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview116/v4/c5/59/35/c559352b-0e5b-8d77-c0f0-fd94ffc1f7ac/mzaf_3887181277634893762.plus.aac.p.m4a",
+      "url": "https://music.apple.com/us/album/o-b%C3%AAbado-e-a-equilibrista/1199069907?i=1199070065"
+    },
+    {
+      "id": "482347908",
+      "song": "Kenya",
+      "artist": "Os Ipanemas",
+      "album": "Os Ipanemas",
+      "artwork": "https://is1-ssl.mzstatic.com/image/thumb/Music124/v4/f5/b4/0a/f5b40abf-619f-dcec-9dc8-4c8f1053a743/mzi.jelwmzdo.jpg/1200x1200bb.jpg",
+      "duration": 197093,
+      "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/b5/3e/99/b53e9912-815a-ab01-fbf0-3a81b99c058c/mzaf_7130259942411349114.plus.aac.p.m4a",
+      "url": "https://music.apple.com/us/album/kenya/482347901?i=482347908"
+    },
+    {
+      "id": "1444076543",
+      "song": "Beleza Pura",
+      "artist": "Masayoshi Takanaka",
+      "album": "Brasilian Skies",
+      "artwork": "https://is1-ssl.mzstatic.com/image/thumb/Music118/v4/65/8f/b5/658fb537-464d-a17f-4a3d-c87c180f4ddd/00602498909386.rgb.jpg/1200x1200bb.jpg",
+      "duration": 473013,
+      "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview118/v4/e8/bc/cd/e8bccd4d-ef13-09f6-7316-14ab9fcc4c93/mzaf_787585645187101628.plus.aac.p.m4a",
+      "url": "https://music.apple.com/us/album/beleza-pura/1444076539?i=1444076543"
+    },
+    {
+      "id": "1721383478",
+      "song": "Um Dia",
+      "artist": "Sreya & Cilon",
+      "album": "Atenção Com Coração",
+      "artwork": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/fc/9b/df/fc9bdfe1-634c-c840-cda8-85c07cca8bfb/4062548080827.png/1200x1200bb.jpg",
+      "duration": 171458,
+      "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/01/9b/37/019b37a7-4413-ead1-eec5-91f4270d23a4/mzaf_12531860894825348682.plus.aac.p.m4a",
+      "url": "https://music.apple.com/us/album/um-dia/1721383467?i=1721383478"
+    },
+    {
+      "id": "1308746007",
+      "song": "Ponteio",
+      "artist": "Astrud Gilberto",
+      "album": "Gilberto with Turrentine (Bonus Track Version)",
+      "artwork": "https://is1-ssl.mzstatic.com/image/thumb/Music115/v4/8e/85/0f/8e850fff-e1bc-877e-e752-03a990b7fc92/827969059821.jpg/1200x1200bb.jpg",
+      "duration": 222733,
+      "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview125/v4/2a/42/63/2a426335-b75c-120b-c7e9-b07d4e45dd4a/mzaf_11422028994598296821.plus.aac.p.m4a",
+      "url": "https://music.apple.com/us/album/ponteio/1308745999?i=1308746007"
+    },
+    {
+      "id": "1368746505",
+      "song": "Samba de Rosa pra Salvador",
+      "artist": "Dona Ivone Lara",
+      "album": "Alegria Minha Gente (Terra Dos Meus Sonhos Dourados)",
+      "artwork": "https://is1-ssl.mzstatic.com/image/thumb/Music128/v4/03/64/26/03642664-8bcb-595f-2b51-a63b2b0a5a91/190296914003.jpg/1200x1200bb.jpg",
+      "duration": 246093,
+      "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview122/v4/4a/80/14/4a8014b7-a1e8-1fe2-254c-c7325a230b8d/mzaf_15826202355608171486.plus.aac.p.m4a",
+      "url": "https://music.apple.com/us/album/samba-de-rosa-pra-salvador/1368745111?i=1368746505"
+    },
+    {
+      "id": "1721383480",
+      "song": "Amanhecer",
+      "artist": "Sreya & Cilon",
+      "album": "Atenção Com Coração",
+      "artwork": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/fc/9b/df/fc9bdfe1-634c-c840-cda8-85c07cca8bfb/4062548080827.png/1200x1200bb.jpg",
+      "duration": 289297,
+      "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/36/84/cc/3684cc48-2a99-921c-3c06-076161232efa/mzaf_2395793579407547109.plus.aac.p.m4a",
+      "url": "https://music.apple.com/us/album/amanhecer/1721383467?i=1721383480"
+    },
+    {
+      "id": "1617145386",
+      "song": "Chora Tua Tristeza (Cry Your Sadness)",
+      "artist": "Carlos Lyra",
+      "album": "Bossa Nova Carlos Lyra",
+      "artwork": "https://is1-ssl.mzstatic.com/image/thumb/Music126/v4/e2/5d/60/e25d606e-28c7-909e-1493-f2f03e568505/5013929321533.jpg/1200x1200bb.jpg",
+      "duration": 157267,
+      "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/b2/bd/85/b2bd858e-b374-9a06-b422-b69c0548e122/mzaf_11593751993736008462.plus.aac.p.m4a",
+      "url": "https://music.apple.com/us/album/chora-tua-tristeza-cry-your-sadness/1617144994?i=1617145386"
+    },
+    {
+      "id": "479472219",
+      "song": "Da Melhor Qualidade",
+      "artist": "Beth Carvalho",
+      "album": "Das Bênçãos Que Virão Com os Novos Amanhãs",
+      "artwork": "https://is1-ssl.mzstatic.com/image/thumb/Music115/v4/15/f7/91/15f791bf-f9cb-f35d-6885-75bdcd6aecf4/743217378127.jpg/1200x1200bb.jpg",
+      "duration": 182400,
+      "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/17/63/fc/1763fc16-31e9-9096-72a6-ff35da6b844c/mzaf_4094896378240905805.plus.aac.p.m4a",
+      "url": "https://music.apple.com/us/album/da-melhor-qualidade/479472213?i=479472219"
+    },
+    {
+      "id": "1444080842",
+      "song": "Carta Ao Tom 74",
+      "artist": "Vinicius De Moraes, Toquinho & Quarteto Em Cy",
+      "album": "20 Grandes Sucessos de Toquinho & Vinicius",
+      "artwork": "https://is1-ssl.mzstatic.com/image/thumb/Music124/v4/b5/59/6f/b5596f52-12c4-725d-268c-7c4131c66fbd/06UMGIM34429.rgb.jpg/1200x1200bb.jpg",
+      "duration": 160600,
+      "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/8a/c1/1c/8ac11c59-b548-a4f9-406b-f5ba624bdb6a/mzaf_9452460475669376676.plus.aac.p.m4a",
+      "url": "https://music.apple.com/us/album/carta-ao-tom-74/1444079932?i=1444080842"
+    },
+    {
+      "id": "1617145408",
+      "song": "Tem dó de Mim",
+      "artist": "Carlos Lyra",
+      "album": "Bossa Nova Carlos Lyra",
+      "artwork": "https://is1-ssl.mzstatic.com/image/thumb/Music126/v4/e2/5d/60/e25d606e-28c7-909e-1493-f2f03e568505/5013929321533.jpg/1200x1200bb.jpg",
+      "duration": 127387,
+      "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/b8/59/5a/b8595a45-e1d7-0a59-4d9e-e03354164c02/mzaf_3356997659836188482.plus.aac.p.m4a",
+      "url": "https://music.apple.com/us/album/tem-d%C3%B3-de-mim/1617144994?i=1617145408"
+    },
+    {
+      "id": "1582748193",
+      "song": "Um Gago Apaixonado",
+      "artist": "João Nogueira",
+      "album": "E Lá Vou Eu",
+      "artwork": "https://is1-ssl.mzstatic.com/image/thumb/Music125/v4/86/97/99/869799eb-e6b0-f670-e7d3-850600349a58/21UMGIM70564.rgb.jpg/1200x1200bb.jpg",
+      "duration": 142893,
+      "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview125/v4/a1/43/5c/a1435c6c-24be-f4f7-fccd-234b657bc2a0/mzaf_12420466869993779359.plus.aac.p.m4a",
+      "url": "https://music.apple.com/us/album/um-gago-apaixonado/1582748180?i=1582748193"
+    },
+    {
+      "id": "917426878",
+      "song": "Canto de Ossanha",
+      "artist": "Baden Powell & Quarteto Em Cy",
+      "album": "Os Afro-Sambas",
+      "artwork": "https://is1-ssl.mzstatic.com/image/thumb/Music5/v4/74/a9/84/74a984bd-a460-4eb2-1408-b304672a0ef1/7898324758300.jpg/1200x1200bb.jpg",
+      "duration": 255080,
+      "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview125/v4/0d/d3/d8/0dd3d86f-e5fd-4e5e-b7ae-a9cc6f657fc8/mzaf_5169599588334703436.plus.aac.p.m4a",
+      "url": "https://music.apple.com/us/album/canto-de-ossanha/917426815?i=917426878"
+    },
+    {
+      "id": "1581709127",
+      "song": "Nó Na Madeira",
+      "artist": "João Nogueira",
+      "album": "Vem Quem Tem",
+      "artwork": "https://is1-ssl.mzstatic.com/image/thumb/Music115/v4/65/cd/df/65cddf6d-8af1-3981-32d9-a41d8859a6ff/21UMGIM65673.rgb.jpg/1200x1200bb.jpg",
+      "duration": 174000,
+      "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/b1/69/63/b16963bc-30b7-6f4a-eecd-8d5c1de3e7a8/mzaf_14555969099713458194.plus.aac.p.m4a",
+      "url": "https://music.apple.com/us/album/n%C3%B3-na-madeira/1581708836?i=1581709127"
+    },
+    {
+      "id": "1446048656",
+      "song": "Não Adianta",
+      "artist": "Trio Mocotó",
+      "album": "Trio Mocoto",
+      "artwork": "https://is1-ssl.mzstatic.com/image/thumb/Music128/v4/b8/a7/19/b8a71961-5859-fd71-49b1-433d62b4906c/cover.jpg/1200x1200bb.jpg",
+      "duration": 247120,
+      "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/16/3b/e9/163be9fb-77d1-43d3-7724-10e015b99e52/mzaf_2235863845010857644.plus.aac.p.m4a",
+      "url": "https://music.apple.com/us/album/n%C3%A3o-adianta/1446048647?i=1446048656"
+    },
+    {
+      "id": "1002609674",
+      "song": "Señora Diana La Ví (feat. Diane Denoir)",
+      "artist": "Eduardo Mateo",
+      "album": "El Tartamudo",
+      "artwork": "https://is1-ssl.mzstatic.com/image/thumb/Music115/v4/1a/dd/f3/1addf363-b1f5-7545-d141-b9b2166c37e5/889845181057.jpg/1200x1200bb.jpg",
+      "duration": 165998,
+      "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/a2/66/eb/a266eb1d-2434-b92d-4dea-1c7b285ccc6c/mzaf_15945962759070802796.plus.aac.p.m4a",
+      "url": "https://music.apple.com/us/album/se%C3%B1ora-diana-la-v%C3%AD-feat-diane-denoir/1002609670?i=1002609674"
+    },
+    {
+      "id": "349912352",
+      "song": "Easy Lovers",
+      "artist": "Piero Piccioni",
+      "album": "Camille 2000 (Original Motion Picture Soundtrack)",
+      "artwork": "https://is1-ssl.mzstatic.com/image/thumb/Music114/v4/58/1a/e2/581ae210-754e-cac7-594e-288b9b408b59/mzi.ysaxvlqp.jpg/1200x1200bb.jpg",
+      "duration": 225542,
+      "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/d9/24/db/d924dbad-be5f-35d2-cd9a-975923e6bea6/mzaf_4870614044037955777.plus.aac.p.m4a",
+      "url": "https://music.apple.com/us/album/easy-lovers/349912349?i=349912352"
+    },
+    {
+      "id": "1873981293",
+      "song": "Samba De Orly",
+      "artist": "Quarteto Em Cy",
+      "album": "Mpb Em Cy",
+      "artwork": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/9f/18/de/9f18dede-088d-e591-af0f-8db3cd7388a9/8721465455410.png/1200x1200bb.jpg",
+      "duration": 124830,
+      "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/be/4f/dd/be4fdd3b-9bd9-55ee-ba91-29a079356414/mzaf_12377765554748460729.plus.aac.p.m4a",
+      "url": "https://music.apple.com/us/album/samba-de-orly/1873981290?i=1873981293"
+    },
+    {
+      "id": "1438430522",
+      "song": "Brigas Nunca Mais",
+      "artist": "Elis Regina & Antônio Carlos Jobim",
+      "album": "Elis & Tom",
+      "artwork": "https://is1-ssl.mzstatic.com/image/thumb/Music125/v4/f1/6e/0c/f16e0cca-3d7a-bd6c-6695-846b583c53b4/18UMGIM64810.rgb.jpg/1200x1200bb.jpg",
+      "duration": 102008,
+      "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/e8/8b/74/e88b74cb-62c0-8c3a-1e5a-1a70e2b42f05/mzaf_17060008124014365829.plus.aac.p.m4a",
+      "url": "https://music.apple.com/us/album/brigas-nunca-mais/1438430508?i=1438430522"
+    },
+    {
+      "id": "1422656497",
+      "song": "Doralice",
+      "artist": "Stan Getz & João Gilberto",
+      "album": "Getz/Gilberto",
+      "artwork": "https://is1-ssl.mzstatic.com/image/thumb/Music126/v4/54/04/b8/5404b8fd-3dbf-9fe1-0513-4611c4dec84e/06UMGIM14182.rgb.jpg/1200x1200bb.jpg",
+      "duration": 168253,
+      "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/a8/d1/de/a8d1de4c-c3d6-0bc4-a752-9856594dabee/mzaf_11885962300861729513.plus.aac.p.m4a",
+      "url": "https://music.apple.com/us/album/doralice/1422655717?i=1422656497"
+    },
+    {
+      "id": "713958666",
+      "song": "To Voltando",
+      "artist": "Simone",
+      "album": "Retratos: Simone",
+      "artwork": "https://is1-ssl.mzstatic.com/image/thumb/Music4/v4/91/8a/da/918adadc-3dbc-b92e-6333-58b6cb5f0369/00724386499950.jpg/1200x1200bb.jpg",
+      "duration": 238307,
+      "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview116/v4/d0/26/e9/d026e912-fcfa-feff-97a9-bf9df69af275/mzaf_15840457945902977447.plus.aac.p.m4a",
+      "url": "https://music.apple.com/us/album/to-voltando/713958640?i=713958666"
+    },
+    {
+      "id": "1438430509",
+      "song": "Águas de Março",
+      "artist": "Elis Regina & Antônio Carlos Jobim",
+      "album": "Elis & Tom",
+      "artwork": "https://is1-ssl.mzstatic.com/image/thumb/Music125/v4/f1/6e/0c/f16e0cca-3d7a-bd6c-6695-846b583c53b4/18UMGIM64810.rgb.jpg/1200x1200bb.jpg",
+      "duration": 214004,
+      "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/46/c9/83/46c98301-28e6-bc75-e495-55638bccca96/mzaf_14687538207891106000.plus.aac.p.m4a",
+      "url": "https://music.apple.com/us/album/%C3%A1guas-de-mar%C3%A7o/1438430508?i=1438430509"
+    },
+    {
+      "id": "975582005",
+      "song": "Samba de Verão (Ao Vivo) [feat. Marcos Valle]",
+      "artist": "Bossacucanova",
+      "album": "Bossacucanova ao Vivo (Uma Celebração aos 50 Anos da Bossa Nova)",
+      "artwork": "https://is1-ssl.mzstatic.com/image/thumb/Music122/v4/fa/6d/4e/fa6d4e07-c55a-7080-ac75-86039be72ba0/cover.jpg/1200x1200bb.jpg",
+      "duration": 215200,
+      "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview122/v4/c5/35/c3/c535c3f4-eb80-050e-d4cf-f22e001a3e75/mzaf_1673006688468726926.plus.aac.p.m4a",
+      "url": "https://music.apple.com/us/album/samba-de-ver%C3%A3o-ao-vivo-feat-marcos-valle/975581418?i=975582005"
+    },
+    {
+      "id": "975439998",
+      "song": "A Vizinha do Lado",
+      "artist": "Roberta Sá",
+      "album": "Braseiro",
+      "artwork": "https://is1-ssl.mzstatic.com/image/thumb/Music3/v4/8e/4c/2d/8e4c2d71-903c-83f2-9f01-99500b305f57/7891430383220.jpg/1200x1200bb.jpg",
+      "duration": 199667,
+      "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/df/05/19/df051954-45f9-1bc8-379a-0f368050fbd6/mzaf_8561072055581672611.plus.aac.p.m4a",
+      "url": "https://music.apple.com/us/album/a-vizinha-do-lado/975439991?i=975439998"
+    },
+    {
+      "id": "486400180",
+      "song": "Aquarela do Brasil",
+      "artist": "João Gilberto",
+      "album": "Brasil (feat. Caetano Veloso, Gilberto Gil and Maria Bethania)",
+      "artwork": "https://is1-ssl.mzstatic.com/image/thumb/Music/e6/fd/f4/mzi.rvsthpry.jpg/1200x1200bb.jpg",
+      "duration": 395760,
+      "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview125/v4/81/4c/f7/814cf771-5d91-0ef1-75b5-f1d8332f1023/mzaf_3730557638237660583.plus.aac.p.m4a",
+      "url": "https://music.apple.com/us/album/aquarela-do-brasil/486400177?i=486400180"
+    },
+    {
+      "id": "1476852811",
+      "song": "Meu Pitel",
+      "artist": "Xande de Pilares",
+      "album": "Meu Pitel - Single",
+      "artwork": "https://is1-ssl.mzstatic.com/image/thumb/Music115/v4/5f/2f/84/5f2f8472-1f35-4a0b-56df-8dd5b6e52f4d/19UMGIM74212.rgb.jpg/1200x1200bb.jpg",
+      "duration": 256784,
+      "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/3f/69/4a/3f694aa8-7741-78a0-eb10-b449c6522cf6/mzaf_8883271286542106722.plus.aac.p.m4a",
+      "url": "https://music.apple.com/us/album/meu-pitel/1476852809?i=1476852811"
+    },
+    {
+      "id": "975439993",
+      "song": "Pelas Tabelas",
+      "artist": "Roberta Sá",
+      "album": "Braseiro",
+      "artwork": "https://is1-ssl.mzstatic.com/image/thumb/Music3/v4/8e/4c/2d/8e4c2d71-903c-83f2-9f01-99500b305f57/7891430383220.jpg/1200x1200bb.jpg",
+      "duration": 233427,
+      "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/ce/25/82/ce258296-f8a6-ec66-b83f-c1a3c9642b56/mzaf_926240771013821657.plus.aac.p.m4a",
+      "url": "https://music.apple.com/us/album/pelas-tabelas/975439991?i=975439993"
+    },
+    {
+      "id": "1715011398",
+      "song": "Melhor Se Acostumar (Tour-Maubourg Remix)",
+      "artist": "Pedro Mizutani",
+      "album": "Melhor Se Acostumar (Tour-Maubourg Remix) - Single",
+      "artwork": "https://is1-ssl.mzstatic.com/image/thumb/Music116/v4/92/db/8c/92db8cfc-3f39-3992-83ce-90fb7db7aa21/cover.jpg/1200x1200bb.jpg",
+      "duration": 194955,
+      "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview126/v4/6f/5e/1b/6f5e1bc2-ecbb-a99e-7576-3ea27ec6aa74/mzaf_11388176416597444698.plus.aac.p.m4a",
+      "url": "https://music.apple.com/us/album/melhor-se-acostumar-tour-maubourg-remix/1715011060?i=1715011398"
+    },
+    {
+      "id": "1443338153",
+      "song": "Lamento No Morro",
+      "artist": "Nara Leão",
+      "album": "Nara (1967)",
+      "artwork": "https://is1-ssl.mzstatic.com/image/thumb/Music128/v4/47/80/de/4780de5c-d165-0f30-c961-d373ca12eb65/00731454634328.rgb.jpg/1200x1200bb.jpg",
+      "duration": 146693,
+      "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/7b/92/d7/7b92d79d-8893-8bc1-f928-9252d225020f/mzaf_8000925259758608807.plus.aac.p.m4a",
+      "url": "https://music.apple.com/us/album/lamento-no-morro/1443337261?i=1443338153"
+    },
+    {
+      "id": "1810229685",
+      "song": "Figa De Guiné",
+      "artist": "Mari Froes",
+      "album": "Figa De Guiné - Single",
+      "artwork": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/61/bf/b0/61bfb0c7-59cf-f3ce-ff64-84c7ee491156/196873072753.jpg/1200x1200bb.jpg",
+      "duration": 140910,
+      "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/a1/2d/82/a12d8276-59dc-d436-6064-237c2a2444d9/mzaf_14401834063197114667.plus.aac.p.m4a",
+      "url": "https://music.apple.com/us/album/figa-de-guin%C3%A9/1810229681?i=1810229685"
+    },
+    {
+      "id": "1444127561",
+      "song": "Nação",
+      "artist": "João Bosco",
+      "album": "Comissão de Frente",
+      "artwork": "https://is1-ssl.mzstatic.com/image/thumb/Music128/v4/d6/4a/f1/d64af175-97b8-5b42-e780-f04fba95e539/00731453374928.rgb.jpg/1200x1200bb.jpg",
+      "duration": 273867,
+      "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/05/42/e1/0542e130-4841-5115-fa68-cb650303ef6b/mzaf_14815748107236449562.plus.aac.p.m4a",
+      "url": "https://music.apple.com/us/album/na%C3%A7%C3%A3o/1444127359?i=1444127561"
+    },
+    {
+      "id": "263514482",
+      "song": "O Homem Falou",
+      "artist": "Maria Rita",
+      "album": "Samba Meu",
+      "artwork": "https://is1-ssl.mzstatic.com/image/thumb/Music125/v4/f5/8e/a6/f58ea644-ce2d-ed8f-765c-6c8af49b8b7e/mzi.cnyqyppy.jpg/1200x1200bb.jpg",
+      "duration": 234533,
+      "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/0b/36/35/0b36358c-8dc5-50e4-27c6-369d4542985a/mzaf_9016165676746358562.plus.aac.p.m4a",
+      "url": "https://music.apple.com/us/album/o-homem-falou/263514375?i=263514482"
+    },
+    {
+      "id": "1743001763",
+      "song": "Para Lennon e McCartney",
+      "artist": "Elis Regina",
+      "album": "Para Lennon e McCartney - Single",
+      "artwork": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/44/07/90/440790a4-d773-6088-1335-99bcde18d917/0.jpg/1200x1200bb.jpg",
+      "duration": 171595,
+      "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/6c/27/4e/6c274ef8-18c6-549c-e51a-00306fd93f5c/mzaf_13764411898800787080.plus.aac.p.m4a",
+      "url": "https://music.apple.com/us/album/para-lennon-e-mccartney/1743001762?i=1743001763"
+    },
+    {
+      "id": "975440000",
+      "song": "Cicatrizes",
+      "artist": "Roberta Sá",
+      "album": "Braseiro",
+      "artwork": "https://is1-ssl.mzstatic.com/image/thumb/Music3/v4/8e/4c/2d/8e4c2d71-903c-83f2-9f01-99500b305f57/7891430383220.jpg/1200x1200bb.jpg",
+      "duration": 204960,
+      "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/5d/f6/fb/5df6fb93-dba9-555d-709c-c47f9bffd745/mzaf_16682022557428805902.plus.aac.p.m4a",
+      "url": "https://music.apple.com/us/album/cicatrizes/975439991?i=975440000"
+    },
+    {
+      "id": "482347958",
+      "song": "Java",
+      "artist": "Os Ipanemas",
+      "album": "Os Ipanemas",
+      "artwork": "https://is1-ssl.mzstatic.com/image/thumb/Music124/v4/f5/b4/0a/f5b40abf-619f-dcec-9dc8-4c8f1053a743/mzi.jelwmzdo.jpg/1200x1200bb.jpg",
+      "duration": 198893,
+      "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/d1/00/4c/d1004c93-842b-cf28-23ef-397c0da2adcb/mzaf_12404478781798437330.plus.aac.p.m4a",
+      "url": "https://music.apple.com/us/album/java/482347901?i=482347958"
+    },
+    {
+      "id": "458422159",
+      "song": "Escasseia",
+      "artist": "Beth Carvalho",
+      "album": "Na Fonte",
+      "artwork": "https://is1-ssl.mzstatic.com/image/thumb/Music/e4/b0/97/mzi.esslykbs.jpg/1200x1200bb.jpg",
+      "duration": 189360,
+      "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview125/v4/b8/03/2a/b8032a1e-a1d5-33c2-5dc5-e4c838bbd287/mzaf_15850559198955287557.plus.aac.p.m4a",
+      "url": "https://music.apple.com/us/album/escasseia/458422084?i=458422159"
+    },
+    {
+      "id": "1420673782",
+      "song": "O Telefone Tocou Novamente (feat. Trio Mocotó)",
+      "artist": "Jorge Ben Jor",
+      "album": "Puro Suingue",
+      "artwork": "https://is1-ssl.mzstatic.com/image/thumb/Music115/v4/83/ba/d1/83bad157-8d4c-27fa-cec2-3182abbfcf4a/18UMGIM41095.rgb.jpg/1200x1200bb.jpg",
+      "duration": 229627,
+      "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/be/f7/58/bef75867-d3ab-f177-1103-ceb78bc6642e/mzaf_16125133591176600074.plus.aac.p.m4a",
+      "url": "https://music.apple.com/us/album/o-telefone-tocou-novamente-feat-trio-mocot%C3%B3/1420673572?i=1420673782"
+    },
+    {
+      "id": "1631386494",
+      "song": "Meditação (Ultimate Mix)",
+      "artist": "João Gilberto",
+      "album": "O Amor, O Sorriso e a Flor (Ultimate Mix)",
+      "artwork": "https://is1-ssl.mzstatic.com/image/thumb/Music112/v4/56/69/e3/5669e345-8fc1-3af0-3b42-94335bfbd8e2/196925254243.jpg/1200x1200bb.jpg",
+      "duration": 106110,
+      "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/66/3e/cb/663ecbf6-411f-f9a5-9f5e-de72d8d9e73b/mzaf_2062802678518277432.plus.aac.p.m4a",
+      "url": "https://music.apple.com/us/album/meditac-a-o-ultimate-mix/1631385807?i=1631386494"
+    },
+    {
+      "id": "1444031368",
+      "song": "Outra Vez",
+      "artist": "Nara Leão",
+      "album": "Abraços e Beijinhos e Carinhos Sem Ter Fim...",
+      "artwork": "https://is1-ssl.mzstatic.com/image/thumb/Music128/v4/63/0e/fd/630efd36-d591-9a2c-3529-36542944b030/00042282231727.rgb.jpg/1200x1200bb.jpg",
+      "duration": 199133,
+      "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/fd/69/3b/fd693b10-20f2-ed0c-67d2-26fa8536a251/mzaf_11987729361441020121.plus.aac.p.m4a",
+      "url": "https://music.apple.com/us/album/outra-vez/1444031217?i=1444031368"
+    },
+    {
+      "id": "977451477",
+      "song": "Quantas Lágrimas (feat. Grupo Semente)",
+      "artist": "Teresa Cristina",
+      "album": "A Vida Me Fez Assim (feat. Grupo Semente)",
+      "artwork": "https://is1-ssl.mzstatic.com/image/thumb/Music125/v4/8f/ab/42/8fab421b-b4bb-7e1a-39ff-02905501dd51/7898324300899.jpg/1200x1200bb.jpg",
+      "duration": 204587,
+      "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview125/v4/da/32/c0/da32c05f-cbe6-e1e2-ab99-d5ec12fb8084/mzaf_14854261722551560150.plus.aac.p.m4a",
+      "url": "https://music.apple.com/us/album/quantas-l%C3%A1grimas-feat-grupo-semente/977451466?i=977451477"
+    },
+    {
+      "id": "1443855235",
+      "song": "Até Parece",
+      "artist": "Carlos Lyra",
+      "album": "...E no Entanto É Preciso Cantar",
+      "artwork": "https://is1-ssl.mzstatic.com/image/thumb/Music118/v4/42/47/9a/42479a82-7021-9f88-56ef-62ae2e24f920/00602537316052.rgb.jpg/1200x1200bb.jpg",
+      "duration": 129680,
+      "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/9f/06/3f/9f063f0d-a223-9202-be06-8c4a4ca49bbf/mzaf_7843565389317696096.plus.aac.p.m4a",
+      "url": "https://music.apple.com/us/album/at%C3%A9-parece/1443854409?i=1443855235"
+    },
+    {
+      "id": "482347957",
+      "song": "Congo",
+      "artist": "Os Ipanemas",
+      "album": "Os Ipanemas",
+      "artwork": "https://is1-ssl.mzstatic.com/image/thumb/Music124/v4/f5/b4/0a/f5b40abf-619f-dcec-9dc8-4c8f1053a743/mzi.jelwmzdo.jpg/1200x1200bb.jpg",
+      "duration": 202893,
+      "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/ae/68/f8/ae68f868-87a8-37e5-4ce7-6dda37279fd3/mzaf_9498711923304804054.plus.aac.p.m4a",
+      "url": "https://music.apple.com/us/album/congo/482347901?i=482347957"
+    },
+    {
+      "id": "1413006173",
+      "song": "Vatapá",
+      "artist": "Mariana Aydar",
+      "album": "Brasil, Ritmos e Receitas",
+      "artwork": "https://is1-ssl.mzstatic.com/image/thumb/Music118/v4/d8/ec/f9/d8ecf90a-57ab-14aa-bba9-b4c8f54d76b9/0.jpg/1200x1200bb.jpg",
+      "duration": 210973,
+      "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/f6/35/9b/f6359ba1-5ee5-b2fc-ce48-67ffc26c19b8/mzaf_6819068953555461300.plus.aac.p.m4a",
+      "url": "https://music.apple.com/us/album/vatap%C3%A1/1413006161?i=1413006173"
+    },
+    {
+      "id": "349912442",
+      "song": "Tears in Brasil",
+      "artist": "Piero Piccioni",
+      "album": "Camille 2000 (Original Motion Picture Soundtrack)",
+      "artwork": "https://is1-ssl.mzstatic.com/image/thumb/Music114/v4/58/1a/e2/581ae210-754e-cac7-594e-288b9b408b59/mzi.ysaxvlqp.jpg/1200x1200bb.jpg",
+      "duration": 167177,
+      "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/f1/44/ff/f144ffc1-fc87-3a66-50aa-7cc135cf0695/mzaf_1980515757761020269.plus.aac.p.m4a",
+      "url": "https://music.apple.com/us/album/tears-in-brasil/349912349?i=349912442"
+    },
+    {
+      "id": "1444077767",
+      "song": "Diz Que Fui por Ai",
+      "artist": "Nara Leão",
+      "album": "Nara",
+      "artwork": "https://is1-ssl.mzstatic.com/image/thumb/Music118/v4/d9/81/9f/d9819f03-ea1d-cae1-31cb-9397cfadde24/00731454680325.rgb.jpg/1200x1200bb.jpg",
+      "duration": 129667,
+      "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/42/ff/1f/42ff1fb4-aaf7-8bed-921b-ac8d0acc4439/mzaf_15537756081273661280.plus.aac.p.m4a",
+      "url": "https://music.apple.com/us/album/diz-que-fui-por-ai/1444077462?i=1444077767"
+    },
+    {
+      "id": "482347904",
+      "song": "Se Chegou Assim",
+      "artist": "Os Ipanemas",
+      "album": "Os Ipanemas",
+      "artwork": "https://is1-ssl.mzstatic.com/image/thumb/Music124/v4/f5/b4/0a/f5b40abf-619f-dcec-9dc8-4c8f1053a743/mzi.jelwmzdo.jpg/1200x1200bb.jpg",
+      "duration": 184440,
+      "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/db/6f/2e/db6f2eb8-6686-c537-8251-25913f31551a/mzaf_6441899979922323316.plus.aac.p.m4a",
+      "url": "https://music.apple.com/us/album/se-chegou-assim/482347901?i=482347904"
+    },
+    {
+      "id": "1444080642",
+      "song": "Samba de Orly (Samba de Fiumicino)",
+      "artist": "Toquinho & Vinicius De Moraes",
+      "album": "20 Grandes Sucessos de Toquinho & Vinicius",
+      "artwork": "https://is1-ssl.mzstatic.com/image/thumb/Music124/v4/b5/59/6f/b5596f52-12c4-725d-268c-7c4131c66fbd/06UMGIM34429.rgb.jpg/1200x1200bb.jpg",
+      "duration": 159627,
+      "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/ac/22/ec/ac22ecbd-0623-3398-9cb9-6e9bfaee2845/mzaf_11579624262313583443.plus.aac.p.m4a",
+      "url": "https://music.apple.com/us/album/samba-de-orly-samba-de-fiumicino/1444079932?i=1444080642"
+    },
+    {
+      "id": "1444080848",
+      "song": "Samba Pra Vinícius",
+      "artist": "Toquinho & Chico Buarque",
+      "album": "20 Grandes Sucessos de Toquinho & Vinicius",
+      "artwork": "https://is1-ssl.mzstatic.com/image/thumb/Music124/v4/b5/59/6f/b5596f52-12c4-725d-268c-7c4131c66fbd/06UMGIM34429.rgb.jpg/1200x1200bb.jpg",
+      "duration": 150667,
+      "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/fe/31/27/fe3127f7-2257-4ea1-5e1a-cdc4967ab272/mzaf_5381421295880695541.plus.aac.p.m4a",
+      "url": "https://music.apple.com/us/album/samba-pra-vin%C3%ADcius/1444079932?i=1444080848"
+    },
+    {
+      "id": "1444177624",
+      "song": "Escravo da alegria",
+      "artist": "Toquinho & Vinicius De Moraes",
+      "album": "Personalidade: Toquinho e Vinícius",
+      "artwork": "https://is1-ssl.mzstatic.com/image/thumb/Music126/v4/66/cc/8a/66cc8a47-efed-bf3b-35a5-4f10f6b8f56c/06UMGIM11906.rgb.jpg/1200x1200bb.jpg",
+      "duration": 230907,
+      "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview125/v4/e9/f1/6f/e9f16f2d-7e98-72aa-e644-55f5e8188156/mzaf_13164138507924981106.plus.aac.p.m4a",
+      "url": "https://music.apple.com/us/album/escravo-da-alegria/1444177617?i=1444177624"
+    },
+    {
+      "id": "1444080272",
+      "song": "Onde Anda Você",
+      "artist": "Toquinho & Vinicius De Moraes",
+      "album": "20 Grandes Sucessos de Toquinho & Vinicius",
+      "artwork": "https://is1-ssl.mzstatic.com/image/thumb/Music124/v4/b5/59/6f/b5596f52-12c4-725d-268c-7c4131c66fbd/06UMGIM34429.rgb.jpg/1200x1200bb.jpg",
+      "duration": 167600,
+      "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/87/1b/42/871b4292-bf12-7408-0aa5-39aee6b328eb/mzaf_10714225205227016025.plus.aac.p.m4a",
+      "url": "https://music.apple.com/us/album/onde-anda-voc%C3%AA/1444079932?i=1444080272"
+    },
+    {
+      "id": "1413006174",
+      "song": "Feira de Mangaio",
+      "artist": "Mariana Aydar",
+      "album": "Brasil, Ritmos e Receitas",
+      "artwork": "https://is1-ssl.mzstatic.com/image/thumb/Music118/v4/d8/ec/f9/d8ecf90a-57ab-14aa-bba9-b4c8f54d76b9/0.jpg/1200x1200bb.jpg",
+      "duration": 195667,
+      "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview125/v4/db/c8/57/dbc8572e-78a6-d574-5631-233c27ec0ec9/mzaf_7041346406895994124.plus.aac.p.m4a",
+      "url": "https://music.apple.com/us/album/feira-de-mangaio/1413006161?i=1413006174"
+    },
+    {
+      "id": "1443395321",
+      "song": "Palhaçada",
+      "artist": "Doris Monteiro",
+      "album": "Doris Monteiro",
+      "artwork": "https://is1-ssl.mzstatic.com/image/thumb/Music128/v4/f0/bf/35/f0bf35ce-8780-6941-17da-97531b7d5363/00602498246351.rgb.jpg/1200x1200bb.jpg",
+      "duration": 153080,
+      "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/ce/c4/3f/cec43f52-298b-07da-7521-c7f0a5303ce7/mzaf_11779935079981051858.plus.aac.p.m4a",
+      "url": "https://music.apple.com/us/album/palha%C3%A7ada/1443395034?i=1443395321"
+    },
+    {
+      "id": "1454269825",
+      "song": "Tudo Que Voce Podia Ser",
+      "artist": "Quarteto Em Cy",
+      "album": "Quarteto Em Cy",
+      "artwork": "https://is1-ssl.mzstatic.com/image/thumb/Music124/v4/f9/d8/47/f9d8471a-d7ee-af45-86c4-a62d4669d8f7/00602577532498.rgb.jpg/1200x1200bb.jpg",
+      "duration": 161107,
+      "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/66/9b/88/669b88a4-db84-4030-2e6a-175e94058eb1/mzaf_8950799050166669962.plus.aac.p.m4a",
+      "url": "https://music.apple.com/us/album/tudo-que-voce-podia-ser/1454269810?i=1454269825"
+    },
+    {
+      "id": "1055727163",
+      "song": "Disfarça e Vem",
+      "artist": "Marcos Valle",
+      "album": "Contrasts",
+      "artwork": "https://is1-ssl.mzstatic.com/image/thumb/Music19/v4/5e/74/d4/5e74d449-e70a-05a5-e56d-a5c6b7559375/mzm.ypctkovg.jpg/1200x1200bb.jpg",
+      "duration": 309853,
+      "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/50/99/7c/50997c86-39f0-3b6a-cb14-731303d7d647/mzaf_12303522167935183819.plus.aac.p.m4a",
+      "url": "https://music.apple.com/us/album/disfar%C3%A7a-e-vem/1055726854?i=1055727163"
+    },
+    {
+      "id": "1055727261",
+      "song": "Água de Coco",
+      "artist": "Marcos Valle",
+      "album": "Contrasts",
+      "artwork": "https://is1-ssl.mzstatic.com/image/thumb/Music19/v4/5e/74/d4/5e74d449-e70a-05a5-e56d-a5c6b7559375/mzm.ypctkovg.jpg/1200x1200bb.jpg",
+      "duration": 287560,
+      "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/94/4f/bc/944fbc15-5b1f-4496-dc73-f78d180f3d56/mzaf_10316914289157878202.plus.aac.p.m4a",
+      "url": "https://music.apple.com/us/album/%C3%A1gua-de-coco/1055726854?i=1055727261"
+    },
+    {
+      "id": "1794817045",
+      "song": "Yemanjá (Tar Blanche Remix)",
+      "artist": "Sreya, Cilon & Tar Blanche",
+      "album": "Yemanjá (Tar Blanche Remix) - Single",
+      "artwork": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/b3/a6/36/b3a636c5-d4fd-6549-a1c1-40c4801da33f/4062548109955.png/1200x1200bb.jpg",
+      "duration": 253933,
+      "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/8e/7b/3a/8e7b3a9d-f398-08c7-3282-21936c824cc7/mzaf_12330625482229187505.plus.aac.p.m4a",
+      "url": "https://music.apple.com/us/album/yemanj%C3%A1-tar-blanche-remix/1794817044?i=1794817045"
+    },
+    {
+      "id": "1620069233",
+      "song": "Chega de Saudade (2021 Remaster)",
+      "artist": "João Gilberto",
+      "album": "Chega de Saudade (2021 Remastered Edition)",
+      "artwork": "https://is1-ssl.mzstatic.com/image/thumb/Music122/v4/0a/60/a9/0a60a97d-5f77-21b5-f086-926ab25e1ab4/artwork.jpg/1200x1200bb.jpg",
+      "duration": 122773,
+      "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/6e/79/c6/6e79c690-6874-0075-58c1-b2b72edec690/mzaf_1402166073260188947.plus.aac.p.m4a",
+      "url": "https://music.apple.com/us/album/chega-de-saudade-2021-remaster/1620069224?i=1620069233"
+    },
+    {
+      "id": "1754695140",
+      "song": "Ife (Live Mix)",
+      "artist": "Awa Band",
+      "album": "IFE - Single",
+      "artwork": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/3b/bb/db/3bbbdbbf-04c5-a990-5800-83ad2623950a/5050580828810.png/1200x1200bb.jpg",
+      "duration": 244364,
+      "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/ca/bf/a9/cabfa9a8-e4b8-992e-99f4-e074f00e9143/mzaf_1922257816624310234.plus.aac.p.m4a",
+      "url": "https://music.apple.com/us/album/ife-live-mix/1754695139?i=1754695140"
+    },
+    {
+      "id": "321805632",
+      "song": "Ame",
+      "artist": "Paulinho da Viola & Elton Medeiros",
+      "album": "Bebadosamba",
+      "artwork": "https://is1-ssl.mzstatic.com/image/thumb/Music/30/72/41/mzi.psztudtp.jpg/1200x1200bb.jpg",
+      "duration": 216699,
+      "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/e9/24/ea/e924ea47-f2c9-614f-c353-a7ec929969e2/mzaf_1148956071379950080.plus.aac.p.m4a",
+      "url": "https://music.apple.com/us/album/ame/321805616?i=321805632"
+    }
+  ],
+  "updated": "2026-10-01T23:32:44.163Z"
+}
