@@ -38,17 +38,39 @@ a { color: #fff; }
 
 main.rd-stage {
   position: relative; z-index: 4; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center;
-  text-align: center; padding: 10vh 1.25rem 14vh;
+  text-align: center; padding: 10vh 1.25rem 16vh;
 }
 .rd-eyebrow { font-size: 0.8rem; letter-spacing: 0.3em; text-transform: uppercase; opacity: 0.6; }
 .rd-station { margin-top: 0.4rem; font-size: 0.95rem; letter-spacing: 0.12em; opacity: 0.85; min-height: 1.4em; }
-.rd-art {
-  margin-top: 1.75rem; width: min(50vmin, 20rem); aspect-ratio: 1; border-radius: 6px; overflow: hidden; background: #111;
-  box-shadow: 0 40px 120px rgba(0,0,0,0.75), 0 0 0 1px rgba(255,255,255,0.06); position: relative;
+.rd-frame {
+  padding: 10px; border-radius: 26px; background: rgba(255,255,255,0.06);
+  box-shadow: 0 0 0 1px rgba(255,255,255,0.12), 0 50px 140px rgba(0,0,0,0.8), inset 0 1px 0 rgba(255,255,255,0.15);
+  backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
+  animation: rd-float 9s ease-in-out infinite;
 }
+.rd-art {
+  width: min(48vmin, 22rem); aspect-ratio: 1; border-radius: 18px; overflow: hidden; background: #111;
+  box-shadow: inset 0 0 0 1px rgba(0,0,0,0.4); position: relative;
+}
+@keyframes rd-float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
 .rd-art img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0; transition: opacity 0.8s ease; }
 .rd-art img.show { opacity: 1; }
-.rd-title { margin-top: 1.6rem; font-weight: 300; line-height: 1.15; letter-spacing: 0.02em; font-size: clamp(1.6rem, 5.5vw, 3.2rem); min-height: 1.2em; }
+.rd-title { margin-top: 2.2rem; font-weight: 300; line-height: 1.15; letter-spacing: 0.03em; font-size: clamp(1.5rem, 4.5vw, 2.6rem); min-height: 1.2em; max-width: 36rem; text-shadow: 0 2px 30px rgba(0,0,0,0.6); }
+
+/* Only the cover and the title are always on screen. The dock (controls, progress, status) and the
+   corner labels appear when the mouse moves or the screen is tapped, then fade again. */
+.rd-dock {
+  position: fixed; left: 0; right: 0; bottom: calc(8vh + 1.25rem); z-index: 5;
+  display: flex; flex-direction: column; align-items: center; gap: 0.2rem; padding: 0 1.25rem;
+  opacity: 0; transition: opacity 0.5s ease; pointer-events: none;
+}
+body.on-radio .rd-home, body.on-radio .rd-onair { opacity: 0; transition: opacity 0.5s ease; pointer-events: none; }
+body.show-controls .rd-dock, body.show-controls .rd-home, body.show-controls .rd-onair { opacity: 1; pointer-events: auto; }
+body.embed-mode .rd-dock { bottom: calc(8vh + 7.25rem); }
+.rd-dock .rd-progress { margin-top: 0; }
+.rd-dock .rd-controls { margin-top: 1rem; min-height: 3.2rem; }
+.rd-dock .rd-status { margin-top: 0.4rem; }
+.rd-dock .rd-meta { margin-top: 0.4rem; }
 .rd-artist { margin-top: 0.7rem; font-size: 0.85rem; letter-spacing: 0.22em; text-transform: uppercase; opacity: 0.65; min-height: 1.2em; }
 .rd-progress { margin-top: 1.4rem; width: min(50vmin, 20rem); height: 2px; background: rgba(255,255,255,0.15); border-radius: 2px; overflow: hidden; }
 .rd-progress > div { height: 100%; width: 0; background: #fff; opacity: 0.8; }
@@ -117,7 +139,7 @@ main.rd-stage {
 
 [hidden] { display: none !important; }
 
-@media (prefers-reduced-motion: reduce) { .rd-onair.live .dot { animation: none; } }
+@media (prefers-reduced-motion: reduce) { .rd-onair.live .dot { animation: none; } .rd-frame { animation: none; } }
 @media (max-width: 640px) {
   .rd-choose { grid-template-columns: 1fr; grid-template-rows: 1fr 1fr; }
   .rd-choose-center { top: 50%; transform: translate(-50%, -50%); }
@@ -127,7 +149,10 @@ main.rd-stage {
   .rd-bar { height: 6vh; }
   .rd-embed { bottom: calc(6vh + 0.5rem); }
   .rd-home, .rd-onair { top: calc(6vh + 0.8rem); }
-  .rd-art, .rd-progress { width: min(62vw, 16rem); }
+  .rd-art { width: min(66vw, 18rem); } .rd-progress { width: min(66vw, 18rem); }
+  .rd-dock { bottom: calc(6vh + 0.9rem); }
+  body.embed-mode .rd-dock { bottom: calc(6vh + 6.5rem); }
+  .rd-frame { padding: 7px; border-radius: 20px; } .rd-art { border-radius: 14px; }
   .rd-controls { gap: 0.9rem; }
   .rd-volume { width: 5rem; }
 }

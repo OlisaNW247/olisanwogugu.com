@@ -91,8 +91,16 @@
   function showPlayer() {
     els.choose.classList.add('leaving');
     setTimeout(function () { els.choose.hidden = true; }, 700);
-    els.stage.hidden = false;
+    els.stage.hidden = false; els.dock.hidden = false;
     els.source.textContent = sourceLabel();
+    document.body.classList.add('on-radio');
+    revealControls();
+  }
+  // Controls and text stay hidden on the radio; a mouse move or tap shows them for a few seconds.
+  function revealControls() {
+    document.body.classList.add('show-controls');
+    clearTimeout(S.timers.hide);
+    S.timers.hide = setTimeout(function () { document.body.classList.remove('show-controls'); }, 3500);
   }
   function setTransport(playing) {
     S.playing = playing;
@@ -380,8 +388,9 @@
   function pickPreviews() { showPlayer(); start('preview'); }
   function switchService() {
     stopAll();
+    document.body.classList.remove('on-radio', 'show-controls', 'embed-mode');
     els.embed.hidden = true;
-    els.stage.hidden = true;
+    els.stage.hidden = true; els.dock.hidden = true;
     els.choose.hidden = false; els.choose.classList.remove('leaving');
     els.chooseHint.textContent = 'Choose how to listen';
     S.source = null; S.timeline = 'preview';
@@ -404,7 +413,7 @@
 
   /* ---------- boot ---------- */
   function init() {
-    ['status', 'station', 'title', 'artist', 'link', 'art', 'back', 'progress', 'play', 'pause', 'volume', 'onair', 'stage', 'choose', 'source', 'switch', 'start', 'embed'].forEach(function (k) { els[k] = $('rd-' + k); });
+    ['status', 'station', 'title', 'artist', 'link', 'art', 'back', 'progress', 'play', 'pause', 'volume', 'onair', 'stage', 'choose', 'source', 'switch', 'start', 'embed', 'dock'].forEach(function (k) { els[k] = $('rd-' + k); });
     els.pickApple = $('rd-pick-apple'); els.pickSpotify = $('rd-pick-spotify'); els.pickPreviews = $('rd-pick-previews');
     els.chooseStation = $('rd-choose-station'); els.chooseHint = document.querySelector('.rd-choose-hint'); els.embedSlot = $('rd-embed-slot');
 
@@ -418,6 +427,8 @@
     els.volume.addEventListener('input', function () { setVolume(parseFloat(els.volume.value)); });
     document.addEventListener('keydown', function (e) { if (e.key === ' ' && S.source && e.target === document.body) { e.preventDefault(); S.playing ? pause() : resume(); } });
     try { var v = localStorage.getItem('radio-volume'); if (v) els.volume.value = v; } catch (e) {}
+    ['mousemove', 'touchstart', 'keydown'].forEach(function (ev) { document.addEventListener(ev, function () { if (document.body.classList.contains('on-radio')) revealControls(); }, { passive: true }); });
+    els.stage.addEventListener('click', function (e) { if (e.target === els.stage || e.target.closest('.rd-frame') || e.target === els.title) { if (!document.body.classList.contains('show-controls')) revealControls(); } });
 
     Promise.all([fetchJson('/radio.json'), fetchJson('/radio-token.json').catch(function () { return {}; })])
       .then(function (r) {
