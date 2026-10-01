@@ -51,13 +51,14 @@
   </section>
 
   <main class="rd-stage" id="rd-stage" hidden>
-    <p class="rd-eyebrow">Olisa&rsquo;s Radio</p>
-    <p class="rd-station" id="rd-station"></p>
-    <div class="rd-art" id="rd-art"></div>
+    <div class="rd-frame"><div class="rd-art" id="rd-art"></div></div>
     <h1 class="rd-title" id="rd-title"></h1>
-    <p class="rd-artist" id="rd-artist"></p>
-    <div class="rd-progress"><div id="rd-progress"></div></div>
+    <p class="rd-station" id="rd-station" hidden></p>
+    <p class="rd-artist" id="rd-artist" hidden></p>
+  </main>
 
+  <div class="rd-dock" id="rd-dock" hidden>
+    <div class="rd-progress"><div id="rd-progress"></div></div>
     <div class="rd-controls">
       <button class="rd-btn" id="rd-start" type="button" hidden>Start listening</button>
       <button class="rd-icon" id="rd-play" type="button" aria-label="Play" hidden><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></button>
@@ -70,7 +71,7 @@
       <a class="rd-link" id="rd-link" target="_blank" rel="noopener" hidden>Open song &rarr;</a>
       <button class="rd-switch" id="rd-switch" type="button">Switch service</button>
     </p>
-  </main>
+  </div>
 
   <div class="rd-embed" id="rd-embed" hidden><div id="rd-embed-slot"></div></div>
 
