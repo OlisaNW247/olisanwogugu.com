@@ -54,8 +54,10 @@ const resolvers = [
     }
   },
   {
+    // song.link's page lists Spotify only as a placeholder (the link is fetched by their script after
+    // load), so this rarely helps; kept in case their page changes.
     name: 'song.link',
-    enabled: () => true,
+    enabled: () => false,
     async run(t) {
       const res = await fetch(`https://song.link/i/${t.id}`, { headers: { 'User-Agent': UA, Accept: 'text/html' }, redirect: 'follow' });
       if (res.status === 404) return '';
@@ -103,7 +105,7 @@ const resolvers = [
     }
   }
 ];
-let diagnostics = 2;
+let diagnostics = 0; // set above 0 to log page snippets for misses
 
 export async function resolveOne(track, storefront, log) {
   let sawAnswer = false;
