@@ -17,8 +17,8 @@ const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 const TRACK_RE = /open\.spotify\.com\/track\/([A-Za-z0-9]{22})/;
 // Pages embed JSON where "/" may appear as "\/" or "\u002F"; also accept bare Spotify URIs.
 const SLASH = String.raw`(?:\/|\\\/|\\u002[fF])`;
-const HTML_RE = new RegExp(`open\\.spotify\\.com${SLASH}track${SLASH}([A-Za-z0-9]{22})|spotify:track:([A-Za-z0-9]{22})`);
-const CACHE_VERSION = 2;
+const HTML_RE = new RegExp(`open\\.spotify\\.com${SLASH}track${SLASH}([A-Za-z0-9]{22})|spotify:track:([A-Za-z0-9]{22})|SPOTIFY_SONG::([A-Za-z0-9]{22})`);
+const CACHE_VERSION = 3;
 
 export function spotifyIdFromOdesli(body) {
   const link = body && body.linksByPlatform && body.linksByPlatform.spotify;
@@ -29,7 +29,7 @@ export function spotifyIdFromOdesli(body) {
 }
 export function spotifyIdFromHtml(html) {
   const m = HTML_RE.exec(String(html || ''));
-  return m ? (m[1] || m[2]) : '';
+  return m ? (m[1] || m[2] || m[3]) : '';
 }
 export function spotifyIdFromMusicBrainz(body) {
   const recs = (body && body.recordings) || [];
@@ -64,7 +64,9 @@ const resolvers = [
       const id = spotifyIdFromHtml(html);
       if (!id && diagnostics-- > 0) {
         const title = (/<title[^>]*>([^<]*)<\/title>/i.exec(html) || [])[1] || '';
-        console.log(`  [song.link diag] status ${res.status}, final url ${res.url}, ${html.length} chars, title "${title.slice(0, 80)}", next-data ${/__NEXT_DATA__/.test(html)}, spotify-mention ${/spotify/i.test(html)}, challenge ${/challenge|cf-browser-verification|Just a moment/i.test(html)}`);
+        console.log(`  [song.link diag] status ${res.status}, final url ${res.url}, ${html.length} chars, title "${title.slice(0, 80)}", next-data ${/__NEXT_DATA__/.test(html)}, challenge ${/challenge|cf-browser-verification|Just a moment/i.test(html)}`);
+        const re = /spotify/gi; let m, n = 0;
+        while ((m = re.exec(html)) && n < 6) { n++; console.log(`    …${html.slice(Math.max(0, m.index - 70), m.index + 90).replace(/\s+/g, ' ')}…`); }
       }
       return id;
     }
@@ -101,7 +103,7 @@ const resolvers = [
     }
   }
 ];
-let diagnostics = 3;
+let diagnostics = 2;
 
 export async function resolveOne(track, storefront, log) {
   let sawAnswer = false;
