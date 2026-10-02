@@ -22,6 +22,14 @@
   };
   var els = {};
   var $ = function (id) { return document.getElementById(id); };
+  var DEBUG = /[?&]debug/.test(location.search), LOG = [];
+  function log(msg) {
+    var line = new Date().toTimeString().slice(0, 8) + ' ' + msg;
+    LOG.push(line); if (LOG.length > 40) LOG.shift();
+    if (window.console) console.log('[radio] ' + msg);
+    if (DEBUG && els.debug) els.debug.textContent = LOG.slice(-18).join('\n');
+  }
+  function stateName(st) { var P = window.MusicKit && MusicKit.PlaybackStates; if (!P) return String(st); for (var k in P) if (P[k] === st) return k; return String(st); }
 
   function fetchJson(url) {
     return fetch(url + (url.indexOf('?') === -1 ? '?' : '&') + 't=' + Date.now(), { cache: 'no-store' })
@@ -159,21 +167,26 @@
       return MusicKit.configure({ developerToken: S.cfg.token, app: { name: 'Olisa’s radio', build: '1' } , suppressErrorDialog: true }).then(function () {
         S.music = MusicKit.getInstance();
         S.music.addEventListener('nowPlayingItemDidChange', function () {
-          var item = S.music.nowPlayingItem; if (!item || !S.data || S.source !== 'apple') return;
+          var item = S.music.nowPlayingItem;
+          log('item -> ' + (item ? (item.attributes && item.attributes.name) + ' [' + S.music.nowPlayingItemIndex + ']' : 'none'));
+          if (!item || !S.data || S.source !== 'apple') return;
           var i = S.data.tracks.findIndex(function (t) { return t.id === String(item.id); });
           if (i !== -1 && i !== S.idx) showTrack(i);
         });
         S.music.addEventListener('playbackStateDidChange', function () {
           var st = S.music.playbackState, P = MusicKit.PlaybackStates;
-          if (S.playing && S.source === 'apple' && (st === P.ended || st === P.completed)) appleTune();
+          log('state ' + stateName(st) + ' t=' + Math.round(S.music.currentPlaybackTime));
+          if (S.playing && S.source === 'apple' && (st === P.ended || st === P.completed)) {
+            // Repeat-all normally carries on by itself; only step in if it really stopped.
+            setTimeout(function () { var now = S.music.playbackState; if (S.playing && S.source === 'apple' && (now === P.ended || now === P.completed || now === P.stopped)) { log('queue ended; re-tuning'); appleTune(); } }, 1500);
+          }
         });
-        // Apple refuses some songs on the web (MEDIA_LICENSE, region locks). Fill the slot with the preview instead.
         S.music.addEventListener('mediaPlaybackError', function (e) { appleUnplayable(e); });
         return S.music;
       });
     });
   }
-  var appleSeq = 0;
+  var appleSeq = 0, lastTuneAt = 0, lastErrorAt = 0, retriedSame = false, indexFixes = 0;
   function appleTune() {
     S.timeline = 'full';
     var s = live('full'); if (!s) return Promise.resolve();
@@ -183,35 +196,66 @@
     showTrack(s.idx);
     clearTimeout(S.timers.slot);
     if (S.audio) S.audio.pause();
+    lastTuneAt = Date.now(); indexFixes = 0;
+    log('tune -> ' + S.data.tracks[s.idx].song + ' [' + s.idx + '] @' + Math.round(s.offset / 1000) + 's');
     music.repeatMode = MusicKit.PlayerRepeatMode.all;
     music.volume = parseFloat(els.volume.value);
     return music.setQueue({ songs: S.data.tracks.map(function (t) { return t.id; }), startPosition: s.idx, startTime: s.offset / 1000, startPlaying: true })
-      .then(function () { if (seq === appleSeq) return music.play(); })
-      .then(function () { if (seq === appleSeq) setTimeout(appleDrift, 2500); })
+      .then(function () {
+        if (seq !== appleSeq) return;
+        // Some builds start at the top of the queue regardless; move to the right song if so.
+        if (music.nowPlayingItemIndex !== s.idx && music.nowPlayingItemIndex !== undefined && typeof music.changeToMediaAtIndex === 'function') {
+          log('queue started at [' + music.nowPlayingItemIndex + '], moving to [' + s.idx + ']');
+          return music.changeToMediaAtIndex(s.idx).then(function () { if (seq === appleSeq) return music.seekToTime(live('full').offset / 1000); });
+        }
+      })
+      .then(function () {
+        if (seq !== appleSeq) return;
+        // startPlaying should have begun playback; if nothing happened after a moment, press play once.
+        setTimeout(function () {
+          if (seq !== appleSeq || !S.playing) return;
+          var P = MusicKit.PlaybackStates, st = music.playbackState;
+          if (st !== P.playing && st !== P.loading && st !== P.waiting && st !== P.seeking && st !== P.stalled) { log('not playing (' + stateName(st) + '); play()'); music.play().catch(function (e) { log('play() failed: ' + (e && e.message)); }); }
+        }, 3000);
+        setTimeout(function () { if (seq === appleSeq) appleDrift(true); }, 8000);
+      })
       .catch(function (e) {
         if (seq !== appleSeq) return;                       // superseded by a newer tune; ignore
+        log('setQueue failed: ' + ((e && (e.errorCode || e.name || e.message)) || e));
         if (e && /abort/i.test(e.name || e.message || '')) return;
         appleUnplayable(e);
       });
   }
-  // Apple won't play the current song here (MEDIA_LICENSE, region lock, missing): slide straight to the next one.
-  var lastSkipAt = 0;
+  // Apple won't play the current song here: licensing errors slide straight to the next song;
+  // anything else (a network hiccup) gets one retry of the same song first.
   function appleUnplayable(e) {
     if (!S.playing || S.source !== 'apple') return;
-    if (Date.now() - lastSkipAt < 1500) return;             // one skip per error burst
-    lastSkipAt = Date.now();
-    if (S.skips > S.data.tracks.length * 2) { say('Apple Music can\u2019t play this station here.'); pause(); return; }
     var code = String((e && (e.errorCode || e.name || e.message)) || '');
-    var licensing = /LICENSE|UNAVAILABLE|NOT_FOUND|RESTRICTED|UNSUPPORTED|AGE/i.test(code) || !code;
+    log('playback error: ' + (code || '(no code)'));
+    if (Date.now() - lastErrorAt < 5000) return;            // one action per error burst
+    lastErrorAt = Date.now();
+    if (S.skips > S.data.tracks.length * 2) { say('Apple Music can\u2019t play this station here.'); pause(); return; }
+    var licensing = /LICENSE|UNAVAILABLE|NOT_FOUND|RESTRICTED|UNSUPPORTED|AGE|CONTENT/i.test(code);
+    if (!licensing && !retriedSame) { retriedSame = true; log('retrying same song'); setTimeout(function () { if (S.playing && S.source === 'apple') appleTune(); }, 2000); return; }
+    retriedSame = false;
     skipCurrent('full', licensing);
     appleTune();
   }
-  function appleDrift() {
+  function appleDrift(initial) {
     if (!S.playing || S.source !== 'apple' || !S.music) return;
-    if (S.music.playbackState !== MusicKit.PlaybackStates.playing) return;   // never touch a loading player
+    var music = S.music, P = MusicKit.PlaybackStates;
+    if (music.playbackState !== P.playing) return;                        // never touch a loading player
+    if (!initial && Date.now() - lastTuneAt < 15000) return;               // let a fresh tune settle
     var want = live('full'); if (!want) return;
-    if (S.music.nowPlayingItemIndex !== want.idx) { if (Math.abs(S.music.nowPlayingItemIndex - want.idx) > 1) appleTune(); }
-    else if (Math.abs(S.music.currentPlaybackTime * 1000 - want.offset) > DRIFT_MS) S.music.seekToTime(want.offset / 1000);
+    var idx = music.nowPlayingItemIndex, t = music.currentPlaybackTime * 1000;
+    if (idx !== want.idx) {
+      if (indexFixes >= 2) { log('index still off (' + idx + ' vs ' + want.idx + '); leaving the player alone'); return; }
+      indexFixes++;
+      log('index drift ' + idx + ' -> ' + want.idx);
+      music.changeToMediaAtIndex(want.idx).then(function () { return music.seekToTime(live('full').offset / 1000); }).catch(function (e) { log('index fix failed: ' + (e && e.message)); });
+      return;
+    }
+    if (Math.abs(t - want.offset) > 8000) { log('time drift ' + Math.round(t / 1000) + 's -> ' + Math.round(want.offset / 1000) + 's'); music.seekToTime(want.offset / 1000); }
   }
 
   /* ---------- Spotify's embedded player ---------- */
@@ -339,6 +383,7 @@
     ['status', 'station', 'title', 'artist', 'link', 'art', 'back', 'progress', 'play', 'pause', 'volume', 'onair', 'stage', 'choose', 'source', 'switch', 'start', 'embed', 'dock'].forEach(function (k) { els[k] = $('rd-' + k); });
     els.pickApple = $('rd-pick-apple'); els.pickSpotify = $('rd-pick-spotify');
     els.chooseHint = $('rd-choose-hint'); els.embedSlot = $('rd-embed-slot');
+    if (DEBUG) { els.debug = document.createElement('pre'); els.debug.id = 'rd-debug'; document.body.appendChild(els.debug); log('debug on'); }
 
     els.pickApple.addEventListener('click', pickApple);
     els.pickSpotify.addEventListener('click', pickSpotify);

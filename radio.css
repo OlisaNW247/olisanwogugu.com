@@ -155,3 +155,10 @@ body.embed-mode .rd-dock { bottom: calc(8vh + 7.25rem); }
   .rd-controls { gap: 0.9rem; }
   .rd-volume { width: 5rem; }
 }
+
+/* ?debug: a small event log for troubleshooting playback */
+#rd-debug {
+  position: fixed; left: 0.5rem; bottom: 0.5rem; z-index: 50; max-width: 94vw; max-height: 40vh; overflow: auto;
+  margin: 0; padding: 0.5rem 0.6rem; background: rgba(0,0,0,0.8); color: #9f9; font: 10px/1.4 ui-monospace, Menlo, monospace;
+  border: 1px solid rgba(255,255,255,0.2); border-radius: 6px; white-space: pre-wrap; pointer-events: none;
+}
