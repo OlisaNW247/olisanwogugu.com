@@ -77,11 +77,15 @@ are silent for Spotify listeners during that slot, so everyone stays in sync.
 
 Spotify now limits Web API access to accounts that meet its developer requirements, so the radio
 avoids it entirely. Each station track is resolved to its Spotify id by trying, in order, Odesli's
-API (only if an `ODESLI_API_KEY` secret is set; keys are free on request at odesli.co), song.link's
-public page for the song, and MusicBrainz via the song's ISRC. Results are cached in
+API (only if an `ODESLI_API_KEY` secret is set; keys are free on request at odesli.co) and
+MusicBrainz, first by the song's ISRC and then by a title-and-artist search. Results are cached in
 `spotify-index.json`. Each run looks up at most 20 songs, so a new station fills in over a few runs,
-and the run log says which resolver answered. Until a song is matched, Spotify listeners hear
-silence for that slot and the player says so.
+and the run log says which resolver answered.
+
+Without an Odesli key, MusicBrainz alone matches only a fraction of songs (around a quarter of a
+Brazilian-heavy playlist in testing). For any song not matched, Spotify listeners hear Apple's
+30-second preview in that slot instead of silence, and the player says so. Adding the
+`ODESLI_API_KEY` secret is the way to get near-complete coverage.
 
 **Things to know.**
 
