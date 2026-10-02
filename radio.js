@@ -38,7 +38,7 @@
   function loadScript(src, readyCheck, timeoutMs) {
     return new Promise(function (resolve, reject) {
       if (readyCheck()) return resolve();
-      var s = document.createElement('script'); s.src = src; s.async = true;
+      var s = document.createElement('script'); s.src = src; s.async = true; s.crossOrigin = 'anonymous';
       s.onerror = function () { reject(new Error('Could not load ' + src.split('/')[2] + '.')); };
       document.head.appendChild(s);
       var t0 = Date.now();
@@ -262,12 +262,15 @@
   function embedStart() {
     say('Loading Spotify’s player…');
     els.embed.hidden = false; document.body.classList.add('embed-mode');
-    return loadScript('https://open.spotify.com/embed/iframe-api/v1', function () { return !!window.__spIframeApi; }).then(function () {
+    var apiReady = function () { return !!window.__spIframeApi; };
+    return loadScript('https://open.spotify.com/embed/iframe-api/v1', apiReady, 25000)
+      .catch(function (e) { log('spotify api load failed (' + (e && e.message) + '); retrying'); return loadScript('https://open.spotify.com/embed/iframe-api/v1?retry=' + Date.now(), apiReady, 25000); })
+      .then(function () {
       return new Promise(function (resolve) {
         if (S.embed) return resolve();
         var s = live(S.timeline), t = S.data.tracks[s.idx];
         window.__spIframeApi.createController(els.embedSlot, { uri: 'spotify:track:' + (t.spotifyId || ''), width: '100%', height: 80 }, function (controller) {
-          S.embed = controller;
+          S.embed = controller; log('spotify embed ready');
           controller.addListener('playback_update', function (e) {
             var d = e.data || {}; S.embedUpdate = d; S.embedAt = Date.now();
             if (!S.playing || S.source !== 'embed') return;
@@ -318,7 +321,8 @@
     if (source === 'apple') { say('Full songs · Apple Music'); p = appleTune(); }
     else if (source === 'embed') { p = embedStart(); }
     else { say('30-second previews'); previewTune(); p = Promise.resolve(); }
-    return p.catch(function () {
+    return p.catch(function (e) {
+      log(source + ' failed: ' + ((e && (e.errorCode || e.message)) || e));
       S.source = 'preview'; els.source.textContent = sourceLabel();
       els.embed.hidden = true; document.body.classList.remove('embed-mode');
       say((source === 'apple' ? 'Apple Music couldn’t play here' : 'Spotify’s player couldn’t load') + ', so you’re hearing previews.');
