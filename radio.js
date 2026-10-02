@@ -176,7 +176,7 @@
         S.music.addEventListener('playbackStateDidChange', function () {
           var st = S.music.playbackState, P = MusicKit.PlaybackStates;
           log('state ' + stateName(st) + ' t=' + Math.round(S.music.currentPlaybackTime));
-          if (S.playing && S.source === 'apple' && (st === P.ended || st === P.completed)) {
+          if (S.playing && S.source === 'apple' && (st === P.ended || st === P.completed) && Date.now() - lastTuneAt > 10000) {
             // Repeat-all normally carries on by itself; only step in if it really stopped.
             setTimeout(function () { var now = S.music.playbackState; if (S.playing && S.source === 'apple' && (now === P.ended || now === P.completed || now === P.stopped)) { log('queue ended; re-tuning'); appleTune(); } }, 1500);
           }
