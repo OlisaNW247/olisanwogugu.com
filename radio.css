@@ -117,18 +117,11 @@ body.embed-mode .rd-dock { bottom: calc(8vh + 7.25rem); }
 .rd-half-icon svg { width: clamp(64px, 10vw, 96px); height: auto; transition: transform 0.5s cubic-bezier(.2,.8,.2,1); }
 .rd-half:hover .rd-half-icon svg { transform: translateY(-6px) scale(1.06); }
 .rd-half-name { font-size: clamp(1.6rem, 3.5vw, 2.4rem); font-weight: 300; letter-spacing: 0.08em; margin-top: 0.5rem; }
-.rd-half-sub { font-size: 0.8rem; letter-spacing: 0.2em; text-transform: uppercase; opacity: 0.6; }
-.rd-choose-center {
-  position: absolute; left: 50%; top: 11vh; transform: translateX(-50%); text-align: center; pointer-events: none; z-index: 2;
-  padding: 0.9rem 1.4rem; background: rgba(0,0,0,0.55); border: 1px solid rgba(255,255,255,0.12); border-radius: 12px; backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+.rd-choose-hint {
+  position: absolute; left: 50%; bottom: 10vh; transform: translateX(-50%); z-index: 2; pointer-events: none;
+  padding: 0.55rem 1rem; border-radius: 999px; background: rgba(0,0,0,0.55); border: 1px solid rgba(255,255,255,0.12);
+  font-size: 0.78rem; letter-spacing: 0.08em; opacity: 0.8; white-space: nowrap; max-width: 92vw; overflow: hidden; text-overflow: ellipsis;
 }
-.rd-choose-station { margin-top: 0.3rem; font-size: 0.95rem; letter-spacing: 0.12em; opacity: 0.9; }
-.rd-choose-hint { margin-top: 0.5rem; font-size: 0.7rem; letter-spacing: 0.25em; text-transform: uppercase; opacity: 0.5; }
-.rd-choose-skip {
-  position: absolute; left: 50%; bottom: 10vh; transform: translateX(-50%); z-index: 2; appearance: none; background: rgba(0,0,0,0.5); border: 1px solid rgba(255,255,255,0.15);
-  color: #fff; font: inherit; font-size: 0.78rem; letter-spacing: 0.08em; opacity: 0.7; cursor: pointer; padding: 0.55rem 1rem; border-radius: 999px; white-space: nowrap;
-}
-.rd-choose-skip:hover { opacity: 1; }
 .rd-choose.leaving { animation: rd-leave 0.7s ease forwards; }
 @keyframes rd-leave { to { opacity: 0; transform: scale(1.04); visibility: hidden; } }
 
@@ -142,8 +135,7 @@ body.embed-mode .rd-dock { bottom: calc(8vh + 7.25rem); }
 @media (prefers-reduced-motion: reduce) { .rd-onair.live .dot { animation: none; } .rd-frame { animation: none; } }
 @media (max-width: 640px) {
   .rd-choose { grid-template-columns: 1fr; grid-template-rows: 1fr 1fr; }
-  .rd-choose-center { top: 50%; transform: translate(-50%, -50%); }
-  .rd-choose-skip { bottom: 7vh; font-size: 0.72rem; }
+  .rd-choose-hint { bottom: 7vh; font-size: 0.72rem; }
 }
 @media (max-width: 480px) {
   .rd-bar { height: 6vh; }

@@ -53,6 +53,7 @@
 
   /* ---------- UI ---------- */
   function say(msg) { els.status.textContent = msg || ''; }
+  function hint(msg) { els.chooseHint.textContent = msg || ''; els.chooseHint.hidden = !msg; }
   function sourceLabel() { return { apple: 'Apple Music', embed: 'Spotify', preview: 'Previews' }[S.source] || ''; }
 
   function showTrack(i) {
@@ -269,17 +270,16 @@
     say('Opening Apple Music…'); els.pickApple.disabled = true;
     musicInstance().then(function (m) { return m.authorize(); })
       .then(function () { showPlayer(); return start('apple'); })
-      .catch(function (e) { els.pickApple.disabled = false; els.chooseHint.textContent = (e && e.message) || 'Apple Music sign-in was cancelled.'; });
+      .catch(function (e) { els.pickApple.disabled = false; hint((e && e.message) || 'Apple Music sign-in was cancelled.'); });
   }
   function pickSpotify() { showPlayer(); start('embed'); }
-  function pickPreviews() { showPlayer(); start('preview'); }
   function switchService() {
     stopAll();
     document.body.classList.remove('on-radio', 'show-controls', 'embed-mode');
     els.embed.hidden = true;
     els.stage.hidden = true; els.dock.hidden = true;
     els.choose.hidden = false; els.choose.classList.remove('leaving');
-    els.chooseHint.textContent = 'Choose how to listen';
+    hint('');
     S.source = null; S.timeline = 'preview';
   }
 
@@ -289,7 +289,7 @@
       if (!S.data || d.startedAt !== S.data.startedAt || d.station.id !== S.data.station.id) {
         var switching = !!S.data;
         S.data = d;
-        els.station.textContent = d.station.name; els.chooseStation.textContent = d.station.name;
+        els.station.textContent = d.station.name;
         if (switching && S.playing) { say('Switching to ' + d.station.name + '…'); resume(); }
         if (!S.playing) { var s = schedule(d, 'preview'); if (s) showTrack(s.idx); }
       } else if (S.data && d.updated !== S.data.updated) {
@@ -301,12 +301,11 @@
   /* ---------- boot ---------- */
   function init() {
     ['status', 'station', 'title', 'artist', 'link', 'art', 'back', 'progress', 'play', 'pause', 'volume', 'onair', 'stage', 'choose', 'source', 'switch', 'start', 'embed', 'dock'].forEach(function (k) { els[k] = $('rd-' + k); });
-    els.pickApple = $('rd-pick-apple'); els.pickSpotify = $('rd-pick-spotify'); els.pickPreviews = $('rd-pick-previews');
-    els.chooseStation = $('rd-choose-station'); els.chooseHint = document.querySelector('.rd-choose-hint'); els.embedSlot = $('rd-embed-slot');
+    els.pickApple = $('rd-pick-apple'); els.pickSpotify = $('rd-pick-spotify');
+    els.chooseHint = $('rd-choose-hint'); els.embedSlot = $('rd-embed-slot');
 
     els.pickApple.addEventListener('click', pickApple);
     els.pickSpotify.addEventListener('click', pickSpotify);
-    els.pickPreviews.addEventListener('click', pickPreviews);
     els.play.addEventListener('click', resume);
     els.pause.addEventListener('click', pause);
     els.switch.addEventListener('click', switchService);
@@ -319,17 +318,15 @@
     Promise.all([fetchJson('/radio.json'), fetchJson('/radio-token.json').catch(function () { return {}; })])
       .then(function (r) {
         S.data = r[0]; S.cfg = r[1] || {};
-        els.station.textContent = S.data.station.name; els.chooseStation.textContent = S.data.station.name;
+        els.station.textContent = S.data.station.name;
         var s = schedule(S.data, 'preview'); if (s) showTrack(s.idx);
-        if (!S.data.tracks.some(function (t) { return t.spotifyId; })) els.pickSpotify.querySelector('.rd-half-sub').textContent = 'Still matching songs…';
         S.timers.ui = setInterval(tickUI, 500);
         S.timers.poll = setInterval(poll, POLL_MS);
         S.timers.drift = setInterval(appleDrift, 30000);
       })
       .catch(function () {
-        els.chooseStation.textContent = 'Off air';
-        els.chooseHint.textContent = 'No station yet. Olisa hasn’t played a playlist recently.';
-        els.pickApple.disabled = els.pickSpotify.disabled = els.pickPreviews.disabled = true;
+        hint('Off air \u2014 no station yet.');
+        els.pickApple.disabled = els.pickSpotify.disabled = true;
       });
   }
 
