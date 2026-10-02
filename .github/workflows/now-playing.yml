@@ -41,6 +41,7 @@ jobs:
           APPLE_KEY_ID: ${{ secrets.APPLE_KEY_ID }}
           APPLE_PRIVATE_KEY: ${{ secrets.APPLE_PRIVATE_KEY }}
           APPLE_MUSIC_USER_TOKEN: ${{ secrets.APPLE_MUSIC_USER_TOKEN }}
+          ODESLI_API_KEY: ${{ secrets.ODESLI_API_KEY }}
         run: node tools/update-radio.mjs
 
       - name: Commit and push if anything changed

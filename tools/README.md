@@ -76,11 +76,12 @@ are silent for Spotify listeners during that slot, so everyone stays in sync.
 ## Spotify matching (no Spotify account needed)
 
 Spotify now limits Web API access to accounts that meet its developer requirements, so the radio
-avoids it entirely. Each station track is resolved to its Spotify id through song.link (Odesli),
-which maps an Apple Music song to the same recording elsewhere, and cached in `spotify-index.json`.
-The free tier allows roughly ten lookups a minute, so each run matches up to 20 songs and a new
-station fills in over a few runs. Until a song is matched, Spotify listeners hear silence for that
-slot and the player says so.
+avoids it entirely. Each station track is resolved to its Spotify id by trying, in order, Odesli's
+API (only if an `ODESLI_API_KEY` secret is set; keys are free on request at odesli.co), song.link's
+public page for the song, and MusicBrainz via the song's ISRC. Results are cached in
+`spotify-index.json`. Each run looks up at most 20 songs, so a new station fills in over a few runs,
+and the run log says which resolver answered. Until a song is matched, Spotify listeners hear
+silence for that slot and the player says so.
 
 **Things to know.**
 
