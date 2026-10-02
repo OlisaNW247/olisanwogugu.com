@@ -150,7 +150,8 @@ body.embed-mode .rd-art { width: min(40vmin, 18rem); }
   .rd-bar { height: 6vh; }
   .rd-embed { bottom: calc(6vh + 0.5rem); }
   .rd-home, .rd-onair { top: calc(6vh + 0.8rem); }
-  .rd-art { width: min(66vw, 18rem); } .rd-progress { width: min(66vw, 18rem); }
+  .rd-art { width: min(60vw, 17rem); } .rd-progress { width: min(60vw, 17rem); }
+  main.rd-stage { padding-bottom: 24vh; }
   .rd-dock { bottom: calc(6vh + 0.9rem); }
   body.embed-mode .rd-dock { bottom: calc(6vh + 6.5rem); }
   body.embed-mode main.rd-stage { padding-bottom: 38vh; }

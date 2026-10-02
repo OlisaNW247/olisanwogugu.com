@@ -38,7 +38,7 @@
   function loadScript(src, readyCheck, timeoutMs) {
     return new Promise(function (resolve, reject) {
       if (readyCheck()) return resolve();
-      var s = document.createElement('script'); s.src = src; s.async = true; s.crossOrigin = 'anonymous';
+      var s = document.createElement('script'); s.src = src; s.async = true;
       s.onerror = function () { reject(new Error('Could not load ' + src.split('/')[2] + '.')); };
       document.head.appendChild(s);
       var t0 = Date.now();
