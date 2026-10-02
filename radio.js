@@ -106,16 +106,25 @@
   }
 
   /* ---------- preview mode (plain <audio>) ---------- */
+  function ensureAudio() {
+    if (S.audio) return S.audio;
+    S.audio = new Audio(); S.audio.preload = 'auto'; S.audio.volume = parseFloat(els.volume.value);
+    S.audio.addEventListener('ended', function () { if (S.playing && S.source === 'preview') previewTune(); });
+    S.audio.addEventListener('error', function () { if (S.playing && S.source === 'preview') setTimeout(previewTune, 1500); });
+    return S.audio;
+  }
+  function seekPreview(audio, offsetMs) {
+    var target = offsetMs / 1000;
+    var seek = function () { try { if (Math.abs(audio.currentTime - target) > 1.5) audio.currentTime = target; } catch (e) {} };
+    audio.addEventListener('loadedmetadata', seek, { once: true });
+    audio.addEventListener('canplay', seek, { once: true });
+  }
   function previewTune() {
     S.timeline = 'preview';
     var s = schedule(S.data, 'preview'); if (!s) return;
     var t = S.data.tracks[s.idx];
     showTrack(s.idx);
-    if (!S.audio) {
-      S.audio = new Audio(); S.audio.preload = 'auto'; S.audio.volume = parseFloat(els.volume.value);
-      S.audio.addEventListener('ended', function () { if (S.playing && S.source === 'preview') previewTune(); });
-      S.audio.addEventListener('error', function () { if (S.playing && S.source === 'preview') setTimeout(previewTune, 1500); });
-    }
+    ensureAudio();
     slotTimer(s, previewTune);
     if (!t.preview) { S.audio.pause(); return; }
     S.audio.src = t.preview;
@@ -185,6 +194,7 @@
               S.timeline = preview ? 'preview' : 'full';
               var sc = schedule(S.data, S.timeline);
               if (sc.idx !== S.idx) return embedTune();
+              if (S.audio) S.audio.pause();
               controller.seek(Math.floor(sc.offset / 1000)); controller.play();
               say(preview ? 'Spotify previews · log in to Spotify in the player for full songs' : 'Full songs · Spotify');
               setTimeout(function () { if (S.playing && S.embedUpdate && S.embedUpdate.isPaused) { say('Press play on the Spotify player below.'); revealControls(); } }, 2500);
@@ -201,7 +211,14 @@
     var s = schedule(S.data, S.timeline), t = S.data.tracks[s.idx];
     showTrack(s.idx);
     slotTimer(s, embedTune);
-    if (!t.spotifyId) { say(S.data.tracks.some(function (x) { return x.spotifyId; }) ? 'This one isn’t on Spotify — back after the song.' : 'Still matching this station to Spotify…'); S.embed.pause(); return; }
+    if (S.audio) S.audio.pause();
+    if (!t.spotifyId) {
+      // Not matched to Spotify (yet): fill the slot with Apple's 30-second preview rather than silence.
+      S.embed.pause();
+      say('Not on Spotify yet \u2014 playing the preview');
+      if (t.preview && s.offset < PREVIEW_MS - 1500) { var a = ensureAudio(); a.src = t.preview; seekPreview(a, s.offset); a.play().catch(function () {}); }
+      return;
+    }
     S.embedArmed = true; S.embedUpdate = null;
     S.embed.loadUri('spotify:track:' + t.spotifyId);
   }
