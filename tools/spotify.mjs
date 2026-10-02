@@ -15,6 +15,10 @@ const SPACING_MS = 4000;
 const UA = 'olisanwogugu.com radio (https://olisanwogugu.com)';
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 const TRACK_RE = /open\.spotify\.com\/track\/([A-Za-z0-9]{22})/;
+// Pages embed JSON where "/" may appear as "\/" or "\u002F"; also accept bare Spotify URIs.
+const SLASH = String.raw`(?:\/|\\\/|\\u002[fF])`;
+const HTML_RE = new RegExp(`open\\.spotify\\.com${SLASH}track${SLASH}([A-Za-z0-9]{22})|spotify:track:([A-Za-z0-9]{22})`);
+const CACHE_VERSION = 2;
 
 export function spotifyIdFromOdesli(body) {
   const link = body && body.linksByPlatform && body.linksByPlatform.spotify;
@@ -24,8 +28,8 @@ export function spotifyIdFromOdesli(body) {
   return fromEntity ? fromEntity[1] : '';
 }
 export function spotifyIdFromHtml(html) {
-  const m = TRACK_RE.exec(String(html || ''));
-  return m ? m[1] : '';
+  const m = HTML_RE.exec(String(html || ''));
+  return m ? (m[1] || m[2]) : '';
 }
 export function spotifyIdFromMusicBrainz(body) {
   const recs = (body && body.recordings) || [];
@@ -81,6 +85,7 @@ export async function resolveOne(track, storefront, log) {
     if (id === null) { log(`${r.name}: no answer`); continue; }
     sawAnswer = true;
     if (id) { log(`${r.name}: matched`); return id; }
+    log(`${r.name}: not found`);
   }
   return sawAnswer ? '' : null;
 }
@@ -90,6 +95,11 @@ export async function matchSpotify(tracks, root, storefront) {
   const file = resolve(root, 'spotify-index.json');
   let cache = {};
   try { cache = JSON.parse(readFileSync(file, 'utf8')); } catch {}
+  if (cache._v !== CACHE_VERSION) {
+    // Parsing improved: forget "not found" answers so they get another look, keep real matches.
+    for (const [k, v] of Object.entries(cache)) if (!v) delete cache[k];
+    cache._v = CACHE_VERSION;
+  }
   const pending = tracks.filter((t) => t.id && !(t.id in cache));
   let changed = false, done = 0, found = 0;
   const notes = {};
