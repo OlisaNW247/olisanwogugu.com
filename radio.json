@@ -65,7 +65,7 @@
       "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview125/v4/63/c4/73/63c473ae-1910-f0e6-659d-e7d582bb5838/mzaf_4401955099347595828.plus.aac.p.m4a",
       "url": "https://music.apple.com/us/album/quando-bate-uma-saudade/460033695?i=460033761",
       "isrc": "BRBMG8900626",
-      "spotifyId": ""
+      "spotifyId": "5N88KtVt89rndQdeuANMBa"
     },
     {
       "id": "1199070065",
@@ -101,7 +101,7 @@
       "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview118/v4/e8/bc/cd/e8bccd4d-ef13-09f6-7316-14ab9fcc4c93/mzaf_787585645187101628.plus.aac.p.m4a",
       "url": "https://music.apple.com/us/album/beleza-pura/1444076539?i=1444076543",
       "isrc": "JPKT07800501",
-      "spotifyId": ""
+      "spotifyId": "63dLm0BUpepXeFIfZ0OKEL"
     },
     {
       "id": "1721383478",
@@ -113,7 +113,7 @@
       "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/01/9b/37/019b37a7-4413-ead1-eec5-91f4270d23a4/mzaf_12531860894825348682.plus.aac.p.m4a",
       "url": "https://music.apple.com/us/album/um-dia/1721383467?i=1721383478",
       "isrc": "FR9Z62300788",
-      "spotifyId": ""
+      "spotifyId": "7xHkWk2XyMJ2ivWqvYMrfZ"
     },
     {
       "id": "1308746007",
@@ -137,7 +137,7 @@
       "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview122/v4/4a/80/14/4a8014b7-a1e8-1fe2-254c-c7325a230b8d/mzaf_15826202355608171486.plus.aac.p.m4a",
       "url": "https://music.apple.com/us/album/samba-de-rosa-pra-salvador/1368745111?i=1368746505",
       "isrc": "BRWMB1800143",
-      "spotifyId": ""
+      "spotifyId": "5C6RsMe2FRaEuN1KYyOSg4"
     },
     {
       "id": "1721383480",
@@ -245,7 +245,7 @@
       "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/16/3b/e9/163be9fb-77d1-43d3-7724-10e015b99e52/mzaf_2235863845010857644.plus.aac.p.m4a",
       "url": "https://music.apple.com/us/album/n%C3%A3o-adianta/1446048647?i=1446048656",
       "isrc": "GBCLQ1800265",
-      "spotifyId": ""
+      "spotifyId": "6r3OpZstuAg72VSty3BxLT"
     },
     {
       "id": "1002609674",
@@ -776,5 +776,5 @@
       "spotifyId": ""
     }
   ],
-  "updated": "2026-10-01T23:44:52.310Z"
+  "updated": "2026-10-02T00:34:16.719Z"
 }
