@@ -280,7 +280,8 @@
               if (sc.idx !== S.idx) return embedTune();
               if (S.audio) S.audio.pause();
               controller.seek(Math.floor(sc.offset / 1000)); controller.play();
-              say(preview ? 'Spotify previews · log in to Spotify in the player for full songs' : 'Full songs · Spotify');
+              els.login.hidden = !preview;
+              say(preview ? 'Previews \u00b7 log in to Spotify, then reload, for full songs' : 'Full songs \u00b7 Spotify');
               setTimeout(function () { if (S.playing && S.embedUpdate && S.embedUpdate.isPaused) { say('Press play on the Spotify player below.'); revealControls(); } }, 2500);
             }
             if (d.duration > 0 && d.isPaused && d.position >= d.duration - 1500 && d.position > 0) embedTune();
@@ -302,6 +303,11 @@
     if (S.audio) S.audio.pause();
     S.embedArmed = true; S.embedUpdate = null;
     S.embed.loadUri('spotify:track:' + t.spotifyId);
+    try { S.embed.play(); } catch (e) {}
+    clearTimeout(S.timers.embedNudge);
+    S.timers.embedNudge = setTimeout(function () {
+      if (S.playing && S.source === 'embed' && S.embedArmed) { say('Press play on the Spotify player below.'); revealControls(); }
+    }, 1800);
   }
 
   /* ---------- transport ---------- */
@@ -356,7 +362,7 @@
   function switchService() {
     stopAll();
     document.body.classList.remove('on-radio', 'show-controls', 'embed-mode');
-    els.embed.hidden = true;
+    els.embed.hidden = true; els.login.hidden = true;
     els.stage.hidden = true; els.dock.hidden = true;
     els.choose.hidden = false; els.choose.classList.remove('leaving');
     hint('');
@@ -380,7 +386,7 @@
 
   /* ---------- boot ---------- */
   function init() {
-    ['status', 'station', 'title', 'artist', 'link', 'art', 'back', 'progress', 'play', 'pause', 'volume', 'onair', 'stage', 'choose', 'source', 'switch', 'start', 'embed', 'dock'].forEach(function (k) { els[k] = $('rd-' + k); });
+    ['status', 'station', 'title', 'artist', 'link', 'login', 'art', 'back', 'progress', 'play', 'pause', 'volume', 'onair', 'stage', 'choose', 'source', 'switch', 'start', 'embed', 'dock'].forEach(function (k) { els[k] = $('rd-' + k); });
     els.pickApple = $('rd-pick-apple'); els.pickSpotify = $('rd-pick-spotify');
     els.chooseHint = $('rd-choose-hint'); els.embedSlot = $('rd-embed-slot');
     if (DEBUG) { els.debug = document.createElement('pre'); els.debug.id = 'rd-debug'; document.body.appendChild(els.debug); log('debug on'); }
