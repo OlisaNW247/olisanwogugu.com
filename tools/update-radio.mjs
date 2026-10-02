@@ -9,7 +9,7 @@
 //                     playlist changed (or once a day)
 //   radio.json        the station: playlist name, start time, shuffled playable tracks
 //   radio-token.json  developer token for the web player, renewed when under 30 days remain
-//   spotify-index.json  cache of ISRC → Spotify track id (only when Spotify secrets are set)
+//   spotify-index.json  cache of Apple catalog id → Spotify track id, resolved through song.link
 
 import { readFileSync, writeFileSync, existsSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
@@ -126,8 +126,7 @@ async function catalogSongs(apple, storefront, ids) {
 function refreshToken() {
   const current = readJson('radio-token.json', null) || {};
   const now = Math.floor(Date.now() / 1000);
-  const spotifyClientId = process.env.SPOTIFY_CLIENT_ID || '';
-  const next = { ...current, spotifyClientId };
+  const next = { token: current.token, exp: current.exp };
   if (!current.token || (current.exp - now) <= TOKEN_RENEW_S) {
     next.token = developerToken({ ...credentials(), ttlSeconds: TOKEN_TTL_S });
     next.exp = now + TOKEN_TTL_S;
@@ -174,7 +173,7 @@ async function main() {
     }
   }
 
-  await matchSpotify(tracks, ROOT);
+  await matchSpotify(tracks, ROOT, await apple.storefront());
 
   const startedAt = sameStation ? current.startedAt : new Date().toISOString();
   const radio = {
