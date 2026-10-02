@@ -142,7 +142,7 @@
     if (!S.cfg || !S.cfg.token) return Promise.reject(new Error('Apple Music sign-in isn’t available right now.'));
     return loadScript('https://js-cdn.music.apple.com/musickit/v3/musickit.js', function () { return !!window.MusicKit; }).then(function () {
       if (S.music) return S.music;
-      return MusicKit.configure({ developerToken: S.cfg.token, app: { name: 'Olisa’s radio', build: '1' } }).then(function () {
+      return MusicKit.configure({ developerToken: S.cfg.token, app: { name: 'Olisa’s radio', build: '1' } , suppressErrorDialog: true }).then(function () {
         S.music = MusicKit.getInstance();
         S.music.addEventListener('nowPlayingItemDidChange', function () {
           var item = S.music.nowPlayingItem; if (!item || !S.data || S.source !== 'apple') return;
@@ -151,27 +151,47 @@
         });
         S.music.addEventListener('playbackStateDidChange', function () {
           var st = S.music.playbackState, P = MusicKit.PlaybackStates;
-          if (S.playing && S.source === 'apple' && (st === P.stopped || st === P.ended)) appleTune();
+          if (S.playing && S.source === 'apple' && (st === P.ended || st === P.completed)) appleTune();
         });
+        // Apple refuses some songs on the web (MEDIA_LICENSE, region locks). Fill the slot with the preview instead.
+        S.music.addEventListener('mediaPlaybackError', function () { appleUnplayable(); });
         return S.music;
       });
     });
   }
+  var appleSeq = 0;
   function appleTune() {
     S.timeline = 'full';
     var s = schedule(S.data, 'full'); if (!s) return Promise.resolve();
-    var music = S.music;
+    var music = S.music, seq = ++appleSeq;
     showTrack(s.idx);
+    clearTimeout(S.timers.slot);
+    if (S.audio) S.audio.pause();
     music.repeatMode = MusicKit.PlayerRepeatMode.all;
     music.volume = parseFloat(els.volume.value);
     return music.setQueue({ songs: S.data.tracks.map(function (t) { return t.id; }), startPosition: s.idx, startTime: s.offset / 1000, startPlaying: true })
-      .then(function () { return music.play(); })
-      .then(function () { setTimeout(appleDrift, 1500); });
+      .then(function () { if (seq === appleSeq) return music.play(); })
+      .then(function () { if (seq === appleSeq) setTimeout(appleDrift, 2500); })
+      .catch(function (e) {
+        if (seq !== appleSeq) return;                       // superseded by a newer tune; ignore
+        if (e && /abort/i.test(e.name || e.message || '')) return;
+        appleUnplayable();
+      });
+  }
+  // The current song can't play through Apple's web player: play its preview, then rejoin at the next song.
+  function appleUnplayable() {
+    if (!S.playing || S.source !== 'apple') return;
+    var s = schedule(S.data, 'full'), t = S.data.tracks[s.idx];
+    try { S.music.pause(); } catch (e) {}
+    say('Apple won\u2019t stream this one here \u2014 playing the preview');
+    if (t.preview && s.offset < PREVIEW_MS - 1500) { var a = ensureAudio(); a.src = t.preview; seekPreview(a, s.offset); a.play().catch(function () {}); }
+    slotTimer(s, appleTune);
   }
   function appleDrift() {
     if (!S.playing || S.source !== 'apple' || !S.music) return;
+    if (S.music.playbackState !== MusicKit.PlaybackStates.playing) return;   // never touch a loading player
     var want = schedule(S.data, 'full'); if (!want) return;
-    if (S.music.nowPlayingItemIndex !== want.idx) S.music.changeToMediaAtIndex(want.idx).then(function () { S.music.seekToTime(want.offset / 1000); });
+    if (S.music.nowPlayingItemIndex !== want.idx) { if (Math.abs(S.music.nowPlayingItemIndex - want.idx) > 1) appleTune(); }
     else if (Math.abs(S.music.currentPlaybackTime * 1000 - want.offset) > DRIFT_MS) S.music.seekToTime(want.offset / 1000);
   }
 
