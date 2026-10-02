@@ -60,7 +60,13 @@ const resolvers = [
       const res = await fetch(`https://song.link/i/${t.id}`, { headers: { 'User-Agent': UA, Accept: 'text/html' }, redirect: 'follow' });
       if (res.status === 404) return '';
       if (!res.ok) return null;
-      return spotifyIdFromHtml(await res.text());
+      const html = await res.text();
+      const id = spotifyIdFromHtml(html);
+      if (!id && diagnostics-- > 0) {
+        const title = (/<title[^>]*>([^<]*)<\/title>/i.exec(html) || [])[1] || '';
+        console.log(`  [song.link diag] status ${res.status}, final url ${res.url}, ${html.length} chars, title "${title.slice(0, 80)}", next-data ${/__NEXT_DATA__/.test(html)}, spotify-mention ${/spotify/i.test(html)}, challenge ${/challenge|cf-browser-verification|Just a moment/i.test(html)}`);
+      }
+      return id;
     }
   },
   {
@@ -73,8 +79,29 @@ const resolvers = [
       if (!res.ok) return null;
       return spotifyIdFromMusicBrainz(await res.json());
     }
+  },
+  {
+    // Last resort: search MusicBrainz by title and artist, then read each candidate's links.
+    name: 'musicbrainz-search',
+    enabled: () => true,
+    async run(t) {
+      if (!t.song || !t.artist) return null;
+      const q = `recording:"${t.song.replace(/"/g, '')}" AND artist:"${t.artist.split(/,|&/)[0].trim().replace(/"/g, '')}"`;
+      const res = await fetch(`https://musicbrainz.org/ws/2/recording?${new URLSearchParams({ query: q, fmt: 'json', limit: '3' })}`, { headers: { 'User-Agent': UA, Accept: 'application/json' } });
+      if (!res.ok) return null;
+      const recs = ((await res.json()).recordings || []).filter((r) => r.score >= 85);
+      for (const r of recs) {
+        await sleep(1100); // MusicBrainz asks for one request per second
+        const d = await fetch(`https://musicbrainz.org/ws/2/recording/${r.id}?fmt=json&inc=url-rels`, { headers: { 'User-Agent': UA, Accept: 'application/json' } });
+        if (!d.ok) continue;
+        const id = spotifyIdFromMusicBrainz({ recordings: [await d.json()] });
+        if (id) return id;
+      }
+      return '';
+    }
   }
 ];
+let diagnostics = 3;
 
 export async function resolveOne(track, storefront, log) {
   let sawAnswer = false;
