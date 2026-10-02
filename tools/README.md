@@ -65,27 +65,22 @@ seeded shuffle of the playlist's catalog songs.
 
 - *Apple Music*: sign in with an Apple Music subscription and hear full songs through Apple's web
   player (MusicKit JS). No subscription → falls back to Apple's 30-second previews.
-- *Spotify*: sign in with Spotify (Authorization Code with PKCE, entirely in the browser). Premium
-  listeners hear full songs through Spotify's web player. Anyone else gets Spotify's embedded player,
-  which plays full songs if they are logged in to Spotify and 30-second previews otherwise.
+- *Spotify*: opens Spotify's embedded player beneath the cover. Listeners logged in to Spotify in
+  their browser hear full songs; everyone else hears Spotify's 30-second previews, and the clock
+  switches to 30-second slots so they stay in step with each other.
 - A small link under the halves plays Apple's previews with no sign-in at all.
 
 Songs that exist only in the library with no catalog match are skipped. Songs with no Spotify match
 are silent for Spotify listeners during that slot, so everyone stays in sync.
 
-## Spotify setup (optional)
+## Spotify matching (no Spotify account needed)
 
-1. At <https://developer.spotify.com/dashboard> (a free Spotify account is enough) click **Create app**.
-   Name it anything, add `https://olisanwogugu.com/radio.html` as a **Redirect URI**, tick **Web API**
-   and **Web Playback SDK**, and save.
-2. Open the app's **Settings** and copy the **Client ID** and **Client secret**.
-3. Add two repository secrets: `SPOTIFY_CLIENT_ID` and `SPOTIFY_CLIENT_SECRET`.
-4. Run the workflow once. It matches the station's songs to Spotify by ISRC (up to 300 per run, the
-   rest on later runs) and publishes the client id in `radio-token.json` for the browser sign-in.
-
-Spotify keeps new apps in *development mode*, where only users you list under **User Management** in
-the dashboard (up to 25) can complete the sign-in. Everyone else lands on Spotify's embedded player
-automatically, so the radio still works for them.
+Spotify now limits Web API access to accounts that meet its developer requirements, so the radio
+avoids it entirely. Each station track is resolved to its Spotify id through song.link (Odesli),
+which maps an Apple Music song to the same recording elsewhere, and cached in `spotify-index.json`.
+The free tier allows roughly ten lookups a minute, so each run matches up to 20 songs and a new
+station fills in over a few runs. Until a song is matched, Spotify listeners hear silence for that
+slot and the player says so.
 
 **Things to know.**
 
