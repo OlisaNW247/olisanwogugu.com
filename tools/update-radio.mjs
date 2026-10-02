@@ -152,6 +152,7 @@ async function main() {
   if (!station) { console.log(`"${np.song}" is not in any playlist with more than ${MIN_SONGS} songs; station unchanged.`); return; }
 
   const current = readJson('radio.json', null);
+  const before = JSON.stringify(current);
   const sameStation = !!(current && current.station && current.station.id === station.id && current.station.lastModified === station.lastModified);
 
   let tracks;
@@ -182,7 +183,7 @@ async function main() {
     tracks: sameStation ? tracks : seededShuffle(tracks, startedAt + station.id),
     updated: sameStation ? current.updated : startedAt
   };
-  if (sameStation && JSON.stringify(radio) === JSON.stringify(current)) { console.log(`Station unchanged: ${station.name}`); return; }
+  if (sameStation && JSON.stringify(radio) === before) { console.log(`Station unchanged: ${station.name}`); return; }
   if (sameStation) radio.updated = new Date().toISOString();
   writeJson('radio.json', radio);
   console.log(`Radio: ${station.name} (${tracks.length} playable of ${station.count}, ${tracks.filter((t) => t.spotifyId).length} on Spotify)`);
