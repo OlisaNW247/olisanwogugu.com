@@ -74,6 +74,8 @@ body.on-radio .rd-title { color: #fff; text-shadow: none; }
 body.on-radio .rd-home, body.on-radio .rd-onair { opacity: 0; transition: opacity 0.5s ease; pointer-events: none; }
 body.show-controls .rd-dock, body.show-controls .rd-home, body.show-controls .rd-onair { opacity: 1; pointer-events: auto; }
 body.embed-mode .rd-dock { bottom: calc(8vh + 7.25rem); }
+body.embed-mode main.rd-stage { padding-bottom: 34vh; }
+body.embed-mode .rd-art { width: min(40vmin, 18rem); }
 .rd-dock .rd-progress { margin-top: 0; }
 .rd-dock .rd-controls { margin-top: 1rem; min-height: 3.2rem; }
 .rd-dock .rd-status { margin-top: 0.4rem; }
@@ -151,6 +153,9 @@ body.embed-mode .rd-dock { bottom: calc(8vh + 7.25rem); }
   .rd-art { width: min(66vw, 18rem); } .rd-progress { width: min(66vw, 18rem); }
   .rd-dock { bottom: calc(6vh + 0.9rem); }
   body.embed-mode .rd-dock { bottom: calc(6vh + 6.5rem); }
+  body.embed-mode main.rd-stage { padding-bottom: 38vh; }
+  body.embed-mode .rd-art { width: min(52vw, 14rem); }
+  body.embed-mode .rd-title { font-size: 1.25rem; margin-top: 1.2rem; }
   .rd-frame { padding: 7px; border-radius: 20px; } .rd-art { border-radius: 14px; }
   .rd-controls { gap: 0.9rem; }
   .rd-volume { width: 5rem; }
