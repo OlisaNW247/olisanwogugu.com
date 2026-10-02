@@ -16,6 +16,8 @@
     playing: false, idx: -1,
     music: null, audio: null,
     embed: null, embedUpdate: null, embedAt: 0, embedArmed: false,
+    shift: 0,              // ms this listener runs ahead of the station clock (after skipping unplayable songs)
+    skips: 0,
     timers: {}
   };
   var els = {};
@@ -45,6 +47,18 @@
     var elapsed = ((now - Date.parse(data.startedAt)) % total + total) % total;
     for (var i = 0; i < durs.length; i++) { if (elapsed < durs[i]) return { idx: i, offset: elapsed, duration: durs[i] }; elapsed -= durs[i]; }
     return { idx: 0, offset: 0, duration: durs[0] };
+  }
+  function live(timeline) { return schedule(S.data, timeline, Date.now() + S.shift); }
+  var BAD_KEY = 'radio-unplayable';
+  function badSet() { try { return new Set(JSON.parse(localStorage.getItem(BAD_KEY) || '[]')); } catch (e) { return new Set(); } }
+  function rememberBad(id) { try { var b = badSet(); b.add(id); localStorage.setItem(BAD_KEY, JSON.stringify(Array.from(b).slice(-500))); } catch (e) {} }
+  // Slide this listener's clock past the current song so the next one starts at once. Returns the new slot.
+  function skipCurrent(timeline, persist) {
+    var s = live(timeline); if (!s) return null;
+    if (persist) rememberBad(S.data.tracks[s.idx].id);
+    S.shift += (s.duration - s.offset) + 50;
+    S.skips++;
+    return live(timeline);
   }
   function slotTimer(s, fn) {
     clearTimeout(S.timers.slot);
@@ -78,11 +92,11 @@
   function position() {
     if (S.source === 'apple' && S.music && S.music.nowPlayingItem) return { offset: S.music.currentPlaybackTime * 1000, duration: S.music.currentPlaybackDuration * 1000 };
     if (S.source === 'embed' && S.embedUpdate) { var u = S.embedUpdate; return { offset: u.position + (u.isPaused ? 0 : Date.now() - S.embedAt), duration: u.duration }; }
-    return schedule(S.data, S.timeline);
+    return live(S.timeline);
   }
   function tickUI() {
     if (!S.data) return;
-    if (S.source === 'preview' || !S.source) { var s = schedule(S.data, 'preview'); if (s && s.idx !== S.idx) showTrack(s.idx); }
+    if (S.source === 'preview' || !S.source) { var s = live('preview'); if (s && s.idx !== S.idx) showTrack(s.idx); }
     var pos = position();
     if (pos && pos.duration) els.progress.style.width = Math.min(100, (pos.offset / pos.duration) * 100) + '%';
   }
@@ -122,7 +136,7 @@
   }
   function previewTune() {
     S.timeline = 'preview';
-    var s = schedule(S.data, 'preview'); if (!s) return;
+    var s = live('preview'); if (!s) return;
     var t = S.data.tracks[s.idx];
     showTrack(s.idx);
     ensureAudio();
@@ -134,7 +148,7 @@
     S.audio.addEventListener('loadedmetadata', seek, { once: true });
     S.audio.addEventListener('canplay', seek, { once: true });
     S.audio.play().catch(function () { say('Tap play to start listening.'); });
-    setTimeout(function () { if (S.playing && S.source === 'preview' && S.audio.src.indexOf(t.preview) !== -1) { target = schedule(S.data, 'preview').offset / 1000; seek(); } }, 1200);
+    setTimeout(function () { if (S.playing && S.source === 'preview' && S.audio.src.indexOf(t.preview) !== -1) { target = live('preview').offset / 1000; seek(); } }, 1200);
   }
 
   /* ---------- Apple Music (MusicKit JS) ---------- */
@@ -154,7 +168,7 @@
           if (S.playing && S.source === 'apple' && (st === P.ended || st === P.completed)) appleTune();
         });
         // Apple refuses some songs on the web (MEDIA_LICENSE, region locks). Fill the slot with the preview instead.
-        S.music.addEventListener('mediaPlaybackError', function () { appleUnplayable(); });
+        S.music.addEventListener('mediaPlaybackError', function (e) { appleUnplayable(e); });
         return S.music;
       });
     });
@@ -162,7 +176,9 @@
   var appleSeq = 0;
   function appleTune() {
     S.timeline = 'full';
-    var s = schedule(S.data, 'full'); if (!s) return Promise.resolve();
+    var s = live('full'); if (!s) return Promise.resolve();
+    var bad = badSet(), guard = 0;
+    while (bad.has(S.data.tracks[s.idx].id) && guard++ < S.data.tracks.length) s = skipCurrent('full', false);
     var music = S.music, seq = ++appleSeq;
     showTrack(s.idx);
     clearTimeout(S.timers.slot);
@@ -175,22 +191,25 @@
       .catch(function (e) {
         if (seq !== appleSeq) return;                       // superseded by a newer tune; ignore
         if (e && /abort/i.test(e.name || e.message || '')) return;
-        appleUnplayable();
+        appleUnplayable(e);
       });
   }
-  // The current song can't play through Apple's web player: play its preview, then rejoin at the next song.
-  function appleUnplayable() {
+  // Apple won't play the current song here (MEDIA_LICENSE, region lock, missing): slide straight to the next one.
+  var lastSkipAt = 0;
+  function appleUnplayable(e) {
     if (!S.playing || S.source !== 'apple') return;
-    var s = schedule(S.data, 'full'), t = S.data.tracks[s.idx];
-    try { S.music.pause(); } catch (e) {}
-    say('Apple won\u2019t stream this one here \u2014 playing the preview');
-    if (t.preview && s.offset < PREVIEW_MS - 1500) { var a = ensureAudio(); a.src = t.preview; seekPreview(a, s.offset); a.play().catch(function () {}); }
-    slotTimer(s, appleTune);
+    if (Date.now() - lastSkipAt < 1500) return;             // one skip per error burst
+    lastSkipAt = Date.now();
+    if (S.skips > S.data.tracks.length * 2) { say('Apple Music can\u2019t play this station here.'); pause(); return; }
+    var code = String((e && (e.errorCode || e.name || e.message)) || '');
+    var licensing = /LICENSE|UNAVAILABLE|NOT_FOUND|RESTRICTED|UNSUPPORTED|AGE/i.test(code) || !code;
+    skipCurrent('full', licensing);
+    appleTune();
   }
   function appleDrift() {
     if (!S.playing || S.source !== 'apple' || !S.music) return;
     if (S.music.playbackState !== MusicKit.PlaybackStates.playing) return;   // never touch a loading player
-    var want = schedule(S.data, 'full'); if (!want) return;
+    var want = live('full'); if (!want) return;
     if (S.music.nowPlayingItemIndex !== want.idx) { if (Math.abs(S.music.nowPlayingItemIndex - want.idx) > 1) appleTune(); }
     else if (Math.abs(S.music.currentPlaybackTime * 1000 - want.offset) > DRIFT_MS) S.music.seekToTime(want.offset / 1000);
   }
@@ -202,7 +221,7 @@
     return loadScript('https://open.spotify.com/embed/iframe-api/v1', function () { return !!window.__spIframeApi; }).then(function () {
       return new Promise(function (resolve) {
         if (S.embed) return resolve();
-        var s = schedule(S.data, S.timeline), t = S.data.tracks[s.idx];
+        var s = live(S.timeline), t = S.data.tracks[s.idx];
         window.__spIframeApi.createController(els.embedSlot, { uri: 'spotify:track:' + (t.spotifyId || ''), width: '100%', height: 80 }, function (controller) {
           S.embed = controller;
           controller.addListener('playback_update', function (e) {
@@ -213,7 +232,7 @@
               var want = S.data.tracks[S.idx];
               var preview = want && d.duration < want.duration - 5000;   // Spotify served a 30-second preview
               S.timeline = preview ? 'preview' : 'full';
-              var sc = schedule(S.data, S.timeline);
+              var sc = live(S.timeline);
               if (sc.idx !== S.idx) return embedTune();
               if (S.audio) S.audio.pause();
               controller.seek(Math.floor(sc.offset / 1000)); controller.play();
@@ -229,17 +248,14 @@
   }
   function embedTune() {
     if (S.source !== 'embed' || !S.embed) return;
-    var s = schedule(S.data, S.timeline), t = S.data.tracks[s.idx];
+    var s = live(S.timeline), guard = 0;
+    // Songs with no Spotify match are skipped, so Spotify listeners never hit a gap.
+    while (!S.data.tracks[s.idx].spotifyId && guard++ < S.data.tracks.length) s = skipCurrent(S.timeline, false);
+    var t = S.data.tracks[s.idx];
+    if (!t.spotifyId) { say('This station isn\u2019t on Spotify yet.'); S.embed.pause(); return; }
     showTrack(s.idx);
     slotTimer(s, embedTune);
     if (S.audio) S.audio.pause();
-    if (!t.spotifyId) {
-      // Not matched to Spotify (yet): fill the slot with Apple's 30-second preview rather than silence.
-      S.embed.pause();
-      say('Not on Spotify yet \u2014 playing the preview');
-      if (t.preview && s.offset < PREVIEW_MS - 1500) { var a = ensureAudio(); a.src = t.preview; seekPreview(a, s.offset); a.play().catch(function () {}); }
-      return;
-    }
     S.embedArmed = true; S.embedUpdate = null;
     S.embed.loadUri('spotify:track:' + t.spotifyId);
   }
@@ -300,7 +316,7 @@
     els.stage.hidden = true; els.dock.hidden = true;
     els.choose.hidden = false; els.choose.classList.remove('leaving');
     hint('');
-    S.source = null; S.timeline = 'preview';
+    S.source = null; S.timeline = 'preview'; S.shift = 0; S.skips = 0;
   }
 
   /* ---------- station changes ---------- */
@@ -308,10 +324,10 @@
     fetchJson('/radio.json').then(function (d) {
       if (!S.data || d.startedAt !== S.data.startedAt || d.station.id !== S.data.station.id) {
         var switching = !!S.data;
-        S.data = d;
+        S.data = d; S.shift = 0; S.skips = 0;
         els.station.textContent = d.station.name;
         if (switching && S.playing) { say('Switching to ' + d.station.name + '…'); resume(); }
-        if (!S.playing) { var s = schedule(d, 'preview'); if (s) showTrack(s.idx); }
+        if (!S.playing) { var s = live('preview'); if (s) showTrack(s.idx); }
       } else if (S.data && d.updated !== S.data.updated) {
         S.data = d; // same station, refreshed details (Spotify matches filling in)
       }
@@ -339,7 +355,7 @@
       .then(function (r) {
         S.data = r[0]; S.cfg = r[1] || {};
         els.station.textContent = S.data.station.name;
-        var s = schedule(S.data, 'preview'); if (s) showTrack(s.idx);
+        var s = live('preview'); if (s) showTrack(s.idx);
         S.timers.ui = setInterval(tickUI, 500);
         S.timers.poll = setInterval(poll, POLL_MS);
         S.timers.drift = setInterval(appleDrift, 30000);

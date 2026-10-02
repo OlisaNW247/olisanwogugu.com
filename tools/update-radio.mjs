@@ -58,6 +58,7 @@ export function seededShuffle(items, seed) {
 export function radioTrack(song) {
   const a = song && song.attributes;
   if (!a || !a.durationInMillis) return null;
+  if (!a.playParams) return null;   // Apple marks these as not playable; they would only fail on the web player
   const preview = a.previews && a.previews[0] && a.previews[0].url;
   return {
     id: String(song.id),
