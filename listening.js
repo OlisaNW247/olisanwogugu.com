@@ -188,7 +188,7 @@
 
   function init() {
     var btn = document.getElementById('listening-btn');
-    if (btn) btn.addEventListener('click', open);
+    if (btn) btn.addEventListener('click', function (e) { e.preventDefault(); open(); });
     // Warm the data so the click feels instant.
     var warm = function () { loadTrack().then(function (t) { preload(t.artwork); }).catch(function () {}); };
     if ('requestIdleCallback' in window) requestIdleCallback(warm); else setTimeout(warm, 300);
