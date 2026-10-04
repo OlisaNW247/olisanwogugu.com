@@ -268,8 +268,11 @@
       .then(function () {
       return new Promise(function (resolve) {
         if (S.embed) return resolve();
-        var s = live(S.timeline), t = S.data.tracks[s.idx];
-        window.__spIframeApi.createController(els.embedSlot, { uri: 'spotify:track:' + (t.spotifyId || ''), width: '100%', height: 80 }, function (controller) {
+        // Create the player with a song Spotify knows; the live song may not be matched yet.
+        var s = live(S.timeline), first = S.data.tracks[s.idx];
+        if (!first.spotifyId) first = S.data.tracks.slice(s.idx).concat(S.data.tracks.slice(0, s.idx)).find(function (t) { return t.spotifyId; });
+        if (!first) throw new Error('This station isn\u2019t on Spotify yet.');
+        window.__spIframeApi.createController(els.embedSlot, { uri: 'spotify:track:' + first.spotifyId, width: '100%', height: 80 }, function (controller) {
           S.embed = controller; log('spotify embed ready');
           controller.addListener('playback_update', function (e) {
             var d = e.data || {}; S.embedUpdate = d; S.embedAt = Date.now();
@@ -325,7 +328,8 @@
       log(source + ' failed: ' + ((e && (e.errorCode || e.message)) || e));
       S.source = 'preview'; els.source.textContent = sourceLabel();
       els.embed.hidden = true; document.body.classList.remove('embed-mode');
-      say((source === 'apple' ? 'Apple Music couldn’t play here' : 'Spotify’s player couldn’t load') + ', so you’re hearing previews.');
+      var why = (e && /station/.test(e.message || '')) ? e.message.replace(/\.$/, '') : (source === 'apple' ? 'Apple Music couldn\u2019t play here' : 'Spotify\u2019s player couldn\u2019t load');
+      say(why + ', so you\u2019re hearing previews.');
       previewTune();
     });
   }
