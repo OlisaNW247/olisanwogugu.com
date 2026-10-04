@@ -259,20 +259,14 @@
   }
 
   /* ---------- Spotify's embedded player ---------- */
-  function embedStart() {
-    say('Loading Spotify’s player…');
-    els.embed.hidden = false; document.body.classList.add('embed-mode');
-    var apiReady = function () { return !!window.__spIframeApi; };
-    return loadScript('https://open.spotify.com/embed/iframe-api/v1', apiReady, 25000)
-      .catch(function (e) { log('spotify api load failed (' + (e && e.message) + '); retrying'); return loadScript('https://open.spotify.com/embed/iframe-api/v1?retry=' + Date.now(), apiReady, 25000); })
-      .then(function () {
-      return new Promise(function (resolve) {
-        if (S.embed) return resolve();
-        // Create the player with a song Spotify knows; the live song may not be matched yet.
-        var s = live(S.timeline), first = S.data.tracks[s.idx];
-        if (!first.spotifyId) first = S.data.tracks.slice(s.idx).concat(S.data.tracks.slice(0, s.idx)).find(function (t) { return t.spotifyId; });
-        if (!first) throw new Error('This station isn\u2019t on Spotify yet.');
-        window.__spIframeApi.createController(els.embedSlot, { uri: 'spotify:track:' + first.spotifyId, width: '100%', height: 80 }, function (controller) {
+  function createEmbed(uri) {
+    return new Promise(function (resolve, reject) {
+      if (S.embed) { try { S.embed.destroy(); } catch (e) {} S.embed = null; }
+      var slot = document.createElement('div'); els.embed.innerHTML = ''; els.embed.appendChild(slot);
+      var done = false;
+      try {
+        window.__spIframeApi.createController(slot, { uri: uri, width: '100%', height: 80 }, function (controller) {
+          done = true;
           S.embed = controller; log('spotify embed ready');
           controller.addListener('playback_update', function (e) {
             var d = e.data || {}; S.embedUpdate = d; S.embedAt = Date.now();
@@ -287,16 +281,47 @@
               if (S.audio) S.audio.pause();
               controller.seek(Math.floor(sc.offset / 1000)); controller.play();
               els.login.hidden = !preview;
-              say(preview ? 'Previews \u00b7 log in to Spotify, then reload, for full songs' : 'Full songs \u00b7 Spotify');
+              say(preview ? 'Previews \u00b7 log in to Spotify for full songs' : 'Full songs \u00b7 Spotify');
               setTimeout(function () { if (S.playing && S.embedUpdate && S.embedUpdate.isPaused) { say('Press play on the Spotify player below.'); revealControls(); } }, 2500);
             }
             if (d.duration > 0 && d.isPaused && d.position >= d.duration - 1500 && d.position > 0) embedTune();
           });
           resolve();
         });
-      });
-    }).then(embedTune);
+      } catch (e) { reject(e); }
+      setTimeout(function () { if (!done) reject(new Error('Spotify\u2019s player did not start.')); }, 20000);
+    });
   }
+  function firstMatchedFrom(idx) {
+    var t = S.data.tracks;
+    return t.slice(idx).concat(t.slice(0, idx)).find(function (x) { return x.spotifyId; });
+  }
+  function embedStart() {
+    say('Loading Spotify\u2019s player\u2026');
+    els.embed.hidden = false; document.body.classList.add('embed-mode');
+    var apiReady = function () { return !!window.__spIframeApi; };
+    return loadScript('https://open.spotify.com/embed/iframe-api/v1', apiReady, 25000)
+      .catch(function (e) { log('spotify api load failed (' + (e && e.message) + '); retrying'); return loadScript('https://open.spotify.com/embed/iframe-api/v1?retry=' + Date.now(), apiReady, 25000); })
+      .then(function () {
+        if (S.embed) return;
+        // Create the player with a song Spotify knows; the live song may not be matched yet.
+        var first = firstMatchedFrom(live(S.timeline).idx);
+        if (!first) throw new Error('This station isn\u2019t on Spotify yet.');
+        return createEmbed('spotify:track:' + first.spotifyId);
+      })
+      .then(embedTune);
+  }
+  // Back from Spotify's login page: rebuild the player so it picks up the login, no reload needed.
+  var spLoginPending = false;
+  function embedRefreshAfterLogin() {
+    if (!spLoginPending || S.source !== 'embed' || !window.__spIframeApi) return;
+    spLoginPending = false;
+    var first = firstMatchedFrom(live(S.timeline).idx); if (!first) return;
+    log('back from Spotify login; rebuilding player');
+    say('Welcome back \u2014 press play for full songs');
+    createEmbed('spotify:track:' + first.spotifyId).then(function () { S.timeline = 'full'; embedTune(); revealControls(); }).catch(function (e) { log('rebuild failed: ' + (e && e.message)); });
+  }
+
   function embedTune() {
     if (S.source !== 'embed' || !S.embed) return;
     var s = live(S.timeline), guard = 0;
@@ -405,6 +430,10 @@
     els.pause.addEventListener('click', pause);
     els.switch.addEventListener('click', switchService);
     els.volume.addEventListener('input', function () { setVolume(parseFloat(els.volume.value)); });
+    els.login.addEventListener('click', function () { spLoginPending = true; });
+    document.addEventListener('visibilitychange', function () { if (document.visibilityState === 'visible') setTimeout(embedRefreshAfterLogin, 300); });
+    window.addEventListener('focus', function () { setTimeout(embedRefreshAfterLogin, 300); });
+    window.addEventListener('pageshow', function () { setTimeout(embedRefreshAfterLogin, 300); });
     document.addEventListener('keydown', function (e) { if (e.key === ' ' && S.source && e.target === document.body) { e.preventDefault(); S.playing ? pause() : resume(); } });
     try { var v = localStorage.getItem('radio-volume'); if (v) els.volume.value = v; } catch (e) {}
     ['mousemove', 'touchstart', 'keydown'].forEach(function (ev) { document.addEventListener(ev, function () { if (document.body.classList.contains('on-radio')) revealControls(); }, { passive: true }); });
