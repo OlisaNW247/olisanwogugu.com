@@ -77,7 +77,7 @@
       "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/16/3f/02/163f0233-452c-ca29-c1fb-94dfb3d40051/mzaf_7052817367579640844.plus.aac.p.m4a",
       "url": "https://music.apple.com/us/album/ma-tnsani-yalla-habibi-feat-aya/1794317769?i=1794317772",
       "isrc": "UKXN22566225",
-      "spotifyId": ""
+      "spotifyId": "2HPuXWCPsmnLOroCFzQpOe"
     },
     {
       "id": "1655434818",
@@ -125,7 +125,7 @@
       "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/d8/d4/9b/d8d49bb4-0000-fc20-a2ff-9e8840318e51/mzaf_15459966125305810805.plus.aac.p.m4a",
       "url": "https://music.apple.com/us/album/nonstop-feeling/1819553087?i=1819553089",
       "isrc": "GBJX31964057",
-      "spotifyId": ""
+      "spotifyId": "1m4M279rE22tnYunqCHvGL"
     },
     {
       "id": "1795489372",
@@ -173,7 +173,7 @@
       "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/0f/7e/f0/0f7ef05b-834e-201f-a5b6-734936561034/mzaf_9745593922847545342.plus.aac.p.m4a",
       "url": "https://music.apple.com/us/album/its-not-right-but-its-okay/1747816545?i=1747816820",
       "isrc": "NLP762300246",
-      "spotifyId": ""
+      "spotifyId": "3sG5qkuqiEQDCDK3A5zoG6"
     },
     {
       "id": "1490637971",
@@ -197,7 +197,7 @@
       "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/e6/30/0c/e6300cc7-85f9-572b-1fe6-447c43b45f1d/mzaf_9954085669359916375.plus.aac.p.m4a",
       "url": "https://music.apple.com/us/album/you-were-right/1058740883?i=1058740887",
       "isrc": "AUDCB1500501",
-      "spotifyId": ""
+      "spotifyId": "2HK8lTQtba1VcJO4L25os7"
     },
     {
       "id": "1753949197",
@@ -4136,5 +4136,5 @@
       "spotifyId": ""
     }
   ],
-  "updated": "2026-10-04T22:32:26.531Z"
+  "updated": "2026-10-05T01:15:21.417Z"
 }
