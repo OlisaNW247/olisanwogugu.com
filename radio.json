@@ -341,7 +341,7 @@
       "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/99/00/d3/9900d37c-5776-d570-1acd-2ea9546b4be6/mzaf_18019541473331411755.plus.aac.p.m4a",
       "url": "https://music.apple.com/us/album/cora%C3%A7ao-feat-jesus-fernandez-20th-anniversary-mix/1754343373?i=1754343539",
       "isrc": "ITLCJ2100634",
-      "spotifyId": ""
+      "spotifyId": "2KVAO2OAH6a9Tr2DqYL65g"
     },
     {
       "id": "1824173343",
@@ -569,7 +569,7 @@
       "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/ef/5e/99/ef5e9915-9556-283d-3b31-f346e8f50f17/mzaf_410606117244292414.plus.aac.p.m4a",
       "url": "https://music.apple.com/us/album/super-people/1012308818?i=1012308819",
       "isrc": "GBLMR1500003",
-      "spotifyId": ""
+      "spotifyId": "468C9SvUsVc5o0rFvWJiVD"
     },
     {
       "id": "1819967715",
@@ -641,7 +641,7 @@
       "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/58/1b/af/581baffe-f409-a154-c9b6-27d6b9397ab5/mzaf_10866552705432839032.plus.aac.p.m4a",
       "url": "https://music.apple.com/us/album/tondo/1511913981?i=1511914722",
       "isrc": "GBUM72000253",
-      "spotifyId": ""
+      "spotifyId": "23PIMIlFx1FeiCmmIf1RgZ"
     },
     {
       "id": "1866760858",
@@ -4136,5 +4136,5 @@
       "spotifyId": ""
     }
   ],
-  "updated": "2026-10-05T01:15:21.417Z"
+  "updated": "2026-10-05T07:12:58.944Z"
 }
