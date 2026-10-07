@@ -558,10 +558,11 @@
     },
     "p.KRUaLKVD84": {
       "name": "Favorite Songs",
-      "lastModified": "2026-09-21T20:48:22Z",
-      "fetchedAt": "2026-10-06T09:22:00.080Z",
-      "count": 5,
+      "lastModified": "2026-10-07T02:04:02Z",
+      "fetchedAt": "2026-10-07T06:27:12.348Z",
+      "count": 6,
       "catalogIds": [
+        "1440950725",
         "1711674302",
         "1728685749",
         "1499843137",
@@ -569,6 +570,7 @@
         "1657271982"
       ],
       "libraryIds": [
+        "i.kGObl59hRxzLgrm",
         "i.oOdNM89SlZMzX7D",
         "i.KoJPbRYfaLKVD84",
         "i.2P0D5ZrFx4R6L7a",
@@ -7310,5 +7312,5 @@
       "libraryIds": []
     }
   },
-  "updated": "2026-10-07T00:35:22.392Z"
+  "updated": "2026-10-07T06:27:12.349Z"
 }
