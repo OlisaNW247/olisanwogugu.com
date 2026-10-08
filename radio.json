@@ -593,7 +593,7 @@
       "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/fe/7b/e6/fe7be636-1980-fb51-2ebf-89e601738e24/mzaf_14441107816605455938.plus.aac.p.m4a",
       "url": "https://music.apple.com/us/album/funky-town/1549126853?i=1549126854",
       "isrc": "GBKQU2102696",
-      "spotifyId": ""
+      "spotifyId": "1fKnpml7V0VImOFQA7XXyj"
     },
     {
       "id": "1600916546",
@@ -605,7 +605,7 @@
       "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview116/v4/3d/d1/11/3dd1115a-55fd-66b1-c794-05d4a552e30e/mzaf_16099457264187741566.plus.aac.p.m4a",
       "url": "https://music.apple.com/us/album/storm/1600916543?i=1600916546",
       "isrc": "ITFGO2200007",
-      "spotifyId": ""
+      "spotifyId": "6UN4vGbTC7SF0bjynH9vfq"
     },
     {
       "id": "1470173414",
@@ -713,7 +713,7 @@
       "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/44/1c/94/441c94d7-2b1c-f72e-858e-9793eeb2e9a6/mzaf_10361895413230479393.plus.aac.p.m4a",
       "url": "https://music.apple.com/us/album/she-babao/1772942929?i=1772942931",
       "isrc": "CH7812420066",
-      "spotifyId": ""
+      "spotifyId": "5KGxJM8IFiJdAulZHI12CT"
     },
     {
       "id": "1819922206",
@@ -4136,5 +4136,5 @@
       "spotifyId": ""
     }
   ],
-  "updated": "2026-10-08T03:24:54.174Z"
+  "updated": "2026-10-08T10:51:50.283Z"
 }
