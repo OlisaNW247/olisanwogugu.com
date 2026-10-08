@@ -857,7 +857,7 @@
       "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/ca/ad/1f/caad1ffd-9c0b-4f59-d6d8-ff79ff86465e/mzaf_6676016889892528514.plus.aac.p.m4a",
       "url": "https://music.apple.com/us/album/shined-on-me-feat-andrea-love-les-bisous-extended-remix/1563105334?i=1563105552",
       "isrc": "NLF712101586",
-      "spotifyId": ""
+      "spotifyId": "1K4MSib4LpLpOBAnASWeqM"
     },
     {
       "id": "1676776350",
@@ -929,7 +929,7 @@
       "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/fb/d9/a6/fbd9a637-a685-f9fe-5051-777aca3bb786/mzaf_11535186861955281886.plus.aac.p.m4a",
       "url": "https://music.apple.com/us/album/da-resurrection/1873024160?i=1873024354",
       "isrc": "UKU932581537",
-      "spotifyId": ""
+      "spotifyId": "6bqbcLbdMo63nYDjIuE5kl"
     },
     {
       "id": "1652064376",
@@ -4136,5 +4136,5 @@
       "spotifyId": ""
     }
   ],
-  "updated": "2026-10-08T10:51:50.283Z"
+  "updated": "2026-10-08T22:31:27.777Z"
 }
