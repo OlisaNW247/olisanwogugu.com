@@ -41,7 +41,7 @@
       "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/b3/a0/bd/b3a0bdee-92c0-0c83-1917-b1113b295664/mzaf_1136058035356155945.plus.aac.p.m4a",
       "url": "https://music.apple.com/us/album/higher/1783080407?i=1783080408",
       "isrc": "NL8RL2455559",
-      "spotifyId": ""
+      "spotifyId": "3xWOfgZzCg1jdEpEfM4oKi"
     },
     {
       "id": "1726206948",
@@ -173,7 +173,7 @@
       "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/ae/88/90/ae88903e-3f28-527f-1df2-f80a20b9adff/mzaf_9476856611102807301.plus.aac.p.m4a",
       "url": "https://music.apple.com/us/album/superheroes/697194953?i=697195890",
       "isrc": "GBDUW0000062",
-      "spotifyId": ""
+      "spotifyId": "186hvCTyrni4KT9nwIQ7zS"
     },
     {
       "id": "1492440606",
@@ -305,7 +305,7 @@
       "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/f2/45/66/f2456678-fade-d86e-d218-c04ff8cb8c7c/mzaf_13324517885487952180.plus.aac.p.m4a",
       "url": "https://music.apple.com/us/album/212-feat-lazy-jay/1426105439?i=1426106382",
       "isrc": "TCADT1876099",
-      "spotifyId": ""
+      "spotifyId": "4D3eJvbNKjMF8DRQFVIHsG"
     },
     {
       "id": "1843394350",
@@ -377,7 +377,7 @@
       "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/f4/1e/74/f41e7441-e8a2-70e7-adfa-75d483c3af5c/mzaf_12863125046407463258.plus.aac.p.m4a",
       "url": "https://music.apple.com/us/album/finally-feat-jessie-ware-classic-house-10-edit/1824447302?i=1824447312",
       "isrc": "GBUM72500658",
-      "spotifyId": ""
+      "spotifyId": "0IIZdgVWv6tV5a01mGEYVQ"
     },
     {
       "id": "1858680683",
@@ -4136,5 +4136,5 @@
       "spotifyId": ""
     }
   ],
-  "updated": "2026-10-07T19:38:23.327Z"
+  "updated": "2026-10-08T03:24:54.174Z"
 }
