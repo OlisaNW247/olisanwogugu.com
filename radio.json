@@ -125,7 +125,7 @@
       "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/a9/18/88/a91888e0-0529-34f8-832f-4c5dbab1c2bf/mzaf_14754840048485595217.plus.aac.p.m4a",
       "url": "https://music.apple.com/us/album/heaven-to-me/1679454273?i=1679455199",
       "isrc": "USQX92301937",
-      "spotifyId": ""
+      "spotifyId": "4Z1ZlABSKDlVByJL3y5OVs"
     },
     {
       "id": "1388572541",
@@ -137,7 +137,7 @@
       "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/ae/64/18/ae641896-367a-c418-e3cd-0066f894d8cc/mzaf_13105852194886359198.plus.aac.p.m4a",
       "url": "https://music.apple.com/us/album/come-over/1388571796?i=1388572541",
       "isrc": "USSM11804479",
-      "spotifyId": ""
+      "spotifyId": "4yqSobnkCpfi6tn0WrdXnU"
     },
     {
       "id": "1494019012",
@@ -173,7 +173,7 @@
       "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/eb/07/c8/eb07c8cd-adb3-3d76-c3a6-5ca509e8de2b/mzaf_5925532892781362578.plus.aac.p.m4a",
       "url": "https://music.apple.com/us/album/sweet-life/1440765580?i=1440766146",
       "isrc": "USUM71207177",
-      "spotifyId": ""
+      "spotifyId": "1jHWjMNyb32gxJfst4AH46"
     },
     {
       "id": "1778524860",
@@ -245,7 +245,7 @@
       "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/e5/6e/07/e56e0775-d44c-fc79-a8d8-78b46a825738/mzaf_9538225478116277548.plus.aac.p.m4a",
       "url": "https://music.apple.com/us/album/something-about-us/697194953?i=697195941",
       "isrc": "GBDUW0000064",
-      "spotifyId": ""
+      "spotifyId": "1NeLwFETswx8Fzxl2AFl91"
     },
     {
       "id": "1756376908",
@@ -1784,5 +1784,5 @@
       "spotifyId": ""
     }
   ],
-  "updated": "2026-10-09T09:37:02.386Z"
+  "updated": "2026-10-09T16:35:23.722Z"
 }
