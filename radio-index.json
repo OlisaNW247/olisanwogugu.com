@@ -561,7 +561,7 @@
     "p.KRUaLKVD84": {
       "name": "Favorite Songs",
       "lastModified": "2026-10-07T02:04:02Z",
-      "fetchedAt": "2026-10-09T16:33:33.653Z",
+      "fetchedAt": "2026-10-10T17:58:50.643Z",
       "count": 6,
       "catalogIds": [
         "1440950725",
@@ -6597,9 +6597,9 @@
     },
     "p.ZOAXXEzs4xVEq5X": {
       "name": "🕴️",
-      "lastModified": "2026-10-09T05:55:16Z",
-      "fetchedAt": "2026-10-10T13:32:04.814Z",
-      "count": 69,
+      "lastModified": "2026-10-10T16:00:19Z",
+      "fetchedAt": "2026-10-10T17:58:51.129Z",
+      "count": 70,
       "catalogIds": [
         "1422656591",
         "1620069233",
@@ -6668,7 +6668,8 @@
         "482347958",
         "1635384394",
         "1251429188",
-        "509909058"
+        "509909058",
+        "74954927"
       ],
       "libraryIds": [
         "i.kGObMZPfRxzLgrm",
@@ -6739,7 +6740,8 @@
         "i.YJMNGbrSREDJ3b9",
         "i.3VB1zNRSdzpr60e",
         "i.YJMNGK5FREDJ3b9",
-        "i.oOdNZBpSlZMzX7D"
+        "i.oOdNZBpSlZMzX7D",
+        "i.8Wdrq12CVD62x4Z"
       ]
     },
     "p.6xZaaPxsvGPNWZ0": {
@@ -7318,5 +7320,5 @@
       "libraryIds": []
     }
   },
-  "updated": "2026-10-10T13:32:04.814Z"
+  "updated": "2026-10-10T17:58:51.129Z"
 }
