@@ -171,6 +171,8 @@
           log('item -> ' + (item ? (item.attributes && item.attributes.name) + ' [' + S.music.nowPlayingItemIndex + ']' : 'none'));
           if (!item || !S.data || S.source !== 'apple') return;
           var i = S.data.tracks.findIndex(function (t) { return t.id === String(item.id); });
+          // While a fresh load settles the player can briefly report the queue's first item; don't flash it.
+          if (Date.now() - lastTuneAt < 4000 && i !== tunedIdx) { log('ignoring transient item [' + i + '] during load'); return; }
           if (i !== -1 && i !== S.idx) showTrack(i);
         });
         S.music.addEventListener('playbackStateDidChange', function () {
@@ -186,7 +188,7 @@
       });
     });
   }
-  var appleSeq = 0, lastTuneAt = 0, lastErrorAt = 0, retriedSame = false, indexFixes = 0;
+  var appleSeq = 0, lastTuneAt = 0, lastErrorAt = 0, retriedSame = false, indexFixes = 0, tunedIdx = -1;
   function appleTune() {
     S.timeline = 'full';
     var s = live('full'); if (!s) return Promise.resolve();
@@ -196,7 +198,7 @@
     showTrack(s.idx);
     clearTimeout(S.timers.slot);
     if (S.audio) S.audio.pause();
-    lastTuneAt = Date.now(); indexFixes = 0;
+    lastTuneAt = Date.now(); indexFixes = 0; tunedIdx = s.idx;
     log('tune -> ' + S.data.tracks[s.idx].song + ' [' + s.idx + '] @' + Math.round(s.offset / 1000) + 's');
     music.repeatMode = MusicKit.PlayerRepeatMode.all;
     music.volume = parseFloat(els.volume.value);
@@ -447,6 +449,8 @@
         S.timers.ui = setInterval(tickUI, 500);
         S.timers.poll = setInterval(poll, POLL_MS);
         S.timers.drift = setInterval(appleDrift, 30000);
+        // Warm Apple's player in the background so the tap only has to start playback.
+        if (S.cfg.token) setTimeout(function () { musicInstance().then(function () { log('apple player warmed'); }).catch(function () {}); }, 500);
       })
       .catch(function () {
         hint('Off air \u2014 no station yet.');
