@@ -185,7 +185,7 @@
       "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/29/03/9c/29039c92-34ef-d290-affb-0c5c74dbe96e/mzaf_4479925783389929629.plus.aac.p.m4a",
       "url": "https://music.apple.com/us/album/super-rich-kids-feat-earl-sweatshirt/1440765580?i=1440766411",
       "isrc": "USUM71207196",
-      "spotifyId": ""
+      "spotifyId": "0725YWm6Z0TpZ6wrNk64Eb"
     },
     {
       "id": "1767485717",
@@ -209,7 +209,7 @@
       "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/51/b0/b5/51b0b59a-dd86-ffbe-de84-2efed4e91f81/mzaf_2909431527553197491.plus.aac.p.m4a",
       "url": "https://music.apple.com/us/album/crack-rock/1440765580?i=1440766579",
       "isrc": "USUM71207184",
-      "spotifyId": ""
+      "spotifyId": "125FPswReMD9Ggvn69M7Ch"
     },
     {
       "id": "1647624667",
@@ -353,7 +353,7 @@
       "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/4c/0b/fa/4c0bfa3f-9720-d8b9-a52f-dc8162d463c0/mzaf_11688100299122534028.plus.aac.p.m4a",
       "url": "https://music.apple.com/us/album/looking-out-for-you/1568781665?i=1568783409",
       "isrc": "GBJET1500070",
-      "spotifyId": ""
+      "spotifyId": "0UI7YyubSyJCxokwcVUGIn"
     },
     {
       "id": "1738258787",
@@ -1784,5 +1784,5 @@
       "spotifyId": ""
     }
   ],
-  "updated": "2026-10-10T13:34:03.140Z"
+  "updated": "2026-10-11T18:06:39.859Z"
 }
