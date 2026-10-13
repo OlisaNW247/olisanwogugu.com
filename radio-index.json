@@ -5970,9 +5970,9 @@
     },
     "p.PkxVVbpI2XJlmRO": {
       "name": "🎸",
-      "lastModified": "2026-10-04T19:28:12Z",
-      "fetchedAt": "2026-10-12T23:24:31.308Z",
-      "count": 26,
+      "lastModified": "2026-10-13T01:55:45Z",
+      "fetchedAt": "2026-10-13T03:45:08.736Z",
+      "count": 27,
       "catalogIds": [
         "693610779",
         "1170055920",
@@ -5999,7 +5999,8 @@
         "1442990320",
         "1874713325",
         "1891411033",
-        "1440950725"
+        "1440950725",
+        "299740483"
       ],
       "libraryIds": [
         "i.5Pkv1rEFOmaEZXK",
@@ -6027,7 +6028,8 @@
         "i.5Pkv327SOmaEZXK",
         "i.oOdNZQ2tlZMzX7D",
         "i.2P0DRNOUx4R6L7a",
-        "i.kGObl59hRxzLgrm"
+        "i.kGObl59hRxzLgrm",
+        "i.5PkRVJmtOmaEZXK"
       ]
     },
     "p.qQXLLRDFArRmDOM": {
@@ -7346,5 +7348,5 @@
       ]
     }
   },
-  "updated": "2026-10-12T23:24:37.878Z"
+  "updated": "2026-10-13T03:45:08.736Z"
 }
