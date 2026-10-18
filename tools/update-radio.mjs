@@ -127,7 +127,7 @@ async function catalogSongs(apple, storefront, ids) {
 function refreshToken() {
   const current = readJson('radio-token.json', null) || {};
   const now = Math.floor(Date.now() / 1000);
-  const next = { token: current.token, exp: current.exp };
+  const next = { token: current.token, exp: current.exp, spotifyClientId: process.env.SPOTIFY_CLIENT_ID || '' };
   if (!current.token || (current.exp - now) <= TOKEN_RENEW_S) {
     next.token = developerToken({ ...credentials(), ttlSeconds: TOKEN_TTL_S });
     next.exp = now + TOKEN_TTL_S;

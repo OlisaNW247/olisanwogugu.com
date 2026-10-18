@@ -1,8 +1,8 @@
 // Spotify matching for the radio, without a Spotify developer account.
 //
 // Each station track is resolved to its Spotify id by trying, in order:
-//   1. Odesli's API (song.link), if an ODESLI_API_KEY secret is set
-//   2. song.link's public page for the Apple Music song
+//   1. Spotify's own catalog, if SPOTIFY_CLIENT_ID / SPOTIFY_CLIENT_SECRET secrets are set
+//   2. Odesli's API (song.link), if an ODESLI_API_KEY secret is set
 //   3. MusicBrainz, looking up the ISRC and reading the recording's Spotify link
 // Results (including "not found") are cached in spotify-index.json keyed by Apple catalog id, so each
 // song is looked up once. A run does a small batch to respect the services' rate limits.
@@ -12,13 +12,15 @@ import { resolve } from 'node:path';
 
 const MAX_LOOKUPS_PER_RUN = 20;
 const SPACING_MS = 4000;
+const FAST_LOOKUPS_PER_RUN = 150;   // when Spotify's own API answers, runs can do far more
+const FAST_SPACING_MS = 250;
 const UA = 'olisanwogugu.com radio (https://olisanwogugu.com)';
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 const TRACK_RE = /open\.spotify\.com\/track\/([A-Za-z0-9]{22})/;
 // Pages embed JSON where "/" may appear as "\/" or "\u002F"; also accept bare Spotify URIs.
 const SLASH = String.raw`(?:\/|\\\/|\\u002[fF])`;
 const HTML_RE = new RegExp(`open\\.spotify\\.com${SLASH}track${SLASH}([A-Za-z0-9]{22})|spotify:track:([A-Za-z0-9]{22})|SPOTIFY_SONG::([A-Za-z0-9]{22})`);
-const CACHE_VERSION = 3;
+const CACHE_VERSION = 4;
 
 export function spotifyIdFromOdesli(body) {
   const link = body && body.linksByPlatform && body.linksByPlatform.spotify;
@@ -40,8 +42,51 @@ export function spotifyIdFromMusicBrainz(body) {
   return '';
 }
 
+// Spotify's own catalog (client-credentials flow: no user login, needs SPOTIFY_CLIENT_ID/SECRET).
+let spotifyToken = null;
+async function spotifyAccessToken() {
+  if (spotifyToken && spotifyToken.exp > Date.now()) return spotifyToken.value;
+  const basic = Buffer.from(`${process.env.SPOTIFY_CLIENT_ID}:${process.env.SPOTIFY_CLIENT_SECRET}`).toString('base64');
+  const res = await fetch('https://accounts.spotify.com/api/token', { method: 'POST', headers: { Authorization: `Basic ${basic}`, 'Content-Type': 'application/x-www-form-urlencoded' }, body: 'grant_type=client_credentials' });
+  if (!res.ok) throw new Error(`Spotify token request failed (${res.status}); check SPOTIFY_CLIENT_ID and SPOTIFY_CLIENT_SECRET`);
+  const j = await res.json();
+  spotifyToken = { value: j.access_token, exp: Date.now() + (j.expires_in - 60) * 1000 };
+  return spotifyToken.value;
+}
+async function spotifySearch(q) {
+  const token = await spotifyAccessToken();
+  for (let attempt = 0; attempt < 3; attempt++) {
+    const res = await fetch(`https://api.spotify.com/v1/search?${new URLSearchParams({ q, type: 'track', limit: '3' })}`, { headers: { Authorization: `Bearer ${token}` } });
+    if (res.status === 429) { await sleep(Math.min(60, Number(res.headers.get('retry-after') || 2)) * 1000); continue; }
+    if (!res.ok) return null;
+    const j = await res.json();
+    return (j.tracks && j.tracks.items) || [];
+  }
+  return null;
+}
+export function spotifyConfigured() { return !!(process.env.SPOTIFY_CLIENT_ID && process.env.SPOTIFY_CLIENT_SECRET); }
+
 // Each resolver returns a Spotify id, '' for "looked, not there", or null for "couldn't look".
 const resolvers = [
+  {
+    // Exact match by ISRC, then a title + artist search as a backstop.
+    name: 'spotify-api',
+    enabled: spotifyConfigured,
+    async run(t) {
+      if (t.isrc) {
+        const items = await spotifySearch(`isrc:${t.isrc}`);
+        if (items === null) return null;
+        if (items.length) return items[0].id;
+      }
+      if (!t.song || !t.artist) return '';
+      const artist = t.artist.split(/,|&|\bfeat\b/i)[0].trim();
+      const items = await spotifySearch(`track:${t.song.replace(/[()\[\]"]/g, ' ')} artist:${artist}`);
+      if (items === null) return null;
+      const norm = (x) => String(x || '').toLowerCase().replace(/[^a-z0-9]+/g, ' ').trim();
+      const hit = items.find((i) => norm(i.name) === norm(t.song) && i.artists.some((a) => norm(a.name) === norm(artist))) || items.find((i) => i.artists.some((a) => norm(a.name) === norm(artist)));
+      return hit ? hit.id : '';
+    }
+  },
   {
     name: 'odesli-api',
     enabled: () => !!process.env.ODESLI_API_KEY,
@@ -135,11 +180,12 @@ export async function matchSpotify(tracks, root, storefront) {
   let changed = false, done = 0, found = 0;
   const notes = {};
   const log = (msg) => { notes[msg] = (notes[msg] || 0) + 1; };
-  for (const t of pending.slice(0, MAX_LOOKUPS_PER_RUN)) {
+  const fast = spotifyConfigured();
+  for (const t of pending.slice(0, fast ? FAST_LOOKUPS_PER_RUN : MAX_LOOKUPS_PER_RUN)) {
     const id = await resolveOne(t, storefront || 'us', log);
     if (id === null) continue;                     // every resolver failed; try again another run
     cache[t.id] = id; changed = true; done++; if (id) found++;
-    await sleep(SPACING_MS);
+    await sleep(fast ? FAST_SPACING_MS : SPACING_MS);
   }
   if (pending.length) {
     console.log(`Spotify: looked up ${done} song${done === 1 ? '' : 's'}, found ${found}${pending.length > done ? `, ${pending.length - done} still to go` : ''}`);
