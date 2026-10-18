@@ -53,7 +53,7 @@
       "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/bd/66/f5/bd66f508-25b4-de5a-ce10-c158679920a0/mzaf_16672701190043949566.plus.aac.p.m4a",
       "url": "https://music.apple.com/us/album/flower-moon/1797634063?i=1797634356",
       "isrc": "USJ5G2536705",
-      "spotifyId": ""
+      "spotifyId": "42ff9QhhQJM5StZgnHNAe9"
     },
     {
       "id": "1634704202",
@@ -197,7 +197,7 @@
       "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/85/f0/7e/85f07e59-8476-c832-f166-b8af9ae2c91c/mzaf_549709850062974354.plus.aac.p.m4a",
       "url": "https://music.apple.com/us/album/cherry-wine/1581102239?i=1581102728",
       "isrc": "GBKPL2162171",
-      "spotifyId": ""
+      "spotifyId": "5o5WaO9pzPhXSGIrTIYVce"
     },
     {
       "id": "1207820257",
@@ -497,7 +497,7 @@
       "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/c0/45/90/c0459096-0e7b-0a7e-513a-73b543102d5e/mzaf_17512389033838065964.plus.aac.p.m4a",
       "url": "https://music.apple.com/us/album/tienat%C3%A9/1628693795?i=1628694045",
       "isrc": "ITB262200160",
-      "spotifyId": ""
+      "spotifyId": "1SIXMGcsAeA6sNxaY1EG3O"
     },
     {
       "id": "1725131841",
@@ -785,7 +785,7 @@
       "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/93/50/f4/9350f43e-892e-54f9-04d2-9f2d9de95a2e/mzaf_13038849612964333096.plus.aac.p.m4a",
       "url": "https://music.apple.com/us/album/chateau-feel-alright/1476578353?i=1476578719",
       "isrc": "GBKPL1959342",
-      "spotifyId": ""
+      "spotifyId": "3vjs2MDHoF9xhylNg6Y9un"
     },
     {
       "id": "1485339439",
@@ -1772,5 +1772,5 @@
       "spotifyId": ""
     }
   ],
-  "updated": "2026-10-18T16:56:29.294Z"
+  "updated": "2026-10-18T19:19:55.845Z"
 }
