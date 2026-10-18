@@ -7,15 +7,17 @@
 (function () {
   'use strict';
 
-  var PREVIEW_MS = 30000, POLL_MS = 60000, DRIFT_MS = 4000;
+  var PREVIEW_MS = 30000, POLL_MS = 60000, DRIFT_MS = 4000, SP_WINDOW = 50;
+  var SP_SCOPES = 'streaming user-read-email user-read-private user-modify-playback-state user-read-playback-state';
 
   var S = {
     data: null, cfg: null,
-    source: null,          // 'apple' | 'embed' | 'preview'
+    source: null,          // 'apple' | 'spotify' | 'embed' | 'preview'
     timeline: 'preview',   // 'full' | 'preview' — which clock the current source follows
     playing: false, idx: -1,
     music: null, audio: null,
     embed: null, embedUpdate: null, embedAt: 0, embedArmed: false,
+    sp: { player: null, deviceId: null, state: null, stateAt: 0, windowStart: -1, windowEnd: -1 },
     shift: 0,              // ms this listener runs ahead of the station clock (after skipping unplayable songs)
     skips: 0,
     timers: {}
@@ -76,14 +78,14 @@
   /* ---------- UI ---------- */
   function say(msg) { els.status.textContent = msg || ''; }
   function hint(msg) { els.chooseHint.textContent = msg || ''; els.chooseHint.hidden = !msg; }
-  function sourceLabel() { return { apple: 'Apple Music', embed: 'Spotify', preview: 'Previews' }[S.source] || ''; }
+  function sourceLabel() { return { apple: 'Apple Music', spotify: 'Spotify', embed: 'Spotify', preview: 'Previews' }[S.source] || ''; }
 
   function showTrack(i) {
     var t = S.data.tracks[i]; if (!t) return;
     S.idx = i;
     els.title.textContent = t.song;
     els.artist.textContent = t.artist + (t.album ? '  —  ' + t.album : '');
-    var link = S.source === 'embed' && t.spotifyId ? 'https://open.spotify.com/track/' + t.spotifyId : t.url;
+    var link = (S.source === 'embed' || S.source === 'spotify') && t.spotifyId ? 'https://open.spotify.com/track/' + t.spotifyId : t.url;
     if (link) { els.link.href = link; els.link.hidden = false; } else { els.link.hidden = true; }
     swapImage(els.art, t.artwork); swapImage(els.back, t.artwork);
     if ('mediaSession' in navigator) {
@@ -99,6 +101,7 @@
   }
   function position() {
     if (S.source === 'apple' && S.music && S.music.nowPlayingItem) return { offset: S.music.currentPlaybackTime * 1000, duration: S.music.currentPlaybackDuration * 1000 };
+    if (S.source === 'spotify' && S.sp.state) { var st = S.sp.state; return { offset: st.position + (st.paused ? 0 : Date.now() - S.sp.stateAt), duration: st.duration }; }
     if (S.source === 'embed' && S.embedUpdate) { var u = S.embedUpdate; return { offset: u.position + (u.isPaused ? 0 : Date.now() - S.embedAt), duration: u.duration }; }
     return live(S.timeline);
   }
@@ -260,6 +263,122 @@
     if (Math.abs(t - want.offset) > 8000) { log('time drift ' + Math.round(t / 1000) + 's -> ' + Math.round(want.offset / 1000) + 's'); music.seekToTime(want.offset / 1000); }
   }
 
+  /* ---------- Spotify sign-in (Authorization Code with PKCE, same tab so iOS never hands it to the app) ---------- */
+  function spRedirectUri() { return location.origin + location.pathname; }
+  function spStored() { try { return JSON.parse(localStorage.getItem('radio-spotify') || 'null'); } catch (e) { return null; } }
+  function spStore(tok) { try { if (tok) localStorage.setItem('radio-spotify', JSON.stringify(tok)); else localStorage.removeItem('radio-spotify'); } catch (e) {} }
+  function b64url(buf) { var s = ''; new Uint8Array(buf).forEach(function (b) { s += String.fromCharCode(b); }); return btoa(s).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, ''); }
+  function spLogin() {
+    if (!S.cfg || !S.cfg.spotifyClientId) { hint('Spotify sign-in isn’t set up yet.'); return; }
+    var a = new Uint8Array(48); crypto.getRandomValues(a); var verifier = b64url(a.buffer);
+    try { sessionStorage.setItem('radio-spotify-verifier', verifier); } catch (e) {}
+    crypto.subtle.digest('SHA-256', new TextEncoder().encode(verifier)).then(function (hash) {
+      // A script-driven navigation (not a tapped link) keeps iOS from opening the Spotify app.
+      location.assign('https://accounts.spotify.com/authorize?' + new URLSearchParams({
+        client_id: S.cfg.spotifyClientId, response_type: 'code', redirect_uri: spRedirectUri(), scope: SP_SCOPES,
+        code_challenge_method: 'S256', code_challenge: b64url(hash), state: 'radio'
+      }));
+    });
+  }
+  function spTokenRequest(params) {
+    return fetch('https://accounts.spotify.com/api/token', { method: 'POST', headers: { 'Content-Type': 'application/x-www-form-urlencoded' }, body: new URLSearchParams(params) })
+      .then(function (r) { return r.json().then(function (j) { if (!r.ok) throw new Error(j.error_description || j.error || 'Spotify sign-in failed.'); return j; }); })
+      .then(function (j) {
+        var prev = spStored() || {};
+        var tok = { access: j.access_token, refresh: j.refresh_token || prev.refresh, exp: Date.now() + (j.expires_in - 60) * 1000 };
+        spStore(tok); return tok;
+      });
+  }
+  function spHandleCallback() {
+    var q = new URLSearchParams(location.search);
+    if (!q.has('code') && !q.has('error')) return Promise.resolve(false);
+    history.replaceState(null, '', location.pathname + (DEBUG ? '?debug=1' : ''));
+    if (q.has('error')) return Promise.reject(new Error('Spotify sign-in was ' + (q.get('error') === 'access_denied' ? 'cancelled.' : 'refused: ' + q.get('error'))));
+    var verifier = ''; try { verifier = sessionStorage.getItem('radio-spotify-verifier') || ''; sessionStorage.removeItem('radio-spotify-verifier'); } catch (e) {}
+    return spTokenRequest({ client_id: S.cfg.spotifyClientId, grant_type: 'authorization_code', code: q.get('code'), redirect_uri: spRedirectUri(), code_verifier: verifier }).then(function () { return true; });
+  }
+  function spSignedIn() { var t = spStored(); return !!(t && (Date.now() < t.exp || t.refresh)); }
+  function spAccessToken() {
+    var tok = spStored();
+    if (!tok) return Promise.reject(new Error('Not signed in to Spotify.'));
+    if (Date.now() < tok.exp) return Promise.resolve(tok.access);
+    if (!tok.refresh) return Promise.reject(new Error('Spotify session expired.'));
+    return spTokenRequest({ client_id: S.cfg.spotifyClientId, grant_type: 'refresh_token', refresh_token: tok.refresh }).then(function (t) { return t.access; });
+  }
+  function spApi(method, path, body) {
+    return spAccessToken().then(function (tok) {
+      return fetch('https://api.spotify.com/v1' + path, { method: method, headers: { Authorization: 'Bearer ' + tok, 'Content-Type': 'application/json' }, body: body ? JSON.stringify(body) : undefined });
+    });
+  }
+
+  /* ---------- Spotify: full songs in our own player (Web Playback SDK, Premium) ---------- */
+  function spotifyStart() {
+    say('Connecting to Spotify…');
+    return loadScript('https://sdk.scdn.co/spotify-player.js', function () { return !!(window.Spotify && window.Spotify.Player); }, 20000).then(function () {
+      return new Promise(function (resolve, reject) {
+        if (S.sp.player && S.sp.deviceId) return resolve();
+        var player = new Spotify.Player({ name: 'Olisa’s radio', volume: parseFloat(els.volume.value), getOAuthToken: function (cb) { spAccessToken().then(cb).catch(function () { cb(''); }); } });
+        S.sp.player = player;
+        var settled = false;
+        player.addListener('ready', function (e) { S.sp.deviceId = e.device_id; log('spotify player ready'); if (!settled) { settled = true; resolve(); } });
+        player.addListener('not_ready', function () { S.sp.deviceId = null; });
+        ['initialization_error', 'authentication_error', 'account_error', 'playback_error'].forEach(function (ev) {
+          player.addListener(ev, function (e) { log('spotify ' + ev + ': ' + (e && e.message)); if (!settled && ev !== 'playback_error') { settled = true; reject(new Error(ev === 'account_error' ? 'premium' : ev)); } });
+        });
+        player.addListener('player_state_changed', spStateChanged);
+        if (player.activateElement) { try { player.activateElement(); } catch (e) {} }
+        player.connect().then(function (ok) { if (!ok && !settled) { settled = true; reject(new Error('Spotify player would not connect.')); } });
+        setTimeout(function () { if (!settled) { settled = true; reject(new Error('Spotify player took too long.')); } }, 15000);
+      });
+    }).then(spotifyTune);
+  }
+  function spStateChanged(state) {
+    if (S.source !== 'spotify') return;
+    var prev = S.sp.state;
+    S.sp.state = state; S.sp.stateAt = Date.now();
+    if (!state) return;
+    var cur = state.track_window && state.track_window.current_track;
+    if (cur) {
+      var i = -1;
+      for (var k = S.sp.windowStart; k <= S.sp.windowEnd && k < S.data.tracks.length; k++) if (S.data.tracks[k].spotifyId === cur.id) { i = k; break; }
+      if (i === -1) i = S.data.tracks.findIndex(function (t) { return t.spotifyId === cur.id; });
+      if (i !== -1 && i !== S.idx) showTrack(i);
+    }
+    // The run of songs finished (paused at 0 right after the end of a song): rejoin live.
+    if (S.playing && state.paused && state.position === 0 && prev && !prev.paused && prev.duration && prev.position > prev.duration - 6000) setTimeout(spotifyTune, 300);
+  }
+  function spotifyTune() {
+    if (S.source !== 'spotify' || !S.sp.deviceId) return Promise.resolve();
+    S.timeline = 'full';
+    var s = live('full'), guard = 0;
+    while (!S.data.tracks[s.idx].spotifyId && guard++ < S.data.tracks.length) s = skipCurrent('full', false);
+    var tracks = S.data.tracks;
+    if (!tracks[s.idx].spotifyId) { say('This station isn’t on Spotify yet.'); return Promise.resolve(); }
+    showTrack(s.idx);
+    say('Full songs · Spotify');
+    var uris = [], end = s.idx;
+    for (var k = s.idx; k < tracks.length && uris.length < SP_WINDOW && tracks[k].spotifyId; k++) { uris.push('spotify:track:' + tracks[k].spotifyId); end = k; }
+    S.sp.windowStart = s.idx; S.sp.windowEnd = end;
+    clearTimeout(S.timers.slot);
+    log('spotify play [' + s.idx + '..' + end + '] @' + Math.round(s.offset / 1000) + 's');
+    return spApi('PUT', '/me/player/play?device_id=' + S.sp.deviceId, { uris: uris, offset: { position: 0 }, position_ms: Math.floor(s.offset) }).then(function (r) {
+      if (r.status === 404) return new Promise(function (res) { setTimeout(res, 1200); }).then(spotifyTune);
+      if (r.status === 403) return r.json().catch(function () { return {}; }).then(function (j) { throw new Error(/PREMIUM/i.test(JSON.stringify(j)) ? 'premium' : 'Spotify refused playback.'); });
+      if (!r.ok && r.status !== 204) throw new Error('Spotify playback failed (' + r.status + ').');
+    });
+  }
+  function spotifyDrift() {
+    if (!S.playing || S.source !== 'spotify' || !S.sp.state || S.sp.state.paused) return;
+    var want = live('full'); if (!want) return;
+    var pos = position();
+    if (S.idx !== want.idx) { if (want.idx < S.sp.windowStart || want.idx > S.sp.windowEnd || Math.abs(S.idx - want.idx) > 1) spotifyTune(); }
+    else if (pos && Math.abs(pos.offset - want.offset) > DRIFT_MS) S.sp.player.seek(Math.floor(want.offset));
+  }
+  function spotifyStop() {
+    if (S.sp.player) { try { S.sp.player.pause(); S.sp.player.disconnect(); } catch (e) {} }
+    S.sp.player = null; S.sp.deviceId = null; S.sp.state = null;
+  }
+
   /* ---------- Spotify's embedded player ---------- */
   function createEmbed(uri) {
     return new Promise(function (resolve, reject) {
@@ -349,10 +468,19 @@
     setTransport(true);
     var p;
     if (source === 'apple') { say('Full songs · Apple Music'); p = appleTune(); }
+    else if (source === 'spotify') { p = spotifyStart(); }
     else if (source === 'embed') { p = embedStart(); }
     else { say('30-second previews'); previewTune(); p = Promise.resolve(); }
     return p.catch(function (e) {
       log(source + ' failed: ' + ((e && (e.errorCode || e.message)) || e));
+      if (source === 'spotify') {
+        // No Premium, not on the app's allow-list, or the player wouldn't start: use Spotify's embedded player instead.
+        spotifyStop();
+        var m = (e && e.message) || '';
+        if (/authentication/.test(m)) spStore(null);
+        say(m === 'premium' ? 'Full songs need Spotify Premium \u2014 using Spotify\u2019s player instead.' : 'Using Spotify\u2019s player instead.');
+        return start('embed');
+      }
       S.source = 'preview'; els.source.textContent = sourceLabel();
       els.embed.hidden = true; document.body.classList.remove('embed-mode');
       var why = (e && /station/.test(e.message || '')) ? e.message.replace(/\.$/, '') : (source === 'apple' ? 'Apple Music couldn\u2019t play here' : 'Spotify\u2019s player couldn\u2019t load');
@@ -364,6 +492,7 @@
     setTransport(false);
     clearTimeout(S.timers.slot);
     if (S.source === 'apple' && S.music) S.music.pause();
+    if (S.source === 'spotify' && S.sp.player) S.sp.player.pause();
     if (S.source === 'embed' && S.embed) S.embed.pause();
     if (S.audio) S.audio.pause();
     say('Paused. Press play to rejoin live.');
@@ -371,6 +500,7 @@
   function resume() {
     setTransport(true);
     if (S.source === 'apple') { say('Full songs · Apple Music'); appleTune(); }
+    else if (S.source === 'spotify') { spotifyTune(); }
     else if (S.source === 'embed') { embedTune(); }
     else { say('30-second previews'); previewTune(); }
   }
@@ -378,10 +508,12 @@
     S.playing = false; clearTimeout(S.timers.slot);
     if (S.music) { try { S.music.stop(); } catch (e) {} }
     if (S.embed) { try { S.embed.pause(); } catch (e) {} }
+    spotifyStop();
     if (S.audio) S.audio.pause();
   }
   function setVolume(v) {
     if (S.music) S.music.volume = v;
+    if (S.sp.player) S.sp.player.setVolume(v);
     if (S.audio) S.audio.volume = v;
     try { localStorage.setItem('radio-volume', String(v)); } catch (e) {}
   }
@@ -393,7 +525,12 @@
       .then(function () { showPlayer(); return start('apple'); })
       .catch(function (e) { els.pickApple.disabled = false; hint((e && e.message) || 'Apple Music sign-in was cancelled.'); });
   }
-  function pickSpotify() { showPlayer(); start('embed'); }
+  function pickSpotify() {
+    if (!S.cfg || !S.cfg.spotifyClientId) { showPlayer(); start('embed'); return; }
+    if (spSignedIn()) { showPlayer(); start('spotify'); return; }
+    hint('Taking you to Spotify\u2026');
+    spLogin();
+  }
   function switchService() {
     stopAll();
     document.body.classList.remove('on-radio', 'show-controls', 'embed-mode');
@@ -432,7 +569,12 @@
     els.pause.addEventListener('click', pause);
     els.switch.addEventListener('click', switchService);
     els.volume.addEventListener('input', function () { setVolume(parseFloat(els.volume.value)); });
-    els.login.addEventListener('click', function () { spLoginPending = true; });
+    els.login.addEventListener('click', function (e) {
+      e.preventDefault();
+      if (S.cfg && S.cfg.spotifyClientId) { spLogin(); return; }     // proper sign-in when the app exists
+      spLoginPending = true; location.assign(els.login.href);        // otherwise Spotify's site, same tab, no app
+    });
+    els.start.addEventListener('click', function () { start('spotify'); });
     document.addEventListener('visibilitychange', function () { if (document.visibilityState === 'visible') setTimeout(embedRefreshAfterLogin, 300); });
     window.addEventListener('focus', function () { setTimeout(embedRefreshAfterLogin, 300); });
     window.addEventListener('pageshow', function () { setTimeout(embedRefreshAfterLogin, 300); });
@@ -448,7 +590,14 @@
         var s = live('preview'); if (s) showTrack(s.idx);
         S.timers.ui = setInterval(tickUI, 500);
         S.timers.poll = setInterval(poll, POLL_MS);
-        S.timers.drift = setInterval(appleDrift, 30000);
+        S.timers.drift = setInterval(function () { appleDrift(); spotifyDrift(); }, 30000);
+        // Back from Spotify's sign-in page: show the player and wait for a tap (browsers need one before audio).
+        spHandleCallback().then(function (cameBack) {
+          if (!cameBack) return;
+          showPlayer(); S.source = 'spotify'; els.source.textContent = sourceLabel();
+          els.start.hidden = false; els.play.hidden = true; els.pause.hidden = true; say('Signed in to Spotify \u2014 tap to start');
+          revealControls();
+        }).catch(function (e) { hint((e && e.message) || 'Spotify sign-in failed.'); });
         // Warm Apple's player in the background so the tap only has to start playback.
         if (S.cfg.token) setTimeout(function () { musicInstance().then(function () { log('apple player warmed'); }).catch(function () {}); }, 500);
       })

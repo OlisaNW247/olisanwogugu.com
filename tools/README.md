@@ -73,22 +73,31 @@ seeded shuffle of the playlist's catalog songs.
 Songs that exist only in the library with no catalog match are skipped. Songs with no Spotify match
 are silent for Spotify listeners during that slot, so everyone stays in sync.
 
-## Spotify matching (no Spotify account needed)
+## Spotify
 
-Spotify now limits Web API access to accounts that meet its developer requirements, so the radio
-avoids it entirely. Each station track is resolved to its Spotify id by trying, in order, Odesli's
-API (only if an `ODESLI_API_KEY` secret is set; keys are free on request at odesli.co) and
-MusicBrainz, first by the song's ISRC and then by a title-and-artist search. Results are cached in
-`spotify-index.json`. Each run looks up at most 20 songs, so a new station fills in over a few runs,
-and the run log says which resolver answered.
+With a Spotify Premium account the developer dashboard allows Web API access, which gives the radio
+its best Spotify setup: exact song matching through Spotify's own catalog, a real sign-in, and full
+songs in our own player for Premium listeners.
 
-Without an Odesli key, MusicBrainz alone matches only a fraction of songs (around a quarter of a
-Brazilian-heavy playlist in testing). For any song not matched, Spotify listeners hear Apple's
-30-second preview in that slot instead of silence, and the player says so. Adding the
-`ODESLI_API_KEY` secret is the way to get near-complete coverage.
+**Setup (once).**
 
-**Things to know.**
+1. At <https://developer.spotify.com/dashboard> create an app. Add `https://olisanwogugu.com/radio.html`
+   as a Redirect URI, tick **Web API** and **Web Playback SDK**, and save.
+2. In the app's Settings copy the Client ID and Client secret, and add them as repository secrets
+   `SPOTIFY_CLIENT_ID` and `SPOTIFY_CLIENT_SECRET`.
+3. Under the app's **User Management** add the Spotify account email of each person who should be able
+   to sign in. New Spotify apps stay in *development mode*, which allows up to 25 such users. Anyone
+   else who signs in is dropped to Spotify's embedded player automatically.
+4. Run the workflow once. It matches the station through Spotify's catalog (ISRC first, then a
+   title-and-artist search), up to 150 songs a run, and publishes the client id in `radio-token.json`
+   for the browser sign-in.
 
-- The first run after enabling the radio indexes every playlist, which can take a few minutes for a
-  large library. Later runs only re-fetch playlists that changed.
-- `radio-token.json` is public by design; MusicKit developer tokens are meant for client-side use.
+**How listeners experience it.** Tapping Spotify sends them to Spotify's sign-in page in the same
+tab (a script-driven navigation, which iOS does not hand to the Spotify app), then back to the radio,
+where one tap starts full songs in sync with everyone else. Premium is Spotify's requirement for
+playback in a third-party player. Without Premium, or without the app configured, listeners get
+Spotify's embedded player instead: full songs if logged in to Spotify in that browser, previews
+otherwise.
+
+**Without the app.** Matching falls back to Odesli (if `ODESLI_API_KEY` is set) and MusicBrainz, which
+together cover only a fraction of most playlists.
