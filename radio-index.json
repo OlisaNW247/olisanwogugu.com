@@ -519,7 +519,7 @@
     "p.V7VYYxDsZ0dWGPk": {
       "name": "Favelasss",
       "lastModified": "2026-10-10T05:02:19Z",
-      "fetchedAt": "2026-10-21T04:38:41.178Z",
+      "fetchedAt": "2026-10-22T05:28:28.738Z",
       "count": 16,
       "catalogIds": [
         "1472057447",
@@ -561,7 +561,7 @@
     "p.KRUaLKVD84": {
       "name": "Favorite Songs",
       "lastModified": "2026-10-14T20:36:02Z",
-      "fetchedAt": "2026-10-21T04:38:41.429Z",
+      "fetchedAt": "2026-10-22T05:28:29.083Z",
       "count": 7,
       "catalogIds": [
         "574051407",
@@ -4426,7 +4426,7 @@
     "p.V7VYpq0cZ0dWGPk": {
       "name": "⚙️",
       "lastModified": "2026-10-11T11:21:35Z",
-      "fetchedAt": "2026-10-21T04:38:43.197Z",
+      "fetchedAt": "2026-10-22T05:28:31.145Z",
       "count": 369,
       "catalogIds": [
         "1568130135",
@@ -7352,22 +7352,24 @@
     },
     "p.PkxVLAvt2XJlmRO": {
       "name": "🪉",
-      "lastModified": "2026-10-11T11:02:25Z",
-      "fetchedAt": "2026-10-21T04:38:43.409Z",
-      "count": 4,
+      "lastModified": "2026-10-22T00:49:17Z",
+      "fetchedAt": "2026-10-22T05:28:31.503Z",
+      "count": 5,
       "catalogIds": [
         "1833862548",
         "1440858717",
         "1440838282",
-        "1196495770"
+        "1196495770",
+        "955676429"
       ],
       "libraryIds": [
         "i.zpZxYQ9Tm46Nqe0",
         "i.2P0DGVXSx4R6L7a",
         "i.KoJPlmVcaLKVD84",
-        "i.oOdNPNDIlZMzX7D"
+        "i.oOdNPNDIlZMzX7D",
+        "i.zpZxY3VFm46Nqe0"
       ]
     }
   },
-  "updated": "2026-10-21T22:15:46.984Z"
+  "updated": "2026-10-22T05:28:31.503Z"
 }
