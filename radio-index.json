@@ -502,18 +502,20 @@
     },
     "p.1YeWWNLhqGK28a5": {
       "name": "Entiendo ",
-      "lastModified": "2025-10-10T16:33:00Z",
-      "fetchedAt": "2026-10-21T18:58:38.826Z",
-      "count": 3,
+      "lastModified": "2026-10-22T14:23:55Z",
+      "fetchedAt": "2026-10-22T15:37:11.195Z",
+      "count": 4,
       "catalogIds": [
         "1645032529",
         "1752031539",
-        "1787023297"
+        "1787023297",
+        "1708289078"
       ],
       "libraryIds": [
         "i.kGObNORSRxzLgrm",
         "i.5PkvRd2fOmaEZXK",
-        "i.oOdN6dqIlZMzX7D"
+        "i.oOdN6dqIlZMzX7D",
+        "i.3VBoL4AUdzpr60e"
       ]
     },
     "p.V7VYYxDsZ0dWGPk": {
@@ -5663,9 +5665,9 @@
     },
     "p.gek11gVCLW5KGvP": {
       "name": "🎷🎷🎷",
-      "lastModified": "2026-10-20T15:47:56Z",
-      "fetchedAt": "2026-10-21T18:59:03.545Z",
-      "count": 157,
+      "lastModified": "2026-10-22T14:43:54Z",
+      "fetchedAt": "2026-10-22T15:37:12.342Z",
+      "count": 158,
       "catalogIds": [
         "1254572585",
         "1631909588",
@@ -5821,7 +5823,8 @@
         "1212413030",
         "1833862531",
         "509909062",
-        "1444013982"
+        "1444013982",
+        "509909065"
       ],
       "libraryIds": [
         "i.kGO5EGmhRxzLgrm",
@@ -5979,7 +5982,8 @@
         "i.pmz5xE0U2MvgzWl",
         "i.kGObl5RiRxzLgrm",
         "i.pmz5xXds2MvgzWl",
-        "i.kGOgY0PURxzLgrm"
+        "i.kGOgY0PURxzLgrm",
+        "i.YJMNGZPTREDJ3b9"
       ]
     },
     "p.PkxVVbpI2XJlmRO": {
@@ -7371,5 +7375,5 @@
       ]
     }
   },
-  "updated": "2026-10-22T10:32:57.629Z"
+  "updated": "2026-10-22T15:37:12.342Z"
 }
