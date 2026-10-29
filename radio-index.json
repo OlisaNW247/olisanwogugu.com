@@ -521,7 +521,7 @@
     "p.V7VYYxDsZ0dWGPk": {
       "name": "Favelasss",
       "lastModified": "2026-10-10T05:02:19Z",
-      "fetchedAt": "2026-10-28T19:26:40.226Z",
+      "fetchedAt": "2026-10-29T21:01:30.997Z",
       "count": 16,
       "catalogIds": [
         "1472057447",
@@ -563,7 +563,7 @@
     "p.KRUaLKVD84": {
       "name": "Favorite Songs",
       "lastModified": "2026-10-14T20:36:02Z",
-      "fetchedAt": "2026-10-28T19:26:40.527Z",
+      "fetchedAt": "2026-10-29T21:01:31.237Z",
       "count": 7,
       "catalogIds": [
         "574051407",
@@ -1735,7 +1735,7 @@
     "p.gek1p21hLW5KGvP": {
       "name": "Nightly",
       "lastModified": "2026-10-21T08:21:58Z",
-      "fetchedAt": "2026-10-28T19:26:40.930Z",
+      "fetchedAt": "2026-10-29T21:01:31.650Z",
       "count": 55,
       "catalogIds": [
         "1234864149",
@@ -6632,7 +6632,7 @@
     "p.ZOAXXEzs4xVEq5X": {
       "name": "🕴️",
       "lastModified": "2026-10-21T07:26:40Z",
-      "fetchedAt": "2026-10-28T19:26:43.342Z",
+      "fetchedAt": "2026-10-29T21:01:32.029Z",
       "count": 72,
       "catalogIds": [
         "1422656591",
@@ -7362,7 +7362,7 @@
     "p.PkxVLAvt2XJlmRO": {
       "name": "🪉",
       "lastModified": "2026-10-22T00:49:17Z",
-      "fetchedAt": "2026-10-28T19:26:43.609Z",
+      "fetchedAt": "2026-10-29T21:01:32.230Z",
       "count": 5,
       "catalogIds": [
         "1833862548",
@@ -7380,5 +7380,5 @@
       ]
     }
   },
-  "updated": "2026-10-29T16:00:25.807Z"
+  "updated": "2026-10-29T21:01:32.230Z"
 }
