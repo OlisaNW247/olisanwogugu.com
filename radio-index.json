@@ -503,7 +503,7 @@
     "p.1YeWWNLhqGK28a5": {
       "name": "Entiendo ",
       "lastModified": "2026-10-22T14:23:55Z",
-      "fetchedAt": "2026-11-01T06:56:02.937Z",
+      "fetchedAt": "2026-11-02T08:56:33.946Z",
       "count": 4,
       "catalogIds": [
         "1645032529",
@@ -5671,7 +5671,7 @@
     "p.gek11gVCLW5KGvP": {
       "name": "🎷🎷🎷",
       "lastModified": "2026-10-22T14:43:54Z",
-      "fetchedAt": "2026-11-01T06:56:03.959Z",
+      "fetchedAt": "2026-11-02T08:56:34.921Z",
       "count": 158,
       "catalogIds": [
         "1254572585",
@@ -5994,7 +5994,7 @@
     "p.PkxVVbpI2XJlmRO": {
       "name": "🎸",
       "lastModified": "2026-10-23T15:00:53Z",
-      "fetchedAt": "2026-11-01T06:56:04.408Z",
+      "fetchedAt": "2026-11-02T08:56:35.292Z",
       "count": 28,
       "catalogIds": [
         "693610779",
@@ -7382,5 +7382,5 @@
       ]
     }
   },
-  "updated": "2026-11-02T01:53:41.666Z"
+  "updated": "2026-11-02T08:56:35.292Z"
 }
