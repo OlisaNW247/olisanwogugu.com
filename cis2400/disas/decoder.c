@@ -1,7 +1,8 @@
-#include "decoder.h"
-
 #include <stdint.h>
 #include <stdio.h>
+#include <string.h>
+
+#include "decoder.h"
 
 // Major opcodes (instr[6:0])
 #define OP_LUI 0x37
@@ -13,7 +14,6 @@
 #define OP_STORE 0x23
 #define OP_IMM 0x13
 #define OP_REG 0x33
-#define OP_SYSTEM 0x73
 
 #define FUNCT7_BASE 0x00
 #define FUNCT7_ALT 0x20  // SUB, SRA, SRAI
@@ -66,9 +66,9 @@ static int32_t imm_b(uint32_t instr) {
   return sign_extend(imm, 13);
 }
 
-// U-type: imm[31:12] = instr[31:12], low 12 bits are zero
+// U-type: the 20-bit immediate instr[31:12], sign-extended (0xFFFFF -> -1)
 static int32_t imm_u(uint32_t instr) {
-  return (int32_t)(instr & 0xFFFFF000u);
+  return sign_extend(bits(instr, 31, 12), 20);
 }
 
 // J-type: imm[20|10:1|11|19:12] = instr[31:12]
@@ -111,7 +111,7 @@ static void decode_op_imm(uint32_t instr, riscv_instr* out) {
 
   out->rd = get_rd(instr);
   out->rs1 = get_rs1(instr);
-  out->imm = imm_i(instr);
+  out->immediate = imm_i(instr);
 
   switch (funct3) {
     case 0x0:
@@ -135,7 +135,7 @@ static void decode_op_imm(uint32_t instr, riscv_instr* out) {
     case 0x1:
       // SLLI: shamt is instr[24:20], unsigned; upper bits must be zero
       out->type = (funct7 == FUNCT7_BASE) ? SLLI : ILLEGAL_INSTR;
-      out->imm = (int32_t)get_rs2(instr);
+      out->immediate = (int32_t)get_rs2(instr);
       break;
     case 0x5:
       if (funct7 == FUNCT7_BASE) {
@@ -145,7 +145,7 @@ static void decode_op_imm(uint32_t instr, riscv_instr* out) {
       } else {
         out->type = ILLEGAL_INSTR;
       }
-      out->imm = (int32_t)get_rs2(instr);
+      out->immediate = (int32_t)get_rs2(instr);
       break;
     default:
       out->type = ILLEGAL_INSTR;
@@ -202,28 +202,13 @@ static INSTR_TYPE decode_branch_type(uint32_t funct3) {
   }
 }
 
-static INSTR_TYPE decode_system_type(uint32_t instr) {
-  // ECALL and EBREAK require rd, funct3 and rs1 to all be zero.
-  if (get_rd(instr) != 0 || get_funct3(instr) != 0 || get_rs1(instr) != 0) {
-    return ILLEGAL_INSTR;
-  }
-  switch (bits(instr, 31, 20)) {
-    case 0x000:
-      return ECALL;
-    case 0x001:
-      return EBREAK;
-    default:
-      return ILLEGAL_INSTR;
-  }
-}
-
 /* ------------------------------------------------------------------------- */
 /* Public interface                                                           */
 /* ------------------------------------------------------------------------- */
 
 riscv_instr decode_instr(uint32_t instr) {
   riscv_instr out = {.type = ILLEGAL_INSTR, .rs1 = 0, .rs2 = 0, .rd = 0,
-                     .imm = 0};
+                     .immediate = 0};
 
   switch (get_opcode(instr)) {
     case OP_REG:
@@ -241,50 +226,46 @@ riscv_instr decode_instr(uint32_t instr) {
       out.type = decode_load_type(get_funct3(instr));
       out.rd = get_rd(instr);
       out.rs1 = get_rs1(instr);
-      out.imm = imm_i(instr);
+      out.immediate = imm_i(instr);
       break;
 
     case OP_STORE:
       out.type = decode_store_type(get_funct3(instr));
       out.rs1 = get_rs1(instr);
       out.rs2 = get_rs2(instr);
-      out.imm = imm_s(instr);
+      out.immediate = imm_s(instr);
       break;
 
     case OP_BRANCH:
       out.type = decode_branch_type(get_funct3(instr));
       out.rs1 = get_rs1(instr);
       out.rs2 = get_rs2(instr);
-      out.imm = imm_b(instr);
+      out.immediate = imm_b(instr);
       break;
 
     case OP_JAL:
       out.type = JAL;
       out.rd = get_rd(instr);
-      out.imm = imm_j(instr);
+      out.immediate = imm_j(instr);
       break;
 
     case OP_JALR:
       out.type = (get_funct3(instr) == 0x0) ? JALR : ILLEGAL_INSTR;
       out.rd = get_rd(instr);
       out.rs1 = get_rs1(instr);
-      out.imm = imm_i(instr);
+      out.immediate = imm_i(instr);
       break;
 
     case OP_LUI:
       out.type = LUI;
       out.rd = get_rd(instr);
-      out.imm = imm_u(instr);
+      out.immediate = imm_u(instr);
       break;
 
     case OP_AUIPC:
       out.type = AUIPC;
       out.rd = get_rd(instr);
-      out.imm = imm_u(instr);
-      break;
-
-    case OP_SYSTEM:
-      out.type = decode_system_type(instr);
+      out.immediate = imm_u(instr);
       break;
 
     default:
@@ -312,11 +293,10 @@ void print_type(INSTR_TYPE type, FILE* file) {
       [BNE] = "BNE",       [BLT] = "BLT",       [BGE] = "BGE",
       [BLTU] = "BLTU",     [BGEU] = "BGEU",     [JAL] = "JAL",
       [JALR] = "JALR",     [LUI] = "LUI",       [AUIPC] = "AUIPC",
-      [ECALL] = "ECALL",   [EBREAK] = "EBREAK",
       [ILLEGAL_INSTR] = "INVALID INSTRUCTION",
   };
 
-  if ((unsigned)type > (unsigned)ILLEGAL_INSTR || names[type] == NULL) {
+  if ((unsigned)type > (unsigned)REMU || names[type] == NULL) {
     fprintf(file, "INVALID INSTRUCTION");
     return;
   }
@@ -351,7 +331,7 @@ void print_instr(riscv_instr instr, FILE* file) {
     case DIVU:
     case REM:
     case REMU:
-      fprintf(file, " x%u, x%u, x%u", instr.rd, instr.rs1, instr.rs2);
+      fprintf(file, " x%d, x%d, x%d", instr.rd, instr.rs1, instr.rs2);
       break;
 
     // rd, rs1, imm
@@ -364,7 +344,7 @@ void print_instr(riscv_instr instr, FILE* file) {
     case SLLI:
     case SRLI:
     case SRAI:
-      fprintf(file, " x%u, x%u, %d", instr.rd, instr.rs1, instr.imm);
+      fprintf(file, " x%d, x%d, %d", instr.rd, instr.rs1, instr.immediate);
       break;
 
     // rd, imm(rs1)
@@ -374,14 +354,14 @@ void print_instr(riscv_instr instr, FILE* file) {
     case LW:
     case LBU:
     case LHU:
-      fprintf(file, " x%u, %d(x%u)", instr.rd, instr.imm, instr.rs1);
+      fprintf(file, " x%d, %d(x%d)", instr.rd, instr.immediate, instr.rs1);
       break;
 
     // rs2, imm(rs1)
     case SB:
     case SH:
     case SW:
-      fprintf(file, " x%u, %d(x%u)", instr.rs2, instr.imm, instr.rs1);
+      fprintf(file, " x%d, %d(x%d)", instr.rs2, instr.immediate, instr.rs1);
       break;
 
     // rs1, rs2, offset
@@ -391,24 +371,20 @@ void print_instr(riscv_instr instr, FILE* file) {
     case BGE:
     case BLTU:
     case BGEU:
-      fprintf(file, " x%u, x%u, %d", instr.rs1, instr.rs2, instr.imm);
+      fprintf(file, " x%d, x%d, %d", instr.rs1, instr.rs2, instr.immediate);
       break;
 
     // rd, offset
     case JAL:
-      fprintf(file, " x%u, %d", instr.rd, instr.imm);
+      fprintf(file, " x%d, %d", instr.rd, instr.immediate);
       break;
 
-    // rd, upper 20-bit immediate as a signed value (e.g. 0xFFFFF -> -1).
-    // The low 12 bits of imm are zero, so dividing by 4096 is exact.
+    // rd, 20-bit upper immediate
     case LUI:
     case AUIPC:
-      fprintf(file, " x%u, %d", instr.rd, instr.imm / 4096);
+      fprintf(file, " x%d, %d", instr.rd, instr.immediate);
       break;
 
-    // no operands
-    case ECALL:
-    case EBREAK:
     case ILLEGAL_INSTR:
       break;
   }
