@@ -12,7 +12,7 @@ static void print_code(const memory* mem, FILE* out) {
     if (word == 0) {
       continue;
     }
-    fprintf(out, "%08X : %08X -> ", CODE_BASE + offset, word);
+    fprintf(out, "%08x : %08x -> ", CODE_BASE + offset, word);
     print_instr(decode_instr(word), out);
     fprintf(out, "\n");
   }
@@ -22,7 +22,7 @@ static void print_code(const memory* mem, FILE* out) {
 static void print_data(const memory* mem, FILE* out) {
   for (uint32_t i = 0; i < MEM_SIZE; i++) {
     if (mem->data[i] != 0) {
-      fprintf(out, "%08X : %02X\n", DATA_BASE + i, mem->data[i]);
+      fprintf(out, "%08x : %02x\n", DATA_BASE + i, mem->data[i]);
     }
   }
 }
