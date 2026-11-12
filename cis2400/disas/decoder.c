@@ -399,10 +399,11 @@ void print_instr(riscv_instr instr, FILE* file) {
       fprintf(file, " x%u, %d", instr.rd, instr.imm);
       break;
 
-    // rd, upper 20-bit immediate (as written in assembly)
+    // rd, upper 20-bit immediate as a signed value (e.g. 0xFFFFF -> -1).
+    // The low 12 bits of imm are zero, so dividing by 4096 is exact.
     case LUI:
     case AUIPC:
-      fprintf(file, " x%u, %u", instr.rd, ((uint32_t)instr.imm) >> 12);
+      fprintf(file, " x%u, %d", instr.rd, instr.imm / 4096);
       break;
 
     // no operands
