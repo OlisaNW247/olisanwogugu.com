@@ -364,11 +364,11 @@ void print_instr(riscv_instr instr, FILE* file) {
     case SLLI:
     case SRLI:
     case SRAI:
-    case JALR:
       fprintf(file, " x%u, x%u, %d", instr.rd, instr.rs1, instr.imm);
       break;
 
     // rd, imm(rs1)
+    case JALR:
     case LB:
     case LH:
     case LW:
