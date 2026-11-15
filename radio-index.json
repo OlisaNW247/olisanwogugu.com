@@ -502,16 +502,17 @@
     },
     "p.1YeWWNLhqGK28a5": {
       "name": "Entiendo ",
-      "lastModified": "2026-11-14T00:24:31Z",
-      "fetchedAt": "2026-11-15T03:09:22.284Z",
-      "count": 6,
+      "lastModified": "2026-11-15T13:45:39Z",
+      "fetchedAt": "2026-11-15T17:36:30.174Z",
+      "count": 7,
       "catalogIds": [
         "1645032529",
         "1752031539",
         "1787023297",
         "1708289078",
         "1750132050",
-        "1556888915"
+        "1556888915",
+        "724011169"
       ],
       "libraryIds": [
         "i.kGObNORSRxzLgrm",
@@ -519,7 +520,8 @@
         "i.oOdN6dqIlZMzX7D",
         "i.3VBoL4AUdzpr60e",
         "i.KoJ2NYYHaLKVD84",
-        "i.kGOgYR8cRxzLgrm"
+        "i.kGOgYR8cRxzLgrm",
+        "i.KoJ2NQ0FaLKVD84"
       ]
     },
     "p.V7VYYxDsZ0dWGPk": {
@@ -7392,5 +7394,5 @@
       ]
     }
   },
-  "updated": "2026-11-15T10:54:41.209Z"
+  "updated": "2026-11-15T17:36:30.175Z"
 }
