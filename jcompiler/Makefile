@@ -1,5 +1,5 @@
 CC = clang-19
-CFLAGS = -Wall -g
+CFLAGS = -Wall -gdwarf-4
 
 jc: jc.o token.o asm_gen.o
 	$(CC) $(CFLAGS) -o jc jc.o token.o asm_gen.o
