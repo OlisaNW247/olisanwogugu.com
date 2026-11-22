@@ -533,7 +533,7 @@
     "p.V7VYYxDsZ0dWGPk": {
       "name": "Favelasss",
       "lastModified": "2026-11-20T17:19:53Z",
-      "fetchedAt": "2026-11-21T22:43:28.337Z",
+      "fetchedAt": "2026-11-22T23:30:26.262Z",
       "count": 17,
       "catalogIds": [
         "1472057447",
@@ -3310,9 +3310,9 @@
     },
     "p.PkxVB2PF2XJlmRO": {
       "name": "Traphouse Tactics",
-      "lastModified": "2026-11-20T18:07:59Z",
-      "fetchedAt": "2026-11-21T22:43:28.637Z",
-      "count": 23,
+      "lastModified": "2026-11-22T20:15:49Z",
+      "fetchedAt": "2026-11-22T23:30:26.738Z",
+      "count": 24,
       "catalogIds": [
         "1711595963",
         "1571537374",
@@ -3336,7 +3336,8 @@
         "1640799733",
         "1729402613",
         "1647641577",
-        "953921166"
+        "953921166",
+        "1446040621"
       ],
       "libraryIds": [
         "i.8WdzB5vCVD62x4Z",
@@ -3361,7 +3362,8 @@
         "i.KoJPKkqSaLKVD84",
         "i.oOdNGgptlZMzX7D",
         "i.3VB17mkSdzpr60e",
-        "i.oOdPLg6HlZMzX7D"
+        "i.oOdPLg6HlZMzX7D",
+        "i.pmz21GDi2MvgzWl"
       ]
     },
     "p.6xZa3e0hvGPNWZ0": {
@@ -7463,5 +7465,5 @@
       ]
     }
   },
-  "updated": "2026-11-22T17:56:41.368Z"
+  "updated": "2026-11-22T23:30:26.738Z"
 }
